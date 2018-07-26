@@ -8,6 +8,11 @@ const anuncioSchema = mongoose.Schema({
 	tags: [String]
 });
 
+anuncioSchema.statics.deleteAll = async function () {
+	return await this.deleteMany().exec();
+};
+
 const Anuncio = mongoose.model('Anuncio', anuncioSchema);
+
 
 module.exports = Anuncio;

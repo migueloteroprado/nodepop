@@ -20,8 +20,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Variables globales de template
 app.locals.title = 'Nodepop';
 
+/**
+ * Conectamos a la Base de Datos y registramos los modelos
+ */
+require('./lib/connectMongoose');
+require('./models/Anuncio');
 
 // Routes
+
+/**
+ * API routes
+ */
+app.use('/apiv1/anuncios', require('./routes/apiv1/anuncios'));
+
+/**
+ * Web application routes
+ */
 app.use('/', require('./routes/index'));
 app.use('/anuncios', require('./routes/anuncios'));
 
