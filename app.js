@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+const { isAPI } = require('./lib/utils');
+
 var app = express();
 
 // view engine setup
@@ -37,23 +39,38 @@ app.use('/apiv1/anuncios', require('./routes/apiv1/anuncios'));
  * Web application routes
  */
 app.use('/', require('./routes/index'));
-app.use('/anuncios', require('./routes/anuncios'));
+//app.use('/anuncios', require('./routes/anuncios'));
+
+
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
 	next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res) {
+app.use(function (err, req, res, next) {
+
+	console.log(req.originalUrl);
 
 	// Validation errors
-	if (err.array) { // los errores 'normales' nunca tienen un array
+	if (err.array) { // other errors never contain an array
 		err.status = 422;
-		const errorInfo = err.array({onlyFirstError: true})[0];
-		err.message = `Not valid - ${errorInfo.param} ${errorInfo.msg}`;
+		const errorInfo = err.array({ onlyFirstError: true })[0];
+
+		err.message = isAPI(req)
+			? { message: 'Not valid', errors: err.mapped() }
+			: `Not valid - ${errorInfo.param} ${errorInfo.msg}`;
 	}
-	
+
+	res.status(err.status || 500);
+
+	// si el error es de una petición a la api, devolvemos un jason, no una página renderizada
+	if (isAPI(req)) {
+		res.json({ success: false, error: err.message });
+		return;
+	}
+
 	// set locals, only providing error in development
 	res.locals.message = err.message;
 	res.locals.error = req.app.get('env') === 'development' ? err : {};

@@ -12,60 +12,84 @@ const { query, validationResult } = require('express-validator/check');
  * GET /
  * Returns a list of documents sorted, filtered and paginated
  */ 
+router.get('/', [ // validations
+			query('venta').isIn(['true', 'false']).withMessage(`must be 'true' or 'false'`),
+			query('')
+  		// (podría haber varias validaciones)
+  		// , query('talla').isNumeric().withMessage('debe ser numérico'), 
+		], async function(req, res, next) {
 
- /*
-tag​=mobile
-&​venta​=false
-&​nombre=ip
-&precio=50-
-&start=0&limit=2
-&sort=precio
-&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NWZkOWFiZGE4Y2QxZDlhMj
-*/
-
-router.get('/', async function(req, res, next) {
 	try {
-		// proccess filters
-		let filters = {};
-		const params = req.query;
+
+		validationResult(req).throw();
+
+		// recuperar datos de entrada
+		const nombre = req.query.nombre;
+		const tag = req.query.tag;
+		const venta = req.query.venta;
+		const precio = req.query.precio;
+		const limit = parseInt(req.query.limit);
+		const start = parseInt(req.query.start);
+		const fields = req.query.fields;
+		const sort = req.query.sort;
+
+		// create empty filter
+		const filters = {};
+		
+		// filter by name, obtaining all documents whose name starts by given value, case insensitive
+		if (nombre) {
+			filters.nombre = new RegExp('^' + req.query.nombre, "i");
+		}
 		// filter by tag
-		if (params.tag) {
-			filters.tags = params.tag;
+		if (tag) {
+			filters.tags = tag;
 		}
-		// filter by type
-		if (params.venta) {
-			filters.venta = (params.venta === 'true');
-		}
-		// filter by name
-		if (params.nombre) {
-			filters.nombre = params.nombre;
+		// filter by venta
+		if (venta) {
+			filters.venta = venta.toLowerCase() === 'true';
 		}
 		// filter by price
-		if (params.precio) {
-			const prices = params.precio.split('-');
-			console.log(prices);
-			if (prices[1]) {
-				filters.precio = {$gte: Number(prices[0]), $lte: Number(prices[1])};
-			} else {
-				if (params.precio.indexOf('-') === 0) {
-					filters.precio = { $lte: Number(prices[0]) }
-				} else {
-					filters.precio = { $gte: Number(prices[0]) }
-				}
+		if (precio) {
+			const position = precio.indexOf('-');
+			if (position === -1) {
+				filters.precio = parseInt(precio);
 			}
-		}
-		const sortField = params.sort ? params.sort : null;
-		const start = params.start ? Number(params.start) : null;
-		const limit = params.limit ? Number(params.limit) : null;
+			else if (position === 0) {
+				filters.precio = { $lte: parseInt(precio.substring(1, precio.length+1)) } ;
+			}
+			else if (position === precio.length -1) {
+				filters.precio = { $gte: parseInt(precio.substring(0, precio.length)) } ;
+			}
+			else {
+				const precios = precio.split('-');
+				filters.precio = { $gte: parseInt(precios[0]), $lte: parseInt(precios[1]) } ;
+			}
+		} 
 
 		console.log(filters);
-		const anuncios = await Anuncio.find(filters).skip(start).limit(limit).sort(sortField).exec();
+		const anuncios = await Anuncio.list(filters, limit, start, fields, sort);
 		res.json({success: true, result: anuncios});
-	} catch(err) {
+	}		
+	catch(err) {
 		next(err);
-		return;
 	}
 });
+
+/**
+ * GET /tags
+ * Obtain all existing tags from anuncios
+ */
+router.get('/tags', async (req, res, next) => {
+	try {
+		tags = await Anuncio.distinct('tags', {});
+		console.log(tags);
+		res.json({ success: true, tags: tags });
+	}
+	catch (err) {
+		next(err);
+	}
+});
+
 
 /**
  * POST /
