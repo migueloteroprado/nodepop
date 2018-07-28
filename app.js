@@ -39,7 +39,7 @@ app.use('/apiv1/anuncios', require('./routes/apiv1/anuncios'));
  * Web application routes
  */
 app.use('/', require('./routes/index'));
-//app.use('/anuncios', require('./routes/anuncios'));
+app.use('/anuncios', require('./routes/anuncios'));
 
 
 
@@ -57,7 +57,6 @@ app.use(function (err, req, res, next) {
 	if (err.array) { // other errors never contain an array
 		err.status = 422;
 		const errorInfo = err.array({ onlyFirstError: true })[0];
-
 		err.message = isAPI(req)
 			? { message: 'Not valid', errors: err.mapped() }
 			: `Not valid - ${errorInfo.param} ${errorInfo.msg}`;

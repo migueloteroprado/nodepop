@@ -13,10 +13,9 @@ const { query, validationResult } = require('express-validator/check');
  * Returns a list of documents sorted, filtered and paginated
  */ 
 router.get('/', [ // validations
-			query('venta').isIn(['true', 'false']).withMessage(`must be 'true' or 'false'`),
-			query('')
-  		// (podría haber varias validaciones)
-  		// , query('talla').isNumeric().withMessage('debe ser numérico'), 
+			query('venta').optional().isIn(['true', 'false']).withMessage(`must be 'true' or 'false'`),
+			query('tag').optional().isIn(['work', 'lifestyle','motor','mobile',]).withMessage(`must be 'work', 'lifestyle', 'motor' or 'mobile'`),
+			query('precio').optional().matches(/(([0-9]+(.[0-9]+)?)|-([0-9]+(.[0-9]+)?)|([0-9]+(.[0-9]+)?)-|([0-9]+(.[0-9]+)?)-([0-9]+(.[0-9]+)?))$/).withMessage(`must be '(exact.price)', '(min.price)-', '-(max.price)' or '(min.price)-(max.price)'`)
 		], async function(req, res, next) {
 
 	try {
@@ -66,7 +65,6 @@ router.get('/', [ // validations
 			}
 		} 
 
-		console.log(filters);
 		const anuncios = await Anuncio.list(filters, limit, start, fields, sort);
 		res.json({success: true, result: anuncios});
 	}		
