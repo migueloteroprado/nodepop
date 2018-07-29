@@ -1,6 +1,7 @@
-var express = require('express');
-var router = express.Router();
-const axios = require('axios');
+const express = require('express');
+const router = express.Router();
+const Anuncio = require('../models/Anuncio');
+const { validations, getFilters } = require('../models/helperAnuncio');
 
 // express validator
 const { query, validationResult } = require('express-validator/check');
@@ -9,28 +10,30 @@ const { query, validationResult } = require('express-validator/check');
  * GET /
  * Renders a list of documents sorted, filtered and paginated
  */ 
-router.get('/', [ // validations
-	query('venta').optional().isIn(['true', 'false']).withMessage('must be "true" or "false"'),
-	query('tag').optional().isIn(['work', 'lifestyle','motor','mobile',]).withMessage('must be "work", "lifestyle", "motor" or "mobile"'),
-	query('precio').optional().matches(/(([0-9]+(.[0-9]+)?)|-([0-9]+(.[0-9]+)?)|([0-9]+(.[0-9]+)?)-|([0-9]+(.[0-9]+)?)-([0-9]+(.[0-9]+)?))$/).withMessage('must be "(exact.price)", "(min.price)-", "-(max.price)" or "(min.price)-(max.price)"')
-], async function(req, res, next) {
+router.get('/', validations, async function(req, res, next) {
 	try {
 
+		// validate params from querystring
 		validationResult(req).throw();
 
-		// obtener artículos del API, paśandole los filtros obtenidos en el querystring
-		const querystring = req._parsedUrl.search !== null ? req._parsedUrl.search : '';
-		const response = await axios.get(`${process.env.API_URL}/anuncios/${querystring}`);
-		if (response.data.success) {
-			const anuncios = response.data.result;
-			res.render('anuncios', { anuncios: anuncios });
-		}
-		else {
-			throw new Error(result);
-		}
+		// build filters object from querystring values
+		const filters = getFilters(req.query);
 
-		// obtener anuncios segun filtros y paginación
-		//res.render('anuncios');
+		// get query config
+		const limit = parseInt(req.query.limit);
+		const start = parseInt(req.query.start);
+		const fields = req.query.fields;
+		const sort = req.query.sort;
+
+		// get the collections from database
+		const anuncios = await Anuncio.list(filters, limit, start, fields, sort);
+		const count = await Anuncio.count(filters);
+		
+		const page = Math.floor(start/limit) + 1;
+		const totalPages = Math.ceil(count/limit);
+
+		// render page
+		res.render('anuncios', {anuncios: anuncios, count: count, page: page, totalPages: totalPages});
 	}
 	catch (err) {
 		next(err);

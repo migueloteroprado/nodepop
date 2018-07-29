@@ -19,6 +19,146 @@
 				"lifestyle",
 				"mobile"
 			]
-		}
+		},
+		{
+			"nombre": "Bicicleta 2",
+			"venta": true,
+			"precio": 50,
+			"foto": "bici.jpg",
+			"tags": [
+				"lifestyle",
+				"motor"
+			]
+		},
+		{
+			"nombre": "iPhone 3GS 2",
+			"venta": false,
+			"precio": 180.00,
+			"foto": "iphone.png",
+			"tags": [
+				"lifestyle",
+				"mobile"
+			]
+		},
+		{
+			"nombre": "Bicicleta",
+			"venta": true,
+			"precio": 230.15,
+			"foto": "bici.jpg",
+			"tags": [
+				"lifestyle",
+				"motor"
+			]
+		},
+		{
+			"nombre": "iPhone 3GS",
+			"venta": false,
+			"precio": 50.00,
+			"foto": "iphone.png",
+			"tags": [
+				"lifestyle",
+				"mobile"
+			]
+		},
+		{
+			"nombre": "Bicicleta 2",
+			"venta": true,
+			"precio": 50,
+			"foto": "bici.jpg",
+			"tags": [
+				"lifestyle",
+				"motor"
+			]
+		},
+		{
+			"nombre": "iPhone 3GS 2",
+			"venta": false,
+			"precio": 180.00,
+			"foto": "iphone.png",
+			"tags": [
+				"lifestyle",
+				"mobile"
+			]
+		},
+		{
+			"nombre": "Bicicleta",
+			"venta": true,
+			"precio": 230.15,
+			"foto": "bici.jpg",
+			"tags": [
+				"lifestyle",
+				"motor"
+			]
+		},
+		{
+			"nombre": "iPhone 3GS",
+			"venta": false,
+			"precio": 50.00,
+			"foto": "iphone.png",
+			"tags": [
+				"lifestyle",
+				"mobile"
+			]
+		},
+		{
+			"nombre": "Bicicleta 2",
+			"venta": true,
+			"precio": 50,
+			"foto": "bici.jpg",
+			"tags": [
+				"lifestyle",
+				"motor"
+			]
+		},
+		{
+			"nombre": "iPhone 3GS 2",
+			"venta": false,
+			"precio": 180.00,
+			"foto": "iphone.png",
+			"tags": [
+				"lifestyle",
+				"mobile"
+			]
+		},
+		{
+			"nombre": "Bicicleta",
+			"venta": true,
+			"precio": 230.15,
+			"foto": "bici.jpg",
+			"tags": [
+				"lifestyle",
+				"motor"
+			]
+		},
+		{
+			"nombre": "iPhone 3GS",
+			"venta": false,
+			"precio": 50.00,
+			"foto": "iphone.png",
+			"tags": [
+				"lifestyle",
+				"mobile"
+			]
+		},
+		{
+			"nombre": "Bicicleta 2",
+			"venta": true,
+			"precio": 50,
+			"foto": "bici.jpg",
+			"tags": [
+				"lifestyle",
+				"motor"
+			]
+		},
+		{
+			"nombre": "iPhone 3GS 2",
+			"venta": false,
+			"precio": 180.00,
+			"foto": "iphone.png",
+			"tags": [
+				"lifestyle",
+				"mobile"
+			]
+		}		
 	]
 }

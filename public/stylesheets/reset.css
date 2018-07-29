@@ -9,14 +9,12 @@ del, em, img, small, strike, strong, sub, sup, tt,
 b, u, i, center,
 dl, dt, dd, ol, ul, li, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, section, summary,
-time, mark, audio, video {
+article, aside, 
+footer, header, hgroup, 
+menu, nav, section {
 	margin: 0;
 	padding: 0;
 	border: 0;
-	font-size: 1rem;
 	vertical-align: baseline;
 }
 
@@ -29,11 +27,6 @@ a {
 	text-decoration: none;
 	color: inherit;
 	outline: none;
-}
-
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
 }
 
 nav ul, form ul, footer ul, article ul {
@@ -57,4 +50,8 @@ img {
 table {
     border-collapse: collapse;
 	border-spacing: 0;
+}
+
+input, button, select {
+	font-size: 0.9rem;
 }

@@ -1,73 +1,132 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      <title><%= title %> - Ads</title>
-      <link rel='stylesheet' href='/stylesheets/reset.css' />
-      <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
 
-    <header class="anuncios">
-      <h1><a href="/"><%= title %></a></h1>
-    </header>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>
+    <%= title %> - Anuncios
+  </title>
+  <link rel='stylesheet' href='/stylesheets/reset.css' />
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+  <script src="/javascripts/main.js" type="module"></script>
+</head>
 
-    <nav>
+<body>
 
-    </nav>
+  <header>
+    <h1>
+      <a href="/">
+        <%= title %>
+      </a>
+    </h1>
+  </header>
 
-    <main>
-      <section class="search-section">
-        <form class="search-form" method="GET" action="/anuncios">
+  <nav>
 
-          <div>Tags: 
-            <label><input type="checkbox" name="tags" value="work">Work</label>
-            <label><input type="checkbox" name="tags" value="lifestyle">Lifestyle</label>
-            <label><input type="checkbox" name="tags" value="motor">Motor</label>
-            <label><input type="checkbox" name="tags" value="mobile">Mobile</label>
+  </nav>
+
+  <main>
+    <section class="search-section">
+      <form class="search-form" method="GET" action="/anuncios">
+
+        <div class="form-wrapper">
+          <div class="form-title">
+            <h3>Filtros</h3>
           </div>
 
-          <div>Tags: 
-            <label><input type="radio" name="tag" value="work">Work</label>
-            <label><input type="radio" name="tag" value="lifestyle">Lifestyle</label>
-            <label><input type="radio" name="tag" value="motor">Motor</label>
-            <label><input type="radio" name="tag" value="mobile">Mobile</label>
+          <div class="form-content">
+
+            <div>
+              <label>Nombre: </label>
+              <input type="text" id="nombre" name="nombre" placeholder="Nombre">
+            </div>
+
+            <div>
+              <label>Tipo: </label>
+              <select id="venta" name="venta">
+                <option value="">-</option>
+                <option value="true">Venta </option>
+                <option value="false">Búsqueda </option>
+              </select>
+            </div>     
+
+            <div>
+              <label>Precio:</label>
+              <input type="text" name="precio" id="precio" placeholder="Precio">
+            </div>
+                        
+            <div class="tags">
+              <label>Tag: </label>
+              <select id="tag" name="tag">
+                <option value="">-</option>
+                <option value="work">Work </option>
+                <option value="lifestyle">Lifestyle </option>
+                <option value="motor">Motor </option>
+                <option value="mobile">Mobile </option>
+              </select>
+            </div>
+
+            <div>
+              <label>Orden: </label>
+              <select id="sort" name="sort">
+                <option value="">-</option>
+                <option value="nombre">Nombre (asc) </option>
+                <option value="-nombre">Nombre (desc) </option>
+                <option value="precio">Precio (asc) </option>
+                <option value="-precio">Precio (desc) </option>
+              </select>    
+            </div>
+  
           </div>
 
-          <div>
-            <label for="nombre">Nombre <input type="text" id="nombre" name="nombre"></label>
+          <div class="buttons">
+            Página<%= page %> de <%= totalPages %>, Registros: <%= count %>
+            <button type="Reset">Reset</button>
+            <button type="submit">Buscar</button>
           </div>
 
-          <div>
-            <label for="venta">Tipo</label>
-            <select id="venta" name="venta">
-              <option value="true">Venta</option>
-              <option value="false">Búsqueda</option>
-            </select>
-          </div>
-          <button type="submit">Buscar</button>
-        </form>
 
-      </section>
-        <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus semper pulvinar consequat. Vestibulum a aliquam nisl. Ut tincidunt velit mauris, non vehicula est vehicula congue. Mauris interdum leo sed ex consequat blandit. Etiam et aliquet metus. Pellentesque pretium mi erat, nec rhoncus orci ullamcorper eu. Quisque et nunc in est tempus consectetur vitae nec quam.
-        </p>
-        <p>
-        Nullam leo ipsum, semper at turpis eu, rhoncus efficitur enim. Maecenas id nisl non odio pretium vestibulum sed id purus. Nullam cursus finibus lobortis. Donec posuere urna eu neque tempor fermentum. Cras dictum nibh sit amet fermentum ultrices. Pellentesque accumsan erat non congue consectetur. Quisque a cursus ligula. Mauris eget orci risus. Phasellus tempor dapibus diam non porttitor. Morbi odio nisl, molestie quis massa non, efficitur aliquam mi. Aliquam vehicula quam molestie interdum euismod. Sed turpis nulla, ornare eu est sed, pulvinar imperdiet purus. Etiam mattis sapien ultrices, rhoncus tellus ac, porttitor metus.
-        </p>
-        <p>
-        Sed quis accumsan magna, at maximus nisi. Sed ligula libero, faucibus in turpis rutrum, ultricies sodales enim. Suspendisse ultricies metus a nibh commodo luctus. Ut a orci placerat, aliquet turpis at, sodales ipsum. Aliquam sagittis massa quam, a viverra tellus porta gravida. Vivamus sed tellus erat. Nulla a pellentesque eros. Sed eu sagittis nunc. Nam imperdiet leo magna. Donec quis enim eu libero sollicitudin molestie ac eget ex. Aliquam sapien eros, venenatis at erat at, condimentum venenatis enim. Morbi eleifend lacus enim, et vehicula leo auctor sed. Aliquam tristique turpis vel ultricies tempus. Donec eros dui, malesuada et viverra a, pretium eu odio. Morbi ornare bibendum nulla, sit amet fermentum urna. Donec pulvinar magna quis neque aliquet, eu porta ipsum tincidunt.
-        </p>
-        <p>
-        Duis ante risus, sollicitudin eget metus eget, tincidunt feugiat neque. Nulla tristique ante lorem, vitae dapibus ante lacinia a. Sed venenatis aliquam molestie. Donec vehicula leo a suscipit interdum. Integer ultricies rhoncus libero, sed viverra risus pharetra eleifend. Nunc dapibus ac nisl vitae efficitur. Mauris ultrices, arcu at auctor blandit, lectus leo fermentum enim, sit amet feugiat sapien purus ac ex. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Interdum et malesuada fames ac ante ipsum primis in faucibus.
-        </p>
-        <p>
-        In hac habitasse platea dictumst. Donec a libero nisl. Vivamus at lobortis orci, eu sodales nibh. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nullam molestie est at aliquet elementum. Integer tristique eget est id vestibulum. Phasellus nec est in diam finibus pellentesque. Sed iaculis ac velit pharetra tempus. Donec eget odio ligula. Quisque massa ipsum, vestibulum in tempor id, accumsan id nisl. Aliquam erat volutpat. Vestibulum eleifend placerat nisi, quis pellentesque quam mollis vel. Donec ultrices purus a quam aliquet, in euismod erat ornare. Donec venenatis at libero mollis pellentesque. Etiam ante urna, dignissim nec justo in, semper pellentesque odio. Proin rhoncus massa in tincidunt malesuada.
-        </p>
-      
-    </main>    
-  </body>
+        </div>
+
+
+      </form>
+
+    </section>
+
+    <section class="list">
+      <header>
+        <h3>Listado de Anuncios</h3>
+      </header>
+      <div class="wrapper-anuncios">
+        <% anuncios.forEach(anuncio => { %>
+          <div class="anuncio">
+            <div class="data">
+              <p>
+                <span class="lbl">Nombre: </span><span class="value"><%= anuncio.nombre %></span>
+              </p>
+              <p>
+                  <span class="lbl">Precio: </span><span class="value"><%= anuncio.precio %></span>
+              </p>
+              <p>
+                  <span class="lbl">Tipo: </span><span class="value"><%= anuncio.venta ? 'Venta' : 'Búsqueda' %></span>
+              </p>
+              <p>
+                  <span class="lbl">Tags: </span><span class="value"><%= anuncio.tags %></span>
+              </p>
+            </div>
+            <div class="picture">
+              <img src=<%=`/images/anuncios/${anuncio.foto}` %> alt="<%= anuncio.foto %>">
+            </div>
+            
+          </div>
+        <% }) %>
+      </div>
+    </section>
+
+  </main>
+</body>
+
 </html>
-

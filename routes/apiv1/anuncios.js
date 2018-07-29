@@ -3,7 +3,7 @@ const router = express.Router();
 var createError = require('http-errors');
 const mongoose = require('mongoose');
 const Anuncio = require('../../models/Anuncio');
-
+const { validations, getFilters } = require('../../models/helperAnuncio');
 
 // express validator
 const { query, validationResult } = require('express-validator/check');
@@ -12,58 +12,21 @@ const { query, validationResult } = require('express-validator/check');
  * GET /
  * Returns a list of documents sorted, filtered and paginated
  */ 
-router.get('/', [ // validations
-			query('venta').optional().isIn(['true', 'false']).withMessage(`must be 'true' or 'false'`),
-			query('tag').optional().isIn(['work', 'lifestyle','motor','mobile',]).withMessage(`must be 'work', 'lifestyle', 'motor' or 'mobile'`),
-			query('precio').optional().matches(/(([0-9]+(.[0-9]+)?)|-([0-9]+(.[0-9]+)?)|([0-9]+(.[0-9]+)?)-|([0-9]+(.[0-9]+)?)-([0-9]+(.[0-9]+)?))$/).withMessage(`must be '(exact.price)', '(min.price)-', '-(max.price)' or '(min.price)-(max.price)'`)
-		], async function(req, res, next) {
+router.get('/', validations, async function(req, res, next) {
 
 	try {
 
-		validationResult(req).throw();
+		// validate params from querystring
+		//validationResult(req).throw();
 
-		// recuperar datos de entrada
-		const nombre = req.query.nombre;
-		const tag = req.query.tag;
-		const venta = req.query.venta;
-		const precio = req.query.precio;
+		// build filters object from querystring values
+		const filters = getFilters(req.query);
+
+		// get query config
 		const limit = parseInt(req.query.limit);
 		const start = parseInt(req.query.start);
 		const fields = req.query.fields;
 		const sort = req.query.sort;
-
-		// create empty filter
-		const filters = {};
-		
-		// filter by name, obtaining all documents whose name starts by given value, case insensitive
-		if (nombre) {
-			filters.nombre = new RegExp('^' + req.query.nombre, "i");
-		}
-		// filter by tag
-		if (tag) {
-			filters.tags = tag;
-		}
-		// filter by venta
-		if (venta) {
-			filters.venta = venta.toLowerCase() === 'true';
-		}
-		// filter by price
-		if (precio) {
-			const position = precio.indexOf('-');
-			if (position === -1) {
-				filters.precio = parseInt(precio);
-			}
-			else if (position === 0) {
-				filters.precio = { $lte: parseInt(precio.substring(1, precio.length+1)) } ;
-			}
-			else if (position === precio.length -1) {
-				filters.precio = { $gte: parseInt(precio.substring(0, precio.length)) } ;
-			}
-			else {
-				const precios = precio.split('-');
-				filters.precio = { $gte: parseInt(precios[0]), $lte: parseInt(precios[1]) } ;
-			}
-		} 
 
 		const anuncios = await Anuncio.list(filters, limit, start, fields, sort);
 		res.json({success: true, result: anuncios});
@@ -79,7 +42,7 @@ router.get('/', [ // validations
  */
 router.get('/tags', async (req, res, next) => {
 	try {
-		tags = await Anuncio.distinct('tags', {});
+		const tags = await Anuncio.distinct('tags');
 		console.log(tags);
 		res.json({ success: true, tags: tags });
 	}
@@ -87,7 +50,6 @@ router.get('/tags', async (req, res, next) => {
 		next(err);
 	}
 });
-
 
 /**
  * POST /

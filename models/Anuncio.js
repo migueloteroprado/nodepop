@@ -5,7 +5,10 @@ const anuncioSchema = mongoose.Schema({
 		type: String,
 		required: true
 	},
-	venta: Boolean,
+	venta: {
+		type: Boolean,
+		default: true
+	},
 	precio: {
 		type: Number,
 		min: 0
@@ -14,10 +17,6 @@ const anuncioSchema = mongoose.Schema({
 	tags: [String]
 });
 
-anuncioSchema.statics.deleteAll = async function () {
-	return await this.deleteMany().exec();
-};
-
 anuncioSchema.statics.list = function(filters, limit, start, fields, sort) {
 	const query = Anuncio.find(filters);
 	query.limit(limit);
@@ -25,7 +24,12 @@ anuncioSchema.statics.list = function(filters, limit, start, fields, sort) {
 	query.select(fields);
 	query.sort(sort);
 	return query.exec();
-}
+};
+
+anuncioSchema.statics.count = function(filters) {
+	const query = Anuncio.countDocuments(filters);
+	return query.exec();
+};
 
 const Anuncio = mongoose.model('Anuncio', anuncioSchema);
 

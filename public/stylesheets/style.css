@@ -1,7 +1,10 @@
 body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.9rem;
 }
 
+
+/******************************/
 .shadow {
   text-shadow: 5px 5px 10px black;
 }
@@ -17,38 +20,36 @@ body > header.home {
 
 body > header .cover {
   position: absolute;
-  top: 70%;
+  top: 42%;
   left: 50%;
   transform: translate(-50%, -50%);
   color: #ffffff;
   font-size: 3rem;
   text-align: center;
-
-  width: 50%;
   border: 1px solid grey;
-  padding: 0 1.5rem 1.5rem 1.5rem;
+  padding: 0.5rem 1.5rem 2.5rem 1.5rem;
   border-radius: 15px;
-  background-color: rgba(255,255,255,0.3);
+  background-color: rgba(255,255,255,0.4);
   box-shadow: 2px 2px 10px black;
-
 }
 
 .cover h1 {
-  font-size: 2.5rem;
-  text-shadow: 5px 5px 10px black;  
+  font-size: 3rem;
+  text-shadow: 5px 5px 10px black;
   text-align: center;
-  line-height: 3rem;
-
+  line-height: 3.5rem;
+  margin-bottom: 1.5rem;
 }
 .cover a {
   padding: 0.2rem 1.5rem;
   outline: none;
   color: #ffffff;
-  background-color: green; 
+  background-color: green;
   border-radius: 8px;
   font-weight: bold;
   font-size: 2rem;
-  box-shadow: 2px 2px 5px grey;
+  box-shadow: 2px 2px 5px black;
+  border: 1px solid #005500;
 }
 .cover a:hover {
   background-color: darkgreen; 
@@ -64,13 +65,159 @@ body > header.ads {
   right: 0;  
 }
 
+/*****************************************************/
+
+
+h1 {
+  font-size: 1.2rem;
+}
+h3 {
+  font-size: 1rem;
+}
+
+body > header {
+  background-color: #222222;
+  color: white;
+  padding: 0.8rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
 main {
-  position: fixed; 
-  top: 3rem; 
-  left: 0; 
-  right: 0; 
-  bottom: 0; 
+  position: fixed;
+  top: 3.3rem;
+  left: 0;
+  right: 0;
+  bottom: 0;
   overflow: auto;
+  padding: 0.5rem;
+}
+
+.search-form {
+  padding: 0.5rem;
+  border: 1px solid grey;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.form-title {
+  margin-bottom: 1rem;
+}
+
+.form-title h3, section.list h3 {
+  background-color: #333333;
+  color: white;
+  padding: 0.2rem 0 0.2rem 0.4rem;
+  border-radius: 5px;
 }
 
 
+.form-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border: 1px solid grey;
+  border-radius: 5px;
+  margin: 0.1rem;
+  padding: 0.5rem 0.5rem 1rem 0.5rem;
+}
+
+.form-content div {
+  padding: 0.6rem 0.6rem 0.2rem 0.6rem;
+}
+
+label {
+  margin-right: 1rem;
+  display: inline-block;
+  width: 70px;
+  text-align: right;
+}
+
+input {
+  padding: 0.2rem;
+  width: 150px;
+}
+
+select {
+  padding: 0.1rem;
+  width: 150px;
+}
+
+
+.search-form .buttons {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.2rem;
+}
+button {
+  margin: 0.5rem 0.1rem 0.2rem 0.7rem;
+  padding: 0.2rem 1rem;
+  width: 100px;
+}
+
+section.list {
+  left: 0.5rem;
+  right: 0.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+section.list header {
+  margin-bottom: 0.5rem;
+}
+
+.anuncio {
+  display: flex;
+  flex-direction: row;
+  padding: 0.7rem;
+  border: 1px solid grey;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  margin: 0.25rem;
+}
+
+.anuncio img {
+  border-radius: 5px;
+  display: flex;
+}
+
+.anuncio .data {
+  width: 100%;
+  padding: 0rem 1rem 0rem 0rem;
+}
+.anuncio .data span.lbl {
+  min-width: 80px;
+  display: inline-block;
+}
+.anuncio .data span.value {
+  font-weight: bold;
+  display: inline-block;
+}
+
+.anuncio .picture {
+  width: 100%;
+}
+
+.wrapper-anuncios {
+  display: grid;
+}
+
+@media (max-width: 900px) {
+  .wrapper-anuncios {
+    grid-template-columns: auto;
+  }
+}
+
+@media (min-width: 901px) {
+  .wrapper-anuncios {
+    grid-template-columns: auto auto; 
+  }
+}
+
+@media (min-width: 1366px) {
+  .wrapper-anuncios {
+    grid-template-columns: auto auto auto;
+  }
+}
