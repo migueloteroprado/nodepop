@@ -101,37 +101,38 @@
 
     </section>
 
-    <section class="paginator">
-      <% if (totalPages > 0 && limit > 0 && page <= totalPages) { %>
+    <% if (totalPages > 0 && limit > 0 && currentPage <= totalPages) { %>
+      <section class="paginator">
         <span>Página</span>
         <ul class="pagination text-center">
-            <% if (page == 1) { %>
+            <% if (currentPage == 1) { %>
                 <li class="disabled"><a>Primera</a></li>
             <% } else { %>
                 <li><a href="/anuncios?start=0&limit=<%= limit %>&<%= filtersInQuery %>">Primera</a></li>
             <% } %>
-            <% var i = (Number(page) > 5 ? Number(page) - 4 : 1) %>
+            <% var i = (Number(currentPage) > 5 ? Number(currentPage) - 4 : 1) %>
             <% if (i !== 1) { %>
                 <li class="disabled"><a>...</a></li>
             <% } %>
-            <% for (; i <= (Number(page) + 4) && i <= totalPages; i++) { %>
-                <% if (i == page) { %>
+            <% for (; i <= (Number(currentPage) + 4) && i <= totalPages; i++) { %>
+                <% if (i == currentPage) { %>
                     <li class="active"><a><%= i %></a></li>
                 <% } else { %>
                     <li><a href="/anuncios/?start=<%= (i * limit) - limit %>&limit=<%= limit %>&<%= filtersInQuery %>"><%= i %></a></li>
                 <% } %>
-                <% if (i == Number(page) + 4 && i < totalPages) { %>
+                <% if (i == Number(currentPage) + 4 && i < totalPages) { %>
                     <li class="disabled"><a>...</a></li>
                 <% } %>
             <% } %>
-            <% if (page == totalPages) { %>
+            <% if (currentPage == totalPages) { %>
                 <li class="disabled"><a>Última</a></li>
             <% } else { %>
                 <li><a href="/anuncios?start=<%= (totalPages * limit) - limit %>&limit=<%= limit %>&<%= filtersInQuery %>">Última</a></li>
             <% } %>
         </ul>
-      <% } %>  
-    </section>
+      </section>
+    <% } %>  
+    
 
 
     <section class="list">
@@ -143,29 +144,37 @@
       
 
       <div class="wrapper-anuncios">
-        <% anuncios.forEach(anuncio => { %>
-          <div class="anuncio shadow-box-light">
-            <div class="data">
-              <h4>
-                <%= anuncio.nombre %>
-              </h4>
-              <p>
-                  <span class="lbl">Precio: </span><span class="value"><%= anuncio.precio %></span>
-              </p>
-              <p>
-                  <span class="lbl">Tipo: </span><span class="value"><%= anuncio.venta ? 'Venta' : 'Búsqueda' %></span>
-              </p>
-              <p>
-                  <span class="lbl">Tags: </span><span class="value"><%= anuncio.tags %></span>
-              </p>
+        <% if (anuncios.length > 0) {
+          anuncios.forEach(anuncio => { %>
+            <div class="anuncio shadow-box-light">
+              <div class="anuncio-wrapper">
+                <div class="data">
+                  <h4 class="shadow-box-light">
+                    <%= anuncio.nombre %>
+                  </h4>
+                  <p>
+                      <span class="lbl">Precio: </span><span class="value"><%= anuncio.precio %></span>
+                  </p>
+                  <p>
+                      <span class="lbl">Tipo: </span><span class="value"><%= anuncio.venta ? 'Venta' : 'Búsqueda' %></span>
+                  </p>
+                </div>
+                <div class="picture">
+                  <img class="shadow-box-light" src=<%=`/images/anuncios/${anuncio.foto}` %> alt="<%= anuncio.foto %>">
+                </div>
+              </div>   
+              <div class="anuncio-footer">
+                <p>
+                    <span class="lbl">Tags: </span><span class="value"><%= anuncio.tags %></span>
+                </p>
+              </div>
             </div>
-            <div class="picture">
-              <img class="shadow-box-light" src=<%=`/images/anuncios/${anuncio.foto}` %> alt="<%= anuncio.foto %>">
-            </div>
-            
-          </div>
-        <% }) %>
+          <% }) 
+          } else { %>
+            <h4>No se encontró ningún anuncio para los filtros de búsqueda indicados</h4> 
+          <% } %>  
       </div>
+
     </section>
 
   </main>

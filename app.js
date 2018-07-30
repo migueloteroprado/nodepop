@@ -1,3 +1,4 @@
+var fs = require('fs');
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -8,12 +9,17 @@ const { isAPI } = require('./lib/utils');
 
 var app = express();
 
+console.log(process.env.DEBUG);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 app.engine('html', require('ejs').__express);
 
+// logger setup
+app.use(logger('common', { stream: fs.createWriteStream('./access.log', {flags: 'a'}) }));
 app.use(logger('dev'));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -23,12 +29,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.locals.title = 'Nodepop';
 
 /**
- * Conectamos a la Base de Datos y registramos los modelos
+ * Connect to database and register models
  */
 require('./lib/connectMongoose');
 require('./models/Anuncio');
 
-// Routes
+/**
+ *  Routes
+ */
 
 /**
  * API routes
@@ -40,7 +48,6 @@ app.use('/apiv1/anuncios', require('./routes/apiv1/anuncios'));
  */
 app.use('/', require('./routes/index'));
 app.use('/anuncios', require('./routes/anuncios'));
-
 
 
 // catch 404 and forward to error handler

@@ -21,141 +21,127 @@
 			]
 		},
 		{
-			"nombre": "Bicicleta 2",
+			"nombre": "Anillo",
 			"venta": true,
-			"precio": 50,
-			"foto": "bici.jpg",
+			"precio": 140.5,
+			"foto": "anillo.jpg",
 			"tags": [
-				"lifestyle",
-				"motor"
+				"lifestyle"
 			]
 		},
 		{
-			"nombre": "iPhone 3GS 2",
+			"nombre": "Ipad",
 			"venta": false,
-			"precio": 180.00,
-			"foto": "iphone.png",
+			"precio": 250,
+			"foto": "ipad.jpg",
+			"tags": [
+				"lifestyle", 
+				"mobile",
+				"work"
+			]
+		},
+		{
+			"nombre": "Samsung Galaxy S8",
+			"venta": true,
+			"precio": 625,
+			"foto": "galaxy-s8.jpg",
 			"tags": [
 				"lifestyle",
 				"mobile"
 			]
 		},
 		{
-			"nombre": "Bicicleta",
-			"venta": true,
-			"precio": 230.15,
-			"foto": "bici.jpg",
-			"tags": [
-				"lifestyle",
-				"motor"
-			]
-		},
-		{
-			"nombre": "iPhone 3GS",
+			"nombre": "Moto",
 			"venta": false,
-			"precio": 50.00,
-			"foto": "iphone.png",
-			"tags": [
-				"mobile"
-			]
-		},
-		{
-			"nombre": "Bicicleta 2",
-			"venta": true,
-			"precio": 50,
-			"foto": "bici.jpg",
+			"precio": 2740.25,
+			"foto": "moto.jpg",
 			"tags": [
 				"motor"
 			]
 		},
 		{
-			"nombre": "iPhone 3GS 2",
-			"venta": false,
-			"precio": 180.00,
-			"foto": "iphone.png",
-			"tags": [
-				"lifestyle",
-				"mobile"
-			]
-		},
-		{
-			"nombre": "Bicicleta",
+			"nombre": "Cubo de Rubik",
 			"venta": true,
-			"precio": 230.15,
-			"foto": "bici.jpg",
+			"precio": 15,
+			"foto": "cubo-rubik.jpg",
 			"tags": [
-				"lifestyle",
-				"motor"
+				"lifestyle"
 			]
 		},
 		{
-			"nombre": "iPhone 3GS",
+			"nombre": "Corbata",
 			"venta": false,
-			"precio": 50.00,
-			"foto": "iphone.png",
+			"precio": 35,
+			"foto": "corbata.jpg",
 			"tags": [
-				"lifestyle",
-				"mobile"
+				"lifestyle"
 			]
 		},
 		{
-			"nombre": "Bicicleta 2",
+			"nombre": "Impresora",
 			"venta": true,
-			"precio": 50,
-			"foto": "bici.jpg",
-			"tags": [
-				"lifestyle",
-				"motor"
-			]
-		},
-		{
-			"nombre": "iPhone 3GS 2",
-			"venta": false,
-			"precio": 180.00,
-			"foto": "iphone.png",
-			"tags": [
-				"lifestyle",
-				"mobile"
-			]
-		},
-		{
-			"nombre": "Bicicleta",
-			"venta": true,
-			"precio": 230.15,
-			"foto": "bici.jpg",
-			"tags": [
-				"lifestyle",
-				"motor"
-			]
-		},
-		{
-			"nombre": "iPhone 3GS",
-			"venta": false,
-			"precio": 50.00,
-			"foto": "iphone.png",
-			"tags": [
-				"lifestyle",
-				"mobile"
-			]
-		},
-		{
-			"nombre": "Bicicleta 2",
-			"venta": true,
-			"precio": 50,
-			"foto": "bici.jpg",
-			"tags": [
-				"lifestyle",
-				"motor"
-			]
-		},
-		{
-			"nombre": "iPhone 3GS 2",
-			"venta": false,
-			"precio": 180.00,
-			"foto": "iphone.png",
+			"precio": 150,
+			"foto": "impresora.jpg",
 			"tags": [
 				"work"
 			]
-		}		
+		},
+		{
+			"nombre": "Ferrari",
+			"venta": false,
+			"precio": 95000,
+			"foto": "ferrari.jpg",
+			"tags": [
+				"motor",
+				"lifestyle"
+			]
+		},
+		{
+			"nombre": "Reloj",
+			"venta": true,
+			"precio": 350,
+			"foto": "reloj.jpg",
+			"tags": [
+				"lifestyle"
+			]
+		},
+		{
+			"nombre": "Televisión",
+			"venta": false,
+			"precio": 350,
+			"foto": "tv.jpg",
+			"tags": [
+				"lifestyle"
+			]
+		},
+		{
+			"nombre": "Yate",
+			"venta": true,
+			"precio": 325000,
+			"foto": "yate.jpg",
+			"tags": [
+				"motor",
+				"lifestyle"
+			]
+		},
+		{
+			"nombre": "Zapatos",
+			"venta": false,
+			"precio": 80,
+			"foto": "zapatos.jpg",
+			"tags": [
+				"lifestyle"
+			]
+		},
+		{
+			"nombre": "Portátil",
+			"venta": true,
+			"precio": 550,
+			"foto": "portatil.jpg",
+			"tags": [
+				"work",
+				"lifestyle"
+			]
+		}
 	]
 }

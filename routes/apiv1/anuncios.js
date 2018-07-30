@@ -3,21 +3,21 @@ const router = express.Router();
 var createError = require('http-errors');
 const mongoose = require('mongoose');
 const Anuncio = require('../../models/Anuncio');
-const { validations, getFilters } = require('../../models/helperAnuncio');
+const { queryValidations, bodyValidations, getFilters } = require('../../models/helperAnuncio');
 
 // express validator
-const { query, validationResult } = require('express-validator/check');
+const { query, body, validationResult } = require('express-validator/check');
 
 /**
  * GET /
  * Returns a list of documents sorted, filtered and paginated
  */ 
-router.get('/', validations, async function(req, res, next) {
+router.get('/', queryValidations, async function(req, res, next) {
 
 	try {
 
 		// validate params from querystring
-		//validationResult(req).throw();
+		validationResult(req).throw();
 
 		// build filters object from querystring values
 		const filters = getFilters(req.query);
@@ -28,7 +28,10 @@ router.get('/', validations, async function(req, res, next) {
 		const fields = req.query.fields;
 		const sort = req.query.sort;
 
+		// query database
 		const anuncios = await Anuncio.list(filters, limit, start, fields, sort);
+
+		// return result
 		res.json({success: true, result: anuncios});
 	}		
 	catch(err) {
@@ -42,8 +45,8 @@ router.get('/', validations, async function(req, res, next) {
  */
 router.get('/tags', async (req, res, next) => {
 	try {
+		// Get all distinct tags from all anuncios
 		const tags = await Anuncio.distinct('tags');
-		console.log(tags);
 		res.json({ success: true, tags: tags });
 	}
 	catch (err) {
@@ -53,17 +56,28 @@ router.get('/tags', async (req, res, next) => {
 
 /**
  * POST /
- * Inserts a document in database
+ * Inserts a new document in database
  */
-router.post('/', async (req, res, next) => {
+router.post('/', bodyValidations, async (req, res, next) => {
 	try {
+
+console.log(req.body);		
+
+		// validate data from body
+		validationResult(req).throw();
+
 		// get data from request body
 		const anuncio = req.body;
+
 		// create a new document using the model
 		const newAnuncio = new Anuncio(anuncio);
+
 		// save document in database
 		const savedAnuncio = await newAnuncio.save();
+
+		// return result
 		res.json({ success: true, result: savedAnuncio });
+
 	} catch(err) {
 		next(err);
 	}

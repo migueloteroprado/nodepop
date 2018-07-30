@@ -1,22 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const Anuncio = require('../models/Anuncio');
-const { validations, getFilters } = require('../models/helperAnuncio');
 
-// express validator
 const { query, validationResult } = require('express-validator/check');
-
-
 
 const queryString = require('query-string');
 
-
+const Anuncio = require('../models/Anuncio');
+const { queryValidations, getFilters } = require('../models/helperAnuncio');
 
 /**
  * GET /
  * Renders a list of documents sorted, filtered and paginated
  */ 
-router.get('/', validations, async function(req, res, next) {
+router.get('/', queryValidations, async function(req, res, next) {
 	try {
 
 		// validate params from querystring
@@ -36,7 +32,7 @@ router.get('/', validations, async function(req, res, next) {
 		const count = await Anuncio.count(filters);
 		
 		// calculate current page and total pages from limit and start, will be passed to the rendered view for pagination
-		const page = Math.floor(start/limit) + 1;
+		const currentPage = Math.floor(start/limit) + 1;
 		const totalPages = Math.ceil(count/limit);
 
 		// Obtain filters and sort from querystring, without start and limit
@@ -52,7 +48,7 @@ router.get('/', validations, async function(req, res, next) {
 		const filtersInQuery = queryString.stringify(queryFilters);
 
 		// render page
-		res.render('anuncios', {anuncios: anuncios, page: page, totalPages: totalPages, limit: limit, filtersInQuery: filtersInQuery});
+		res.render('anuncios', {anuncios: anuncios, currentPage: currentPage, totalPages: totalPages, limit: limit, filtersInQuery: filtersInQuery});
 	}
 	catch (err) {
 		next(err);

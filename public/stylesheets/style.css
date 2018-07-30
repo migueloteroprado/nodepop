@@ -191,13 +191,15 @@ section.list header {
 }
 
 .anuncio {
-  display: flex;
-  flex-direction: row;
-  padding: 1rem;
   border: 1px solid grey;
   border-radius: 5px;
   background-color: #f9f9f9;
   max-width: 900px;
+}
+.anuncio .anuncio-wrapper {
+  display: flex;
+  flex-direction: row;
+  padding: 1rem;
 }
 
 .anuncio img {
@@ -210,25 +212,38 @@ section.list header {
   padding: 0rem 1rem 0rem 0rem;
 }
 .anuncio .data h4 {
-  font-size: 1.1rem;
-  padding-bottom: 0.4rem;
+  font-size: 0.9rem;
 }
 .anuncio .data span.lbl {
-  min-width: 80px;
+  min-width: 60px;
   display: inline-block;
+  text-align: right;
+  margin-right: 0.5rem;
 }
-.anuncio .data span.value {
+.anuncio span.value {
   font-weight: bold;
   display: inline-block;
 }
-
 .anuncio .picture {
   width: 100%;
+  border-radius: 5px;
+  border: 1px solid #999999;
+}
+.anuncio .anuncio-footer {
+  text-align: right;
+  margin: 0 1.1rem 0.6rem;
 }
 
 .wrapper-anuncios {
   display: grid;
   grid-gap: 0.8rem;
+}
+.wrapper-anuncios h4 {
+  padding: 0.1rem 0.1rem 0.1rem 0.5rem;
+  margin-bottom: 1rem;
+  background-color: #333333;
+  color: white;
+  border-radius: 5px;
 }
 
 /*** Pagination ****/
@@ -237,7 +252,7 @@ section.paginator {
   display: flex;
   border: 1px solid grey;
   border-radius: 5px;
-  padding: 1rem;
+  padding: 0.5rem;
   justify-content: flex-end;
 }
 
@@ -256,6 +271,7 @@ ul.pagination {
 ul.pagination li {
   border: 1px solid #aaaaaa;
   margin-left: 4px;
+  margin-bottom: 4px;
   border-radius: 5px;
   display: block;
 }
@@ -284,19 +300,19 @@ ul.pagination li.disabled:hover {
 
 /*** media queries **/
 
-@media (max-width: 899px) {
+@media (max-width: 799px) {
   .wrapper-anuncios {
     grid-template-columns: 1fr;
   }
 }
 
-@media (min-width: 900px) {
+@media (min-width: 800px) {
   .wrapper-anuncios {
-    grid-template-columns: 1fr 1fr; 
+    grid-template-columns: 1fr 1fr;
   }
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1368px) {
   .wrapper-anuncios {
     grid-template-columns: 1fr 1fr 1fr;
   }

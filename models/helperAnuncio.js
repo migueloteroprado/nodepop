@@ -1,5 +1,5 @@
 // express validator
-const query = require('express-validator/check').query;
+const { query, body } = require('express-validator/check');
 
 // List of posible tags
 const tags = ['work', 'lifestyle', 'motor', 'mobile'];
@@ -9,7 +9,7 @@ let checkTags = (value) => {
 	let queryTags = typeof value === 'object' ? value : [value];
 	for (let i = 0; i < queryTags.length; i++) {
 		if (tags.indexOf(queryTags[i]) === -1) {
-			throw new Error(`wrong value '${queryTags[i]}'`);
+			throw new Error(`wrong value "${queryTags[i]}". Must be "work", "lifestyle", "motor" or "mobile"`);
 		}
 	}
 	return true;
@@ -40,13 +40,20 @@ let checkInteger = (value) => {
 module.exports = {
 
 	// validation array for querystring
-	validations: [
+	queryValidations: [
 		query('venta').optional().isIn(['', 'true', 'false']).withMessage('must be "true" or "false"'),
 		query('tag').optional().custom(checkTags),
 		query('precio').optional().custom(checkPrice),
-		query('start').custom(checkInteger),
-		query('limit').custom(checkInteger)
+		query(['start', 'limit']).custom(checkInteger),
 	],
+
+	bodyValidations: [
+		body('nombre').not().isEmpty().withMessage('is required'),
+		body('venta').isIn(['true', 'false']).withMessage('must be "true" or "false"'),
+		body('tags').custom(checkTags),
+		body('precio').isDecimal(),
+		body('foto').matches(new RegExp(/\.(gif|jpe?g|png)$/i)).withMessage('must be a .gif, .jpg, .jpeg or .png image file')
+	],	
 
 	// obtain filter object from querystring
 	getFilters: function(queryString) {
