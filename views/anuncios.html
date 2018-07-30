@@ -34,7 +34,7 @@
 
         <div class="form-wrapper">
           <div class="form-title">
-            <h3>Filtros</h3>
+            <h3 class="shadow-box">Filtros</h3>
           </div>
 
           <div class="form-content">
@@ -57,16 +57,12 @@
               <label>Precio:</label>
               <input type="text" name="precio" id="precio" placeholder="Precio">
             </div>
-                        
-            <div class="tags">
-              <label>Tag: </label>
-              <select id="tag" name="tag">
-                <option value="">-</option>
-                <option value="work">Work </option>
-                <option value="lifestyle">Lifestyle </option>
-                <option value="motor">Motor </option>
-                <option value="mobile">Mobile </option>
-              </select>
+
+            <div><label>Tags: </label>
+              <label><input type="checkbox" id="tag-work" name="tag" value="work">Work</label>
+              <label><input type="checkbox" id="tag-lifestyle" name="tag" value="lifestyle">Lifestyle</label>
+              <label><input type="checkbox" id="tag-motor" name="tag" value="motor">Motor</label>
+              <label><input type="checkbox" id="tag-mobile" name="tag" value="mobile">Mobile</label>
             </div>
 
             <div>
@@ -79,11 +75,20 @@
                 <option value="-precio">Precio (desc) </option>
               </select>    
             </div>
+
+            <div>
+              <label>Start: </label>
+              <input type="number" min="0" name="start" id="start" placeholder="Start">
+            </div>
+
+            <div>
+              <label>Limit: </label>
+              <input type="number" min="0" name="limit" id="limit" placeholder="Limit">
+            </div>
   
           </div>
 
           <div class="buttons">
-            Página<%= page %> de <%= totalPages %>, Registros: <%= count %>
             <button type="Reset">Reset</button>
             <button type="submit">Buscar</button>
           </div>
@@ -96,17 +101,54 @@
 
     </section>
 
+    <section class="paginator">
+      <% if (totalPages > 0 && limit > 0 && page <= totalPages) { %>
+        <span>Página</span>
+        <ul class="pagination text-center">
+            <% if (page == 1) { %>
+                <li class="disabled"><a>Primera</a></li>
+            <% } else { %>
+                <li><a href="/anuncios?start=0&limit=<%= limit %>&<%= filtersInQuery %>">Primera</a></li>
+            <% } %>
+            <% var i = (Number(page) > 5 ? Number(page) - 4 : 1) %>
+            <% if (i !== 1) { %>
+                <li class="disabled"><a>...</a></li>
+            <% } %>
+            <% for (; i <= (Number(page) + 4) && i <= totalPages; i++) { %>
+                <% if (i == page) { %>
+                    <li class="active"><a><%= i %></a></li>
+                <% } else { %>
+                    <li><a href="/anuncios/?start=<%= (i * limit) - limit %>&limit=<%= limit %>&<%= filtersInQuery %>"><%= i %></a></li>
+                <% } %>
+                <% if (i == Number(page) + 4 && i < totalPages) { %>
+                    <li class="disabled"><a>...</a></li>
+                <% } %>
+            <% } %>
+            <% if (page == totalPages) { %>
+                <li class="disabled"><a>Última</a></li>
+            <% } else { %>
+                <li><a href="/anuncios?start=<%= (totalPages * limit) - limit %>&limit=<%= limit %>&<%= filtersInQuery %>">Última</a></li>
+            <% } %>
+        </ul>
+      <% } %>  
+    </section>
+
+
     <section class="list">
       <header>
-        <h3>Listado de Anuncios</h3>
+        <h3 class="shadow-box">Listado de Anuncios</h3>
       </header>
+
+
+      
+
       <div class="wrapper-anuncios">
         <% anuncios.forEach(anuncio => { %>
-          <div class="anuncio">
+          <div class="anuncio shadow-box-light">
             <div class="data">
-              <p>
-                <span class="lbl">Nombre: </span><span class="value"><%= anuncio.nombre %></span>
-              </p>
+              <h4>
+                <%= anuncio.nombre %>
+              </h4>
               <p>
                   <span class="lbl">Precio: </span><span class="value"><%= anuncio.precio %></span>
               </p>
@@ -118,7 +160,7 @@
               </p>
             </div>
             <div class="picture">
-              <img src=<%=`/images/anuncios/${anuncio.foto}` %> alt="<%= anuncio.foto %>">
+              <img class="shadow-box-light" src=<%=`/images/anuncios/${anuncio.foto}` %> alt="<%= anuncio.foto %>">
             </div>
             
           </div>

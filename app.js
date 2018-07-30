@@ -59,7 +59,7 @@ app.use(function (err, req, res, next) {
 		const errorInfo = err.array({ onlyFirstError: true })[0];
 		err.message = isAPI(req)
 			? { message: 'Not valid', errors: err.mapped() }
-			: `Not valid - ${errorInfo.param} ${errorInfo.msg}`;
+			: `Not valid - ${errorInfo.param} : ${errorInfo.msg}`;
 	}
 
 	res.status(err.status || 500);

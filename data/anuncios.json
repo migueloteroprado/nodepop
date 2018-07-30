@@ -56,7 +56,6 @@
 			"precio": 50.00,
 			"foto": "iphone.png",
 			"tags": [
-				"lifestyle",
 				"mobile"
 			]
 		},
@@ -66,7 +65,6 @@
 			"precio": 50,
 			"foto": "bici.jpg",
 			"tags": [
-				"lifestyle",
 				"motor"
 			]
 		},
@@ -156,8 +154,7 @@
 			"precio": 180.00,
 			"foto": "iphone.png",
 			"tags": [
-				"lifestyle",
-				"mobile"
+				"work"
 			]
 		}		
 	]

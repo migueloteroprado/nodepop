@@ -4,9 +4,16 @@ body {
 }
 
 
-/******************************/
+/*** Index  ****/
+
 .shadow {
   text-shadow: 5px 5px 10px black;
+}
+.shadow-box {
+  box-shadow: 4px 4px 15px grey;
+}
+.shadow-box-light {
+  box-shadow: 1px 1px 15px grey;
 }
 
 body > header.home {
@@ -65,7 +72,7 @@ body > header.ads {
   right: 0;  
 }
 
-/*****************************************************/
+/***** Anuncios ****/
 
 
 h1 {
@@ -92,18 +99,21 @@ main {
   right: 0;
   bottom: 0;
   overflow: auto;
-  padding: 0.5rem;
+  padding: 1rem;
+}
+
+section {
+  margin-bottom: 1rem;
 }
 
 .search-form {
   padding: 0.5rem;
   border: 1px solid grey;
   border-radius: 5px;
-  background-color: #f9f9f9;
 }
 
 .form-title {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .form-title h3, section.list h3 {
@@ -121,7 +131,7 @@ main {
   border: 1px solid grey;
   border-radius: 5px;
   margin: 0.1rem;
-  padding: 0.5rem 0.5rem 1rem 0.5rem;
+  padding: 0.5rem;
 }
 
 .form-content div {
@@ -131,13 +141,16 @@ main {
 label {
   margin-right: 1rem;
   display: inline-block;
-  width: 70px;
   text-align: right;
 }
 
 input {
   padding: 0.2rem;
   width: 150px;
+}
+
+input[type="checkbox"] {
+  width: inherit;
 }
 
 select {
@@ -149,19 +162,28 @@ select {
 .search-form .buttons {
   display: flex;
   justify-content: flex-end;
-  padding: 0.2rem;
 }
 button {
-  margin: 0.5rem 0.1rem 0.2rem 0.7rem;
-  padding: 0.2rem 1rem;
+  margin: 0.5rem 0.1rem 0.2rem 0.4rem;
+  padding: 0.5rem 1rem;
   width: 100px;
+  background-color: #333333;
+  color: white;
+  border: 0;
+  border-radius: 5px;
+  font-weight: bold;
+}
+button:hover {
+  cursor: pointer;
+  background-color: #555555;
 }
 
 section.list {
   left: 0.5rem;
   right: 0.5rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border: 1px solid grey;
+  border-radius: 5px;
 }
 
 section.list header {
@@ -171,11 +193,11 @@ section.list header {
 .anuncio {
   display: flex;
   flex-direction: row;
-  padding: 0.7rem;
+  padding: 1rem;
   border: 1px solid grey;
   border-radius: 5px;
   background-color: #f9f9f9;
-  margin: 0.25rem;
+  max-width: 900px;
 }
 
 .anuncio img {
@@ -186,6 +208,10 @@ section.list header {
 .anuncio .data {
   width: 100%;
   padding: 0rem 1rem 0rem 0rem;
+}
+.anuncio .data h4 {
+  font-size: 1.1rem;
+  padding-bottom: 0.4rem;
 }
 .anuncio .data span.lbl {
   min-width: 80px;
@@ -202,22 +228,76 @@ section.list header {
 
 .wrapper-anuncios {
   display: grid;
+  grid-gap: 0.8rem;
 }
 
-@media (max-width: 900px) {
+/*** Pagination ****/
+
+section.paginator {
+  display: flex;
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding: 1rem;
+  justify-content: flex-end;
+}
+
+section.paginator span {
+  line-height: 2rem;
+  margin-right: 1rem;
+}
+
+ul.pagination {
+  display: flex;
+  list-style: none;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+ul.pagination li {
+  border: 1px solid #aaaaaa;
+  margin-left: 4px;
+  border-radius: 5px;
+  display: block;
+}
+ul.pagination li.disabled {
+  color: #aaaaaa;
+}
+ul.pagination li.active,
+ul.pagination li.active:hover {
+  color: white;
+  background-color: #333333;
+  font-weight: bold;
+}
+ul.pagination li a {
+  padding: 0.3rem 1rem;
+  display: block;
+}
+ul.pagination li:hover {
+  background-color: #555555;
+  color: white;
+}
+ul.pagination li.disabled:hover {
+  background-color: white;
+  color: #aaaaaa;
+}
+
+
+/*** media queries **/
+
+@media (max-width: 899px) {
   .wrapper-anuncios {
-    grid-template-columns: auto;
+    grid-template-columns: 1fr;
   }
 }
 
-@media (min-width: 901px) {
+@media (min-width: 900px) {
   .wrapper-anuncios {
-    grid-template-columns: auto auto; 
+    grid-template-columns: 1fr 1fr; 
   }
 }
 
-@media (min-width: 1366px) {
+@media (min-width: 1280px) {
   .wrapper-anuncios {
-    grid-template-columns: auto auto auto;
+    grid-template-columns: 1fr 1fr 1fr;
   }
 }
