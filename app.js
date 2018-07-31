@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs');
 var createError = require('http-errors');
 var express = require('express');
@@ -30,7 +32,7 @@ app.locals.title = 'Nodepop';
  * Connect to database and register models
  */
 require('./lib/connectMongoose');
-require('./models/Anuncio');
+require('./models/anuncios/Anuncio');
 
 /**
  *  Routes
@@ -40,13 +42,13 @@ require('./models/Anuncio');
  * API routes
  */
 app.use('/apiv1/anuncios', require('./routes/apiv1/anuncios'));
+app.use('/apiv1/users', require('./routes/apiv1/users'));
 
 /**
  * Web application routes
  */
 app.use('/', require('./routes/index'));
 app.use('/anuncios', require('./routes/anuncios'));
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

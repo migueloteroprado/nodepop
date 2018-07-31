@@ -33,16 +33,16 @@ module.exports = {
 
 	// validation array for querystring
 	queryValidations: [
-		query('venta').optional({ checkFalsy: true }).isIn(['true', 'false']).withMessage('must be true or false'),
+		query('venta').optional({ checkFalsy: true }).not().isArray().isIn(['true', 'false']).withMessage('must be true or false'),
 		query('tag').optional({ checkFalsy: true }).custom(checkTags),
-		query('precio').optional({ checkFalsy: true }).custom(checkPrice),
-		query(['start', 'limit']).optional({ checkFalsy: true }).isInt().withMessage('must be integer'),
+		query('precio').optional({ checkFalsy: true }).not().isArray().custom(checkPrice),
+		query(['start', 'limit']).optional({ checkFalsy: true }).not().isArray().isInt().withMessage('must be integer'),
 		query('sort').optional({ checkFalsy: true }).isIn(order).withMessage('must be one of: -nombre, nombre, -precio, precio')
 	],
 
 	// validations array for body (POST requests)
 	bodyValidationsPost: [
-		body('nombre').not().isArray().not().isEmpty().withMessage('is required').isString(),
+		body('nombre').not().isArray().not().isEmpty().withMessage('is required'),
 		body('venta').not().isArray().isIn(['true', 'false']).withMessage('must be true or false'),
 		body('tags').not().isEmpty().custom(checkTags),
 		body('precio').not().isArray().isNumeric().withMessage('must be numeric'),
@@ -51,7 +51,7 @@ module.exports = {
 
 	// validations array for body (PUT requests)
 	bodyValidationsPut: [
-		body('nombre').optional().not().isArray().not().isEmpty().withMessage('is required').isString(),
+		body('nombre').optional().not().isArray().not().isEmpty().withMessage('is required'),
 		body('venta').optional().not().isArray().isIn(['true', 'false']).withMessage('must be true or false'),
 		body('tags').optional().custom(checkTags),
 		body('precio').optional().not().isArray().isNumeric().withMessage('must be numeric'),

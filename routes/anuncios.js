@@ -5,14 +5,14 @@ const { query, validationResult } = require('express-validator/check');
 
 const queryString = require('query-string');
 
-const Anuncio = require('../models/Anuncio');
-const { queryValidations, getFilters } = require('../models/helperAnuncio');
+const Anuncio = require('../models/anuncios/Anuncio');
+const { queryValidations, getFilters } = require('../models/anuncios/helperAnuncio');
 
 /**
  * GET /
  * Renders a list of documents sorted, filtered and paginated
  */ 
-router.get('/', queryValidations, async function(req, res, next) {
+router.get('/', queryValidations, async (req, res, next) => {
 	try {
 
 		// validate params from querystring

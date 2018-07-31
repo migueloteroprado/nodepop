@@ -1,4 +1,6 @@
-var mongoose = require('mongoose');
+'use strict';
+
+const mongoose = require('mongoose');
 
 // Schema definition
 // Create indexes for fields: nombre, venta, precio and tags
@@ -41,7 +43,7 @@ anuncioSchema.statics.list = function(filters, limit, start, fields, sort) {
 	return query.exec();
 };
 
-// Static methos to get document count
+// Static method to get document count
 anuncioSchema.statics.count = function(filters) {
 	const query = Anuncio.countDocuments(filters);
 	return query.exec();

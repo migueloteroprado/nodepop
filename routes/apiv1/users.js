@@ -1,16 +1,18 @@
+'use strict';
+
 const express = require('express');
 const router = express.Router();
 var createError = require('http-errors');
 const mongoose = require('mongoose');
-const Anuncio = require('../../models/anuncios/Anuncio');
-const { queryValidations, bodyValidationsPost, bodyValidationsPut, getFilters } = require('../../models/anuncios/helperAnuncio');
 
-// express validator
 const { param, validationResult } = require('express-validator/check');
+
+const User = require('../../models/users/User');
+const { queryValidations, bodyValidationsPost, bodyValidationsPut, getFilters } = require('../../models/users/helperUser');
 
 /**
  * GET /
- * Returns a list of documents sorted, filtered and paginated
+ * Returns a list of users sorted, filtered and paginated
  */ 
 router.get('/', queryValidations, async (req, res, next) => {
 
@@ -29,12 +31,12 @@ router.get('/', queryValidations, async (req, res, next) => {
 		const sort = req.query.sort;
 
 		// query database
-		const anuncios = await Anuncio.list(filters, limit, start, fields, sort);
+		const users = await User.list(filters, limit, start, fields, sort);
 
 		// return result
 		res.json({
 			success: true, 
-			result: anuncios
+			result: users
 		});
 	}		
 	catch(err) {
@@ -43,7 +45,7 @@ router.get('/', queryValidations, async (req, res, next) => {
 });
 
 /** GET /:id
- * Get one document by Id
+ * Get one user by Id
  */
 router.get('/:id', [
 	param('id').isMongoId().withMessage('invalid ID')
@@ -54,28 +56,10 @@ router.get('/:id', [
 		// validate data from req
 		validationResult(req).throw();
 
-		const anuncio = await Anuncio.findById(req.params.id).exec();
+		const user = await User.findById(req.params.id).exec();
 		res.json({ 
 			success: true, 
-			result: anuncio 
-		});
-	}
-	catch (err) {
-		next(err);
-	}
-});
-
-/**
- * GET /tags
- * Obtain all existing tags from anuncios
- */
-router.get('/tags', async (req, res, next) => {
-	try {
-		// Get all distinct tags from all anuncios
-		const tags = await Anuncio.distinct('tags');
-		res.json({ 
-			success: true, 
-			result: tags 
+			result: user 
 		});
 	}
 	catch (err) {
@@ -85,7 +69,7 @@ router.get('/tags', async (req, res, next) => {
 
 /**
  * POST /
- * Inserts a new document in database
+ * Inserts a new user in database
  */
 router.post('/', bodyValidationsPost, async (req, res, next) => {
 	try {
@@ -94,18 +78,24 @@ router.post('/', bodyValidationsPost, async (req, res, next) => {
 		validationResult(req).throw();
 
 		// get data from request body
-		const anuncio = req.body;
+		const user = req.body;
 
-		// create a new document using the model
-		const newAnuncio = new Anuncio(anuncio);
+		// check that user doesn't already exists
+		const userExists = await User.find({ email: user.email }).exec();
+		if (userExists.length > 0) {
+			throw new Error('Email already in use');
+		}
 
-		// save document in database
-		const savedAnuncio = await newAnuncio.save();
+		// create a new user using the model
+		const newUser = new User(user);
+
+		// save user in database
+		const savedUser = await newUser.save();
 
 		// return result
 		res.json({ 
 			success: true, 
-			result: savedAnuncio 
+			result: savedUser
 		});
 
 	} catch(err) {
@@ -114,7 +104,7 @@ router.post('/', bodyValidationsPost, async (req, res, next) => {
 });
 
 /** PUT /:id
- * Updates one document
+ * Updates one user
  */
 router.put('/:id', [
 	...bodyValidationsPut,
@@ -126,11 +116,23 @@ router.put('/:id', [
 		validationResult(req).throw();
 
 		const _id = req.params.id;
-		const anuncio = req.body;
-		const updatedAnuncio = await Anuncio.findByIdAndUpdate(_id, anuncio, { new: true }).exec();
+		const user = req.body;
+
+		// if email changes, check that new email is not in use
+		if (user.email) {
+			// find other users with the new email 
+			const userExists = await User.find({ 
+				email: user.email, 
+				_id: { $ne: _id }
+			}).exec();
+			if (userExists.length > 0) {
+				throw new Error('Email already in use');
+			}
+		}
+		const updatedUser = await User.findByIdAndUpdate(_id, user, { new: true }).exec();
 		res.json({ 
 			success: true, 
-			result: updatedAnuncio 
+			result: user
 		});
 	}
 	catch (err) {
@@ -139,7 +141,7 @@ router.put('/:id', [
 });
 
 /** DELETE /:id
- * Delete one document
+ * Delete one user
  */
 router.delete('/:id', [
 	param('id').isMongoId().withMessage('invalid ID')
@@ -150,7 +152,7 @@ router.delete('/:id', [
 		validationResult(req).throw();
 
 		const _id = req.params.id;
-		const deleted = await Anuncio.remove({_id: _id}).exec();
+		const deleted = await User.remove({_id: _id}).exec();
 		console.log(deleted);
 		res.json({ 
 			sucess: true, 
