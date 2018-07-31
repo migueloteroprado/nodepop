@@ -3,10 +3,10 @@ const router = express.Router();
 var createError = require('http-errors');
 const mongoose = require('mongoose');
 const Anuncio = require('../../models/Anuncio');
-const { queryValidations, bodyValidations, getFilters } = require('../../models/helperAnuncio');
+const { queryValidations, bodyValidationsPost, bodyValidationsPut, getFilters } = require('../../models/helperAnuncio');
 
 // express validator
-const { query, body, validationResult } = require('express-validator/check');
+const { param, validationResult } = require('express-validator/check');
 
 /**
  * GET /
@@ -32,9 +32,35 @@ router.get('/', queryValidations, async function(req, res, next) {
 		const anuncios = await Anuncio.list(filters, limit, start, fields, sort);
 
 		// return result
-		res.json({success: true, result: anuncios});
+		res.json({
+			success: true, 
+			result: anuncios
+		});
 	}		
 	catch(err) {
+		next(err);
+	}
+});
+
+/** GET /:id
+ * Get one document by Id
+ */
+router.get('/:id', [
+	param('id').isMongoId().withMessage('invalid ID')
+], async (req, res, next) => {
+
+	try {
+	
+		// validate data from req
+		validationResult(req).throw();
+
+		const anuncio = await Anuncio.findById(req.params.id).exec();
+		res.json({ 
+			success: true, 
+			result: anuncio 
+		});
+	}
+	catch (err) {
 		next(err);
 	}
 });
@@ -47,7 +73,10 @@ router.get('/tags', async (req, res, next) => {
 	try {
 		// Get all distinct tags from all anuncios
 		const tags = await Anuncio.distinct('tags');
-		res.json({ success: true, tags: tags });
+		res.json({ 
+			success: true, 
+			result: tags 
+		});
 	}
 	catch (err) {
 		next(err);
@@ -58,10 +87,8 @@ router.get('/tags', async (req, res, next) => {
  * POST /
  * Inserts a new document in database
  */
-router.post('/', bodyValidations, async (req, res, next) => {
+router.post('/', bodyValidationsPost, async (req, res, next) => {
 	try {
-
-console.log(req.body);		
 
 		// validate data from body
 		validationResult(req).throw();
@@ -76,11 +103,66 @@ console.log(req.body);
 		const savedAnuncio = await newAnuncio.save();
 
 		// return result
-		res.json({ success: true, result: savedAnuncio });
+		res.json({ 
+			success: true, 
+			result: savedAnuncio 
+		});
 
 	} catch(err) {
 		next(err);
 	}
+});
+
+/** PUT /:id
+ * Updates one document
+ */
+router.put('/:id', [
+	...bodyValidationsPut,
+	param('id').isMongoId().withMessage('invalid ID')
+], async (req, res, next) => {
+
+	try {
+		// validate data from body
+		validationResult(req).throw();
+
+		const _id = req.params.id;
+		const anuncio = req.body;
+		const updatedAnuncio = await Anuncio.findByIdAndUpdate(_id, anuncio, { new: true }).exec();
+		res.json({ 
+			success: true, 
+			result: updatedAnuncio 
+		});
+	}
+	catch (err) {
+		next(err);
+	}
+});
+
+/** DELETE /:id
+ * Delete one document
+ */
+router.delete('/:id', [
+	param('id').isMongoId().withMessage('invalid ID')
+], async (req, res, next) => {
+	try {
+
+		// validate id param
+		validationResult(req).throw();
+
+		const _id = req.params.id;
+		const deleted = await Anuncio.remove({_id: _id}).exec();
+		console.log(deleted);
+		res.json({ 
+			sucess: true, 
+			result: { 
+				deleted: deleted.n 
+			} 
+		});
+	}
+	catch (err) {
+		next(err);
+	}
+
 });
 
 module.exports = router;

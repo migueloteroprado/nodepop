@@ -9,8 +9,6 @@ const { isAPI } = require('./lib/utils');
 
 var app = express();
 
-console.log(process.env.DEBUG);
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');

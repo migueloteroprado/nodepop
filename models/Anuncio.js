@@ -47,6 +47,7 @@ anuncioSchema.statics.count = function(filters) {
 	return query.exec();
 };
 
+// Create model
 const Anuncio = mongoose.model('Anuncio', anuncioSchema);
 
 module.exports = Anuncio;
