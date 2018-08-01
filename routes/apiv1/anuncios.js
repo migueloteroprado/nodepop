@@ -3,7 +3,16 @@
 const express = require('express');
 const router = express.Router();
 var createError = require('http-errors');
+
 const Anuncio = require('../../models/anuncios/Anuncio');
+
+/**
+ * Auxiliar module, returns: 
+ * - getFilters: Method that returns a filters object created form querystring parameters, to pass to model list method
+ * - queryValidations: Array of validations for querystring in GET requests
+ * - bodyValidationsPost: Array of validations for body object passed to POST requests
+ * - bodyValidationsPut: Array of validations for body object passed to PUT requests
+*/
 const { queryValidations, bodyValidationsPost, bodyValidationsPut, getFilters } = require('../../models/anuncios/helperAnuncio');
 
 // express validator
@@ -43,6 +52,24 @@ router.get('/', queryValidations, async (req, res, next) => {
 	}
 });
 
+/**
+ * GET /tags
+ * Obtain all existing tags from anuncios
+ */
+router.get('/tags', async (req, res, next) => {
+	try {
+		// Get all distinct tags from all anuncios
+		const tags = await Anuncio.distinct('tags');
+		res.json({ 
+			success: true, 
+			result: tags 
+		});
+	}
+	catch (err) {
+		next(err);
+	}
+});
+
 /** GET /:id
  * Get one document by Id
  */
@@ -69,24 +96,6 @@ router.get('/:id', [
 		res.json({ 
 			success: true, 
 			result: anuncio 
-		});
-	}
-	catch (err) {
-		next(err);
-	}
-});
-
-/**
- * GET /tags
- * Obtain all existing tags from anuncios
- */
-router.get('/tags', async (req, res, next) => {
-	try {
-		// Get all distinct tags from all anuncios
-		const tags = await Anuncio.distinct('tags');
-		res.json({ 
-			success: true, 
-			result: tags 
 		});
 	}
 	catch (err) {

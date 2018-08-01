@@ -26,7 +26,7 @@ userSchema.statics.list = function(filter, limit, skip, fields, sort) {
 	query.limit(limit);
 	query.skip(skip);	
 	query.select(fields);
-	query.sort(sort).collation({ locale: 'es', caseLevel: true });
+	query.sort(sort).collation({ locale: 'es', caseLevel: true }); // collation with caseLevel:true to perform case insensitive sorting 
 	return query.exec();
 };
 

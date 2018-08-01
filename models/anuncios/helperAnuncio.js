@@ -35,35 +35,8 @@ const checkPrice = (value) => {
 };
 
 module.exports = {
-
-	// validation array for querystring
-	queryValidations: [
-		query('venta').optional({ checkFalsy: true }).not().isArray().isIn(['true', 'false']).withMessage('must be true or false'),
-		query('tag').optional({ checkFalsy: true }).custom(checkTags),
-		query('precio').optional({ checkFalsy: true }).not().isArray().custom(checkPrice),
-		query(['start', 'limit']).optional({ checkFalsy: true }).not().isArray().isInt().withMessage('must be integer'),
-		query('sort').optional({ checkFalsy: true }).not().isArray()
-	],
-
-	// validations array for body (POST requests)
-	bodyValidationsPost: [
-		body('nombre').not().isArray().not().isEmpty().withMessage('is required'),
-		body('venta').not().isArray().isIn(['true', 'false']).withMessage('must be true or false'),
-		body('tags').not().isEmpty().custom(checkTags),
-		body('precio').not().isArray().isNumeric().withMessage('must be numeric'),
-		body('foto').not().isArray().isString().matches(new RegExp(/\.(gif|jpe?g|png)$/i)).withMessage('must be a .gif, .jpg, .jpeg or .png image file')
-	],	
-
-	// validations array for body (PUT requests)
-	bodyValidationsPut: [
-		body('nombre').optional().not().isArray().not().isEmpty().withMessage('is required'),
-		body('venta').optional().not().isArray().isIn(['true', 'false']).withMessage('must be true or false'),
-		body('tags').optional().custom(checkTags),
-		body('precio').optional().not().isArray().isNumeric().withMessage('must be numeric'),
-		body('foto').optional().not().isArray().matches(new RegExp(/\.(gif|jpe?g|png)$/i)).withMessage('must be an string containing a .gif, .jpg, .jpeg or .png image file name')
-	],	
-
-	// obtain filter object from querystring
+ 
+	// Method that returns a filters object created form querystring parameters, to pass to model list method
 	getFilters: function(queryString) {
 		// get filters from querystring
 		const nombre = queryString.nombre;
@@ -102,6 +75,33 @@ module.exports = {
 		}
 
 		return filters;
-	}
+	},	
+
+	// Array of validations for querystring parameters in GET requests
+	queryValidations: [
+		query('venta').optional({ checkFalsy: true }).not().isArray().isIn(['true', 'false']).withMessage('must be true or false'),
+		query('tag').optional({ checkFalsy: true }).custom(checkTags),
+		query('precio').optional({ checkFalsy: true }).not().isArray().custom(checkPrice),
+		query(['start', 'limit']).optional({ checkFalsy: true }).not().isArray().isInt().withMessage('must be integer'),
+		query('sort').optional({ checkFalsy: true }).not().isArray()
+	],
+
+	// Array of validations for body object passed to POST requests
+	bodyValidationsPost: [
+		body('nombre').not().isArray().not().isEmpty().withMessage('is required'),
+		body('venta').not().isArray().isIn(['true', 'false']).withMessage('must be true or false'),
+		body('tags').not().isEmpty().custom(checkTags),
+		body('precio').not().isArray().isNumeric().withMessage('must be numeric'),
+		body('foto').not().isArray().isString().matches(new RegExp(/\.(gif|jpe?g|png)$/i)).withMessage('must be a .gif, .jpg, .jpeg or .png image file')
+	],	
+
+	// Array of validations for body object passed to PUT requests
+	bodyValidationsPut: [
+		body('nombre').optional().not().isArray().not().isEmpty().withMessage('is required'),
+		body('venta').optional().not().isArray().isIn(['true', 'false']).withMessage('must be true or false'),
+		body('tags').optional().custom(checkTags),
+		body('precio').optional().not().isArray().isNumeric().withMessage('must be numeric'),
+		body('foto').optional().not().isArray().matches(new RegExp(/\.(gif|jpe?g|png)$/i)).withMessage('must be an string containing a .gif, .jpg, .jpeg or .png image file name')
+	]
 
 };

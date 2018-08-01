@@ -199,6 +199,10 @@ section.list header {
 	justify-content: space-evenly;
 }
 
+.wrapper-anuncios > h4 {
+  margin: 1.5rem;
+}
+
 .anuncio {
 	flex: 1 0 200px;
   box-sizing: border-box;
