@@ -20,7 +20,10 @@ const anuncioSchema = mongoose.Schema({
 		min: 0,
 		index: true
 	},
-	foto: String,
+	foto: {
+		type: String,
+		required: true
+	},
 	tags: {
 		type: [String],
 		index: true

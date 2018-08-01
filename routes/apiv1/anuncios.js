@@ -4,6 +4,17 @@ const express = require('express');
 const router = express.Router();
 var createError = require('http-errors');
 
+const multer  = require('multer');
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+        cb(null, 'public/images/anuncios');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+const upload = multer({storage: storage}).single('foto');
+
 const Anuncio = require('../../models/anuncios/Anuncio');
 
 /**
@@ -105,31 +116,55 @@ router.get('/:id', [
 
 /**
  * POST /
- * Inserts a new document in database
+ * Two middlewares: 
+ * The first uploads image and add file name to req.body
+ * The second apllies validators and insert document in database.
  */
+
+router.post('/', (req, res, next) => {
+
+	// upload foto
+	upload(req, res, function (err) {
+			if (err) {
+					return next(err);
+			}
+
+			// check if file was received and uploaded
+			if (!(req.file && req.file.originalname)) {
+					return next(new Error('foto is required'));
+			}
+
+			// extract original name from uploaded file, and add it to req.body field 'foto'.
+			req.body.foto = req.file.originalname;
+			
+			// call next middleware
+			return next();
+	});
+});
+
 router.post('/', bodyValidationsPost, async (req, res, next) => {
+
 	try {
+			// validate data from body
+			validationResult(req).throw();
 
-		// validate data from body
-		validationResult(req).throw();
+			// get data from request body
+			const anuncio = req.body;
 
-		// get data from request body
-		const anuncio = req.body;
+			// create a new document using the model
+			const newAnuncio = new Anuncio(anuncio);
 
-		// create a new document using the model
-		const newAnuncio = new Anuncio(anuncio);
+			// save document in database
+			const savedAnuncio = await newAnuncio.save();
 
-		// save document in database
-		const savedAnuncio = await newAnuncio.save();
-
-		// return result
-		res.json({ 
-			success: true, 
-			result: savedAnuncio 
-		});
+			// return result
+			res.json({ 
+					success: true, 
+					result: savedAnuncio 
+			});
 
 	} catch(err) {
-		next(err);
+			next(err);
 	}
 });
 

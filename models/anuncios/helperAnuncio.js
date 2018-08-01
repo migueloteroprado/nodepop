@@ -91,8 +91,8 @@ module.exports = {
 		body('nombre').not().isArray().not().isEmpty().withMessage('is required'),
 		body('venta').not().isArray().isIn(['true', 'false']).withMessage('must be true or false'),
 		body('tags').not().isEmpty().custom(checkTags),
-		body('precio').not().isArray().isNumeric().withMessage('must be numeric'),
-		body('foto').not().isArray().isString().matches(new RegExp(/\.(gif|jpe?g|png)$/i)).withMessage('must be a .gif, .jpg, .jpeg or .png image file')
+		body('precio').not().isArray().isNumeric().withMessage('must be numeric')/*,
+		body('foto').not().isArray().isString().matches(new RegExp(/\.(gif|jpe?g|png)$/i)).withMessage('must be a .gif, .jpg, .jpeg or .png image file')*/
 	],	
 
 	// Array of validations for body object passed to PUT requests
