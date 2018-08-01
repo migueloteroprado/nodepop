@@ -1,3 +1,5 @@
+'use strict';
+
 // express validator
 const { query, param, body } = require('express-validator/check');
 
@@ -7,6 +9,8 @@ module.exports = {
 	queryValidations: [
 		query('name').optional({ checkFalsy: true }).not().isArray().withMessage('must be an string'),
 		query('email').optional({ checkFalsy: true }).not().isArray().withMessage('must be an string'),
+		query(['start', 'limit']).optional({ checkFalsy: true }).not().isArray().isInt().withMessage('must be integer'),
+		query('sort').not().isArray().optional({ checkFalsy: true })
 	],
 
 	// validations array for body (POST requests)

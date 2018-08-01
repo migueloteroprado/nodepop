@@ -2,6 +2,8 @@
 
 const mongoose = require('mongoose');
 
+mongoose.set('debug', true);
+
 // Schema definition
 // Create indexes for fields: nombre, venta, precio and tags
 const anuncioSchema = mongoose.Schema({
@@ -39,7 +41,7 @@ anuncioSchema.statics.list = function(filters, limit, start, fields, sort) {
 	query.limit(limit);
 	query.skip(start);	
 	query.select(fields);
-	query.sort(sort);
+	query.sort(sort).collation({ locale: 'es', caseLevel: true });
 	return query.exec();
 };
 

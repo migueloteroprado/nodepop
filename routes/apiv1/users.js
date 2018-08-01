@@ -3,7 +3,6 @@
 const express = require('express');
 const router = express.Router();
 var createError = require('http-errors');
-const mongoose = require('mongoose');
 
 const { param, validationResult } = require('express-validator/check');
 
@@ -56,7 +55,17 @@ router.get('/:id', [
 		// validate data from req
 		validationResult(req).throw();
 
-		const user = await User.findById(req.params.id).exec();
+		const _id = req.params.id;
+
+		// get user from databasse
+		const user = await User.findById(_id).exec();
+
+		if (!user) {
+			next(createError(404));
+			return;
+		}
+
+		// return result
 		res.json({ 
 			success: true, 
 			result: user 
@@ -132,7 +141,7 @@ router.put('/:id', [
 		const updatedUser = await User.findByIdAndUpdate(_id, user, { new: true }).exec();
 		res.json({ 
 			success: true, 
-			result: user
+			result: updatedUser
 		});
 	}
 	catch (err) {

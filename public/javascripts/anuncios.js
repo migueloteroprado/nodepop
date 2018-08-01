@@ -1,3 +1,4 @@
+'use strict';
 
 export class Anuncios {
 
@@ -17,12 +18,9 @@ export class Anuncios {
 		this.start = params.start;
 		this.limit = params.limit;
 
-		console.log(tag);
-
 		// DOM objects
 		this.searchForm = document.querySelector('.search-form');
 		this.inputNombre = document.querySelector('#nombre');
-		//this.selectTag = document.querySelector('#tag');
 		this.checkWork = document.querySelector('#tag-work');
 		this.checkLifestyle = document.querySelector('#tag-lifestyle');
 		this.checkMotor = document.querySelector('#tag-motor');
@@ -30,15 +28,14 @@ export class Anuncios {
 
 		this.selectVenta = document.querySelector('#venta');
 		this.inputPrecio = document.querySelector('#precio');
-		this.selectOrden = document.querySelector('#sort');
+		this.inputOrden = document.querySelector('#sort');
 
 		this.inputStart = document.querySelector('#start');
 		this.inputLimit = document.querySelector('#limit');
 
 		// intialize form values
 		this.inputNombre.value = this.nombre ? this.nombre : '';
-		//this.selectTag.value = tag ? tag : '';
-
+		
 		this.checkWork.checked = this.tag && this.tag.indexOf('work') >= 0;
 		this.checkLifestyle.checked = this.tag && this.tag.indexOf('lifestyle') >= 0;
 		this.checkMotor.checked = this.tag && this.tag.indexOf('motor') >= 0;
@@ -46,12 +43,10 @@ export class Anuncios {
 
 		this.selectVenta.value = this.venta ? this.venta : '';
 		this.inputPrecio.value = this.precio ? this.precio : '';
-		this.selectOrden.value = this.sort ? this.sort : '';
+		this.inputOrden.value = this.sort ? this.sort : '';
 
 		this.inputStart.value = this.start ? this.start : '';
 		this.inputLimit.value = this.limit ? this.limit : '';
-
-		//this.btnFirst.addEventListener('click', this.first.bind(this));
 
 	}
 
@@ -72,6 +67,7 @@ export class Anuncios {
 					params[pair[0]] = [ params[pair[0]], decodeURIComponent(pair[1])];
 			}
 		}
+		if (params.sort) params.sort = params.sort.replace('+', ' ');
 		return params;
 	}
 

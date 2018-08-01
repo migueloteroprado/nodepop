@@ -23,13 +23,12 @@ const userSchema = mongoose.Schema({
 // static method to get users filtered, sorted and paginated
 userSchema.statics.list = function(filter, limit, skip, fields, sort) {
 	const query = User.find(filter);
-	// (el orden de limit y skip da igual)
 	query.limit(limit);
 	query.skip(skip);	
 	query.select(fields);
-	query.sort(sort);
+	query.sort(sort).collation({ locale: 'es', caseLevel: true });
 	return query.exec();
-}
+};
 
 
 // Create model

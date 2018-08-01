@@ -14,7 +14,7 @@ const users = require('./data/users.json').users;
 conn.once('open', async() => {
 	try {
 		// ask user
-		const response = await askUser('Are you sure you want to delete all database contents? (no) ')
+		const response = await askUser('Are you sure you want to delete all database contents? (no) ');
 		if (response.toLowerCase() !== 'yes') {
 			console.log('Proccess Aborted.');
 			process.exit(1);
@@ -22,12 +22,12 @@ conn.once('open', async() => {
 
 		// check json
 		if (!anuncios) {
-			console.info(`The json file 'anuncios.js' doesn't contain any document`);
+			console.info('The json file anuncios.js has no documents');
 			process.exit(1);
 		}
 
 		if (!users) {
-			console.info(`The json file 'users.js' doesn't contain any document`);
+			console.info('The json file users.js has no users');
 			process.exit(1);
 		}
 
@@ -69,7 +69,7 @@ async function initAnuncios(anuncios) {
 
 	// Insert new documents from json file
 	const inserted = await Anuncio.insertMany(anuncios);
-	console.log(`Inserted ${inserted.length} anuncios.`)
+	console.log(`Inserted ${inserted.length} anuncios.`);
 }
 
 async function initUsers(users) {
@@ -79,5 +79,5 @@ async function initUsers(users) {
 
 	// Insert new users from json file
 	const inserted = await User.insertMany(users);
-	console.log(`Inserted ${inserted.length} users.`)
+	console.log(`Inserted ${inserted.length} users.`);
 }

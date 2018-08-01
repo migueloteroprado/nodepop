@@ -1,7 +1,8 @@
+'use strict';
+
 const express = require('express');
 const router = express.Router();
 var createError = require('http-errors');
-const mongoose = require('mongoose');
 const Anuncio = require('../../models/anuncios/Anuncio');
 const { queryValidations, bodyValidationsPost, bodyValidationsPut, getFilters } = require('../../models/anuncios/helperAnuncio');
 
@@ -54,7 +55,17 @@ router.get('/:id', [
 		// validate data from req
 		validationResult(req).throw();
 
-		const anuncio = await Anuncio.findById(req.params.id).exec();
+		const _id = req.params.id;
+
+		// Get document from database
+		const anuncio = await Anuncio.findById(_id).exec();
+
+		if (!anuncio) {
+			next(createError(404));
+			return;
+		}
+
+		// return result
 		res.json({ 
 			success: true, 
 			result: anuncio 

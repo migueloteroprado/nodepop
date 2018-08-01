@@ -1,7 +1,9 @@
+'use strict';
+
 const express = require('express');
 const router = express.Router();
 
-const { query, validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator/check');
 
 const queryString = require('query-string');
 

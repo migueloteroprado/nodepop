@@ -1,11 +1,10 @@
+'use strict';
+
 // express validator
 const { query, body } = require('express-validator/check');
 
 // List of posible tags
 const tags = ['work', 'lifestyle', 'motor', 'mobile'];
-
-// List of possible sort values
-const order = ['-nombre', 'nombre', '-precio', 'precio'];
 
 // custom function for express-validator to validate tags
 const checkTags = (value) => {
@@ -22,9 +21,15 @@ const checkTags = (value) => {
 const checkPrice = (value) => {
 	if (value && value.length > 0) {
 		const parts = value.split('-');
-		if (parts.length !== 2 || isNaN(parts[0]) || isNaN(parts[1])) {
+		console.log(parts);
+		if (parts.length > 2) {
 			throw new Error('wrong format');
 		}
+		parts.forEach((part) => {
+			if (isNaN(part)) {
+				throw new Error('wrong format');
+			}
+		});
 	}
 	return true;
 };
@@ -37,7 +42,7 @@ module.exports = {
 		query('tag').optional({ checkFalsy: true }).custom(checkTags),
 		query('precio').optional({ checkFalsy: true }).not().isArray().custom(checkPrice),
 		query(['start', 'limit']).optional({ checkFalsy: true }).not().isArray().isInt().withMessage('must be integer'),
-		query('sort').optional({ checkFalsy: true }).isIn(order).withMessage('must be one of: -nombre, nombre, -precio, precio')
+		query('sort').optional({ checkFalsy: true }).not().isArray()
 	],
 
 	// validations array for body (POST requests)
