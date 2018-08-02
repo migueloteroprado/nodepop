@@ -12,21 +12,24 @@ const anuncioSchema = mongoose.Schema({
 	},
 	venta: {
 		type: Boolean,
+		required: true,
 		default: true,
 		index: true
 	},
 	precio: {
 		type: Number,
 		min: 0,
+		required: true,
+		index: true
+	},
+	tags: {
+		type: [String],
+		required: true,
 		index: true
 	},
 	foto: {
 		type: String,
 		required: true
-	},
-	tags: {
-		type: [String],
-		index: true
 	}
 });
 

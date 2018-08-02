@@ -4,17 +4,10 @@ const express = require('express');
 const router = express.Router();
 var createError = require('http-errors');
 
-const multer  = require('multer');
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-        cb(null, 'public/images/anuncios');
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  }
-});
-const upload = multer({storage: storage}).single('foto');
+// upload files with multer
+const upload = require('../../lib/upload');
 
+// Anuncio model
 const Anuncio = require('../../models/anuncios/Anuncio');
 
 /**
@@ -34,7 +27,7 @@ const { param, validationResult } = require('express-validator/check');
  * Returns a list of documents sorted, filtered and paginated
  */ 
 router.get('/', queryValidations, async (req, res, next) => {
-
+	
 	try {
 
 		// validate params from querystring
@@ -121,63 +114,61 @@ router.get('/:id', [
  * The second apllies validators and insert document in database.
  */
 
-router.post('/', (req, res, next) => {
-
-	// upload foto
-	upload(req, res, function (err) {
-			if (err) {
-					return next(err);
-			}
-
-			// check if file was received and uploaded
-			if (!(req.file && req.file.originalname)) {
-					return next(new Error('foto is required'));
-			}
-
-			// extract original name from uploaded file, and add it to req.body field 'foto'.
-			req.body.foto = req.file.originalname;
-			
-			// call next middleware
-			return next();
-	});
-});
-
-router.post('/', bodyValidationsPost, async (req, res, next) => {
+router.post('/', upload.single('foto'), bodyValidationsPost, async (req, res, next) => {
 
 	try {
-			// validate data from body
-			validationResult(req).throw();
 
-			// get data from request body
-			const anuncio = req.body;
+		// check if file was received and uploaded
+		if (!(req.file && req.file.originalname)) {
+				throw new Error('Image file is required');
+		}
 
-			// create a new document using the model
-			const newAnuncio = new Anuncio(anuncio);
+		// extract original name from uploaded file, and add it to req.body field 'foto'.
+		req.body.foto = req.file.originalname;
+		
+		// validate data from body and throw possible validation errors
+		validationResult(req).throw();
 
-			// save document in database
-			const savedAnuncio = await newAnuncio.save();
+		// get data from request body
+		const anuncio = req.body;
 
-			// return result
-			res.json({ 
-					success: true, 
-					result: savedAnuncio 
-			});
+		// create a new document using the model
+		const newAnuncio = new Anuncio(anuncio);
+
+		// save document in database
+		const savedAnuncio = await newAnuncio.save();
+
+		// return result
+		res.json({ 
+				success: true, 
+				result: savedAnuncio 
+		});
 
 	} catch(err) {
-			next(err);
+		next(err);
 	}
-});
+});	
+
 
 /** PUT /:id
  * Updates one document
  */
-router.put('/:id', [
-	...bodyValidationsPut,
-	param('id').isMongoId().withMessage('invalid ID')
-], async (req, res, next) => {
+router.put('/:id', upload.single('foto'), [
+			...bodyValidationsPut,
+			param('id').isMongoId().withMessage('invalid ID')
+		], async (req, res, next) => {
+
+			console.log(req.body);
 
 	try {
-		// validate data from body
+
+		// check if file was received and uploaded
+		if (req.file && req.file.originalname) {
+			// extract original name from uploaded file, and add it to req.body field 'foto'.
+			req.body.foto = req.file.originalname;
+		}
+
+		// validate data from body and throw possible validation errors
 		validationResult(req).throw();
 
 		const _id = req.params.id;
@@ -187,6 +178,7 @@ router.put('/:id', [
 			success: true, 
 			result: updatedAnuncio 
 		});
+
 	}
 	catch (err) {
 		next(err);

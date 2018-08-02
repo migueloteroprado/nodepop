@@ -8,12 +8,14 @@ const tags = ['work', 'lifestyle', 'motor', 'mobile'];
 
 // custom function for express-validator to validate tags
 const checkTags = (value) => {
+	// if there is only one tag, convert string to array
 	let queryTags = typeof value === 'object' ? value : [value];
-	for (let i = 0; i < queryTags.length; i++) {
-		if (tags.indexOf(queryTags[i]) === -1) {
-			throw new Error(`wrong value '${queryTags[i]}'. Must be work, lifestyle, motor or mobile`);
+	// check tags
+	queryTags.forEach(tag => {
+		if (tag.length === 0 || tags.indexOf(tag) === -1) {
+			throw new Error(`wrong value '${tag}'. Must be work, lifestyle, motor or mobile`);
 		}
-	}
+	});
 	return true;
 };
 
@@ -21,7 +23,6 @@ const checkTags = (value) => {
 const checkPrice = (value) => {
 	if (value && value.length > 0) {
 		const parts = value.split('-');
-		console.log(parts);
 		if (parts.length > 2) {
 			throw new Error('wrong format');
 		}
@@ -37,6 +38,7 @@ const checkPrice = (value) => {
 module.exports = {
  
 	// Method that returns a filters object created form querystring parameters, to pass to model list method
+	// This method is invoked from the API and from the View
 	getFilters: function(queryString) {
 		// get filters from querystring
 		const nombre = queryString.nombre;
@@ -62,22 +64,22 @@ module.exports = {
 		// filter by price
 		if (precio) {
 			const position = precio.indexOf('-');
-			if (position === -1)
-				filters.precio = parseInt(precio);
-			else if (position === 0)
-				filters.precio = { $lte: parseInt(precio.substring(1, precio.length+1)) } ;
-			else if (position === precio.length -1)
-				filters.precio = { $gte: parseInt(precio.substring(0, precio.length)) } ;
-			else {
+			if (position === -1)	// No '-' character: one exact price
+				filters.precio = parseFloat(precio);
+			else if (position === 0)	// Begins with '-': maximum value
+				filters.precio = { $lte: parseFloat(precio.substring(1, precio.length + 1)) } ;
+			else if (position === precio.length - 1)	// Ends with '-': minimum value
+				filters.precio = { $gte: parseFloat(precio.substring(0, precio.length)) } ;
+			else {	// value range
 				const precios = precio.split('-');
-				filters.precio = { $gte: parseInt(precios[0]), $lte: parseInt(precios[1]) } ;
+				filters.precio = { $gte: parseFloat(precios[0]), $lte: parseFloat(precios[1]) } ;
 			}
 		}
-
 		return filters;
 	},	
 
 	// Array of validations for querystring parameters in GET requests
+	// All parameters are optional, and check that they are not passed multiple times (not isArray)
 	queryValidations: [
 		query('venta').optional({ checkFalsy: true }).not().isArray().isIn(['true', 'false']).withMessage('must be true or false'),
 		query('tag').optional({ checkFalsy: true }).custom(checkTags),
@@ -87,11 +89,12 @@ module.exports = {
 	],
 
 	// Array of validations for body object passed to POST requests
+	// check that they are not passed multiple times (not isArray)
 	bodyValidationsPost: [
 		body('nombre').not().isArray().not().isEmpty().withMessage('is required'),
 		body('venta').not().isArray().isIn(['true', 'false']).withMessage('must be true or false'),
 		body('tags').not().isEmpty().custom(checkTags),
-		body('precio').not().isArray().isNumeric().withMessage('must be numeric')/*,
+		body('precio').not().isArray().isFloat({min: 0.0}).withMessage('must be a positive number')/*,
 		body('foto').not().isArray().isString().matches(new RegExp(/\.(gif|jpe?g|png)$/i)).withMessage('must be a .gif, .jpg, .jpeg or .png image file')*/
 	],	
 
@@ -100,8 +103,8 @@ module.exports = {
 		body('nombre').optional().not().isArray().not().isEmpty().withMessage('is required'),
 		body('venta').optional().not().isArray().isIn(['true', 'false']).withMessage('must be true or false'),
 		body('tags').optional().custom(checkTags),
-		body('precio').optional().not().isArray().isNumeric().withMessage('must be numeric'),
-		body('foto').optional().not().isArray().matches(new RegExp(/\.(gif|jpe?g|png)$/i)).withMessage('must be an string containing a .gif, .jpg, .jpeg or .png image file name')
+		body('precio').optional().not().isArray().isFloat({min: 0.0}).withMessage('must be a positive number')/*,
+		body('foto').optional().not().isArray().matches(new RegExp(/\.(gif|jpe?g|png)$/i)).withMessage('must be an string containing a .gif, .jpg, .jpeg or .png image file name')*/
 	]
 
 };
