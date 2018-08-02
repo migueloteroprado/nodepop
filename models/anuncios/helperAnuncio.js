@@ -3,6 +3,19 @@
 // express validator
 const { query, body } = require('express-validator/check');
 
+// multer instance to upload image files
+const path = require('path');
+const multer  = require('multer');
+
+const storage = multer.diskStorage({
+	destination: function (req, file, cb) {
+		cb(null, path.join(__dirname, '../../public/images/anuncios'));
+	},
+	filename: function (req, file, cb) {
+		cb(null, file.originalname);
+	}
+});
+
 // List of posible tags
 const tags = ['work', 'lifestyle', 'motor', 'mobile'];
 
@@ -76,7 +89,19 @@ module.exports = {
 			}
 		}
 		return filters;
-	},	
+	},
+
+	upload: multer({
+		storage: storage,
+		fileFilter: function (req, file, cb) {
+			const extension = (path.extname(file.originalname));
+			console.log(extension);
+			if (!extension.match(/\.(jpg|jpeg|png|gif)$/)) {
+				return cb(new Error('Only image files are allowed (jpeg, jpeg, png, gif)'));
+			}
+			cb(null, true);
+		}
+	}),
 
 	// Array of validations for querystring parameters in GET requests
 	// All parameters are optional, and check that they are not passed multiple times (not isArray)

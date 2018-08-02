@@ -34,8 +34,10 @@ router.get('/', queryValidations, async (req, res, next) => {
 		const count = await Anuncio.count(filters);
 		
 		// calculate current page and total pages from limit and start, will be passed to the rendered view for pagination
-		const currentPage = Math.floor(start/limit) + 1;
-		const totalPages = Math.ceil(count/limit);
+		const currentPage = limit > 0 ? Math.floor(start/limit) + 1 : 1;
+		const totalPages = limit > 0 ? Math.ceil(count/limit) : 1;
+
+		console.log(currentPage, totalPages);
 
 		// Obtain filters and sort from querystring, without start and limit
 		// (Pagination buttons will modify only 'start' and 'limit' parameters, and will keep all others (filters and sort)
