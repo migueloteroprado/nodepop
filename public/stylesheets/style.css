@@ -125,17 +125,28 @@ section {
 
 
 .form-content {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
   border: 1px solid grey;
   border-radius: 5px;
   margin: 0.1rem;
   padding: 0.5rem;
 }
 
-.form-content div {
-  padding: 0.6rem 0.6rem 0.2rem 0.6rem;
+.form-content-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  /* margin: 0.1rem; */
+  padding: 0.2rem 0.5rem 0 0.5rem;
+}
+
+.filters-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.filters-wrapper div {
+  padding: 0.5rem 0.6rem 0.3rem 0.6rem;
 }
 
 label {
@@ -143,6 +154,10 @@ label {
   display: inline-block;
   text-align: left;
   line-height: 1.9rem;
+}
+
+label.tag {
+  width: 50px;
 }
 
 input {
@@ -158,7 +173,6 @@ select {
   padding: 0.1rem;
   width: 150px;
 }
-
 
 .search-form .buttons {
   display: flex;
@@ -217,8 +231,10 @@ section.list header {
 .anuncio .wrapper-anuncio {
   display: flex;
   flex-direction: row;
-  padding: 1rem;
+  padding: 0.8rem;
 }
+
+
 
 .anuncio img {
   border-radius: 5px;
@@ -255,6 +271,10 @@ section.list header {
 .anuncio .anuncio-footer {
   text-align: right;
   margin: 0 1.1rem 0.6rem;
+}
+
+.hidden {
+  display: none;
 }
 
 /*** Pagination ****/

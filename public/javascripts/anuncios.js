@@ -1,6 +1,6 @@
 'use strict';
 
-export class Anuncios {
+class Anuncios {
 
 	constructor() {
 
@@ -17,6 +17,7 @@ export class Anuncios {
 		this.sort = params.sort;
 		this.start = params.start;
 		this.limit = params.limit;
+		this.fields = params.fields;
 
 		// DOM objects
 		this.searchForm = document.querySelector('.search-form');
@@ -33,6 +34,8 @@ export class Anuncios {
 		this.inputStart = document.querySelector('#start');
 		this.inputLimit = document.querySelector('#limit');
 
+		this.inputFields = document.querySelector('#fields');
+
 		// intialize form values
 		this.inputNombre.value = this.nombre ? this.nombre : '';
 		
@@ -48,16 +51,18 @@ export class Anuncios {
 		this.inputStart.value = this.start ? this.start : '';
 		this.inputLimit.value = this.limit ? this.limit : '';
 
+		this.inputFields.value = this.fields ? this.fields : '';
+
 	}
 
 	getParams(url) {
-		var params = {};
-		var parser = document.createElement('a');
+		let params = {};
+		let parser = document.createElement('a');
 		parser.href = url;
-		var query = parser.search.substring(1);
-		var vars = query.split('&');
-		for (var i = 0; i < vars.length; i++) {
-			var pair = vars[i].split('=');
+		const query = parser.search.substring(1);
+		const vars = query.split('&');
+		for (let i = 0; i < vars.length; i++) {
+			const pair = vars[i].split('=');
 			if (!params[pair[0]])
 				params[pair[0]] = decodeURIComponent(pair[1]);
 			else {
@@ -67,8 +72,14 @@ export class Anuncios {
 					params[pair[0]] = [ params[pair[0]], decodeURIComponent(pair[1])];
 			}
 		}
-		if (params.sort) params.sort = params.sort.replace('+', ' ');
+		if (params.sort) params.sort = params.sort.replace(/\+/g,' ');
+		if (params.fields) params.fields = params.fields.replace(/\+/g,' ');
+
+		console.log(params);
 		return params;
 	}
-
 }
+
+window.addEventListener('load', () => {
+	new Anuncios();
+});

@@ -13,25 +13,22 @@ module.exports = {
             "error",
             "tab"
         ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
         "quotes": [
-            "error",
+            "warn",
             "single"
         ],
         "semi": [
-            "error",
+            "warn",
             "always"
-        ]
-        ,"globals": {
-        },
+        ],
+        "globals": {},
         "strict": "error",
-        "globalstrict": true,
+        "global-strict": true,
         "quotmark": "single",
         "undef": true,
         "unused": true,
         "no-console": 0
     }
 };
+
+

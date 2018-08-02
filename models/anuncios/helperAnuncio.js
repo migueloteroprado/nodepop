@@ -91,11 +91,11 @@ module.exports = {
 		return filters;
 	},
 
+	// uploader for image files
 	upload: multer({
 		storage: storage,
 		fileFilter: function (req, file, cb) {
 			const extension = (path.extname(file.originalname));
-			console.log(extension);
 			if (!extension.match(/\.(jpg|jpeg|png|gif)$/)) {
 				return cb(new Error('Only image files are allowed (jpeg, jpeg, png, gif)'));
 			}
@@ -104,12 +104,13 @@ module.exports = {
 	}),
 
 	// Array of validations for querystring parameters in GET requests
-	// All parameters are optional, and check that they are not passed multiple times (not isArray)
+	// All parameters are optional, and check that they are not passed multiple times (not isArray), except for tags
 	queryValidations: [
 		query('venta').optional({ checkFalsy: true }).not().isArray().isIn(['true', 'false']).withMessage('must be true or false'),
 		query('tag').optional({ checkFalsy: true }).custom(checkTags),
 		query('precio').optional({ checkFalsy: true }).not().isArray().custom(checkPrice),
-		query(['start', 'limit']).optional({ checkFalsy: true }).not().isArray().isInt().withMessage('must be integer'),
+		query('start').optional({ checkFalsy: true }).not().isArray().isInt().withMessage('must be integer'),
+		query('limit').optional({ checkFalsy: true }).not().isArray().isInt({max: 100}).withMessage('must be integer, maximum 100'),
 		query('sort').optional({ checkFalsy: true }).not().isArray()
 	],
 
@@ -119,8 +120,7 @@ module.exports = {
 		body('nombre').not().isArray().not().isEmpty().withMessage('is required'),
 		body('venta').not().isArray().isIn(['true', 'false']).withMessage('must be true or false'),
 		body('tags').not().isEmpty().custom(checkTags),
-		body('precio').not().isArray().isFloat({min: 0.0}).withMessage('must be a positive number')/*,
-		body('foto').not().isArray().isString().matches(new RegExp(/\.(gif|jpe?g|png)$/i)).withMessage('must be a .gif, .jpg, .jpeg or .png image file')*/
+		body('precio').not().isArray().isFloat({min: 0.0}).withMessage('must be a positive number')
 	],	
 
 	// Array of validations for body object passed to PUT requests
@@ -128,8 +128,7 @@ module.exports = {
 		body('nombre').optional().not().isArray().not().isEmpty().withMessage('is required'),
 		body('venta').optional().not().isArray().isIn(['true', 'false']).withMessage('must be true or false'),
 		body('tags').optional().custom(checkTags),
-		body('precio').optional().not().isArray().isFloat({min: 0.0}).withMessage('must be a positive number')/*,
-		body('foto').optional().not().isArray().matches(new RegExp(/\.(gif|jpe?g|png)$/i)).withMessage('must be an string containing a .gif, .jpg, .jpeg or .png image file name')*/
+		body('precio').optional().not().isArray().isFloat({min: 0.0}).withMessage('must be a positive number')
 	]
 
 };

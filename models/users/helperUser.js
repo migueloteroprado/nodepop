@@ -1,7 +1,7 @@
 'use strict';
 
 // express validator
-const { query, param, body } = require('express-validator/check');
+const { query, body } = require('express-validator/check');
 
 module.exports = {
 	
@@ -14,7 +14,7 @@ module.exports = {
 		// create empty filter
 		let filters = {};
 
-		// filter by name, obtaining all users whose name starts by given value, case insensitive
+		// filter by name, obtaining all users whose name begins with given value, case insensitive
 		if (name) {
 			filters.name = new RegExp(name, 'i');
 		}

@@ -162,7 +162,6 @@ router.delete('/:id', [
 
 		const _id = req.params.id;
 		const deleted = await User.remove({_id: _id}).exec();
-		console.log(deleted);
 		res.json({ 
 			sucess: true, 
 			result: { 

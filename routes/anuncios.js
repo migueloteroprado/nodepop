@@ -24,8 +24,8 @@ router.get('/', queryValidations, async (req, res, next) => {
 		const filters = getFilters(req.query);
 
 		// get query config
-		const limit = parseInt(req.query.limit);
-		const start = parseInt(req.query.start || 0);
+		const limit = Math.min(parseInt(req.query.limit), 100);
+		const start = parseInt(req.query.start);
 		const fields = req.query.fields;
 		const sort = req.query.sort;
 
@@ -37,10 +37,8 @@ router.get('/', queryValidations, async (req, res, next) => {
 		const currentPage = limit > 0 ? Math.floor(start/limit) + 1 : 1;
 		const totalPages = limit > 0 ? Math.ceil(count/limit) : 1;
 
-		console.log(currentPage, totalPages);
-
 		// Obtain filters and sort from querystring, without start and limit
-		// (Pagination buttons will modify only 'start' and 'limit' parameters, and will keep all others (filters and sort)
+		// (Pagination buttons will modify only 'start' and 'limit' parameters, and will keep all others (filters, sort and fields)
 		const queryParsed = queryString.parseUrl(req.originalUrl).query;
 		let queryFilters = {};
 		let keys = Object.keys(queryParsed);

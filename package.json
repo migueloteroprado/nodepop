@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "cross-env DEBUG=nodeapi:* PORT=3000 nodemon",
-    "installDB": "node ./models/install_db.js",
-    "eslint": "eslint ."
+    "dev": "cross-env DEBUG=nodeapi:* nodemon",
+    "install_db": "node ./install_db.js",
+    "eslint": "node_modules/.bin/eslint ."
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",

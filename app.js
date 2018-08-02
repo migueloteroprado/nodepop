@@ -1,6 +1,7 @@
 'use strict';
 
-var fs = require('fs');
+// Uncoomet this line if you want Logger to write file 'access.log'
+// var fs = require('fs');
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -16,8 +17,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 app.engine('html', require('ejs').__express);
 
-// logger setup
-app.use(logger('common', { stream: fs.createWriteStream('./access.log', {flags: 'a'}) }));
+// Logger setup. Uncomment next line to enable logging to file 'access.log'
+// app.use(logger('common', { stream: fs.createWriteStream('./access.log', {flags: 'a'}) }));
 app.use(logger('dev'));
 
 app.use(express.json());
@@ -57,8 +58,6 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
-
-	console.log(req.originalUrl);
 
 	// Validation errors
 	if (err.array) { // other errors never contain an array

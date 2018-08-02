@@ -46,7 +46,7 @@ router.get('/', queryValidations, async (req, res, next) => {
 		const filters = getFilters(req.query);
 
 		// get query config
-		const limit = parseInt(req.query.limit);
+		const limit = Math.min(parseInt(req.query.limit), 100); // maximum 100 documents at one time 
 		const start = parseInt(req.query.start);
 		const fields = req.query.fields;
 		const sort = req.query.sort;
@@ -58,23 +58,6 @@ router.get('/', queryValidations, async (req, res, next) => {
 		res.json({
 			success: true,
 			result: anuncios
-		});
-	} catch (err) {
-		next(err);
-	}
-});
-
-/**
- * GET /tags
- * Obtain all existing tags from anuncios
- */
-router.get('/tags', async (req, res, next) => {
-	try {
-		// Get all distinct tags from all anuncios
-		const tags = await Anuncio.distinct('tags');
-		res.json({
-			success: true,
-			result: tags
 		});
 	} catch (err) {
 		next(err);
@@ -161,8 +144,6 @@ router.put('/:id', upload.single('foto'), [
 	param('id').isMongoId().withMessage('invalid ID')
 ], async (req, res, next) => {
 
-	console.log(req.body);
-
 	try {
 
 		// check if file was received and uploaded
@@ -204,7 +185,6 @@ router.delete('/:id', [
 		const deleted = await Anuncio.remove({
 			_id: _id
 		}).exec();
-		console.log(deleted);
 		res.json({
 			sucess: true,
 			result: {
@@ -215,6 +195,23 @@ router.delete('/:id', [
 		next(err);
 	}
 
+});
+
+/**
+ * GET /tags
+ * Obtain all existing tags from anuncios
+ */
+router.get('/tags', async (req, res, next) => {
+	try {
+		// Get all distinct tags from all anuncios
+		const tags = await Anuncio.distinct('tags');
+		res.json({
+			success: true,
+			result: tags
+		});
+	} catch (err) {
+		next(err);
+	}
 });
 
 module.exports = router;

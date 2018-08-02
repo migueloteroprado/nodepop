@@ -45,6 +45,9 @@ anuncioSchema.statics.list = function(filters, limit, start, fields, sort) {
 	query.limit(limit);
 	query.skip(start);	
 	query.select(fields);
+
+console.log(fields)	;
+
 	query.sort(sort).collation({ locale: 'es', caseLevel: true }); // collation with caseLevel:true to perform case insensitive sorting
 	return query.exec();
 };
