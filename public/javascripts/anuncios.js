@@ -55,6 +55,7 @@ class Anuncios {
 
 	}
 
+	// returns an objects with all the params extracted from the querystring
 	getParams(url) {
 		let params = {};
 		let parser = document.createElement('a');
@@ -75,11 +76,11 @@ class Anuncios {
 		if (params.sort) params.sort = params.sort.replace(/\+/g,' ');
 		if (params.fields) params.fields = params.fields.replace(/\+/g,' ');
 
-		console.log(params);
 		return params;
 	}
 }
 
+// Wait for DOM loaded
 window.addEventListener('load', () => {
 	new Anuncios();
 });

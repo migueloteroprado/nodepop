@@ -21,6 +21,16 @@
 			]
 		},
 		{
+			"nombre": "Bicicleta de montaña",
+			"venta": true,
+			"precio": 625,
+			"foto": "bici-montaña.jpg",
+			"tags": [
+				"lifestyle",
+				"motor"
+			]
+		},
+		{
 			"nombre": "Anillo",
 			"venta": true,
 			"precio": 140.5,

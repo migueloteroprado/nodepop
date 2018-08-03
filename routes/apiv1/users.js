@@ -24,13 +24,12 @@ router.get('/', queryValidations, async (req, res, next) => {
 		const filters = getFilters(req.query);
 
 		// get query config
-		const limit = parseInt(req.query.limit);
+		const limit = Math.min(parseInt(req.query.limit), 100);
 		const start = parseInt(req.query.start);
-		const fields = req.query.fields;
 		const sort = req.query.sort;
 
 		// query database
-		const users = await User.list(filters, limit, start, fields, sort);
+		const users = await User.list(filters, limit, start, sort);
 
 		// return result
 		res.json({

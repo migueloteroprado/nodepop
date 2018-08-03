@@ -25,7 +25,7 @@ router.get('/', queryValidations, async (req, res, next) => {
 
 		// get query config
 		const limit = Math.min(parseInt(req.query.limit), 100);
-		const start = parseInt(req.query.start);
+		const start = parseInt(req.query.start) || 0;
 		const fields = req.query.fields;
 		const sort = req.query.sort;
 

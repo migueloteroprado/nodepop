@@ -26,8 +26,6 @@
 
   <main>
 
-<div>
-
     <section class="search-section">
       <form class="search-form shadow-box-light" method="GET" action="/anuncios">
 
@@ -123,9 +121,7 @@
       </section>
     <% } %>  
     
-  </div>
 
-  <div>
     <section class="list">
       <header>
         <h3 class="shadow-box">Listado de Anuncios</h3>
@@ -134,38 +130,50 @@
       <div class="wrapper-anuncios">
         <% if (anuncios.length > 0) {
           anuncios.forEach(anuncio => { %>
-            <div class="anuncio shadow-box-light">
+            <article class="anuncio shadow-box-light">
               <div class="wrapper-anuncio">
-                <div class="data">
+                <header class="title">
                   <h4 class="shadow-box-light">
                     <%= anuncio.nombre ? anuncio.nombre : '-' %>
                   </h4>
-                  <p class="<%= anuncio.precio ? '' : 'hidden' %>">
-                      <span class="lbl">Precio: </span><span class="value"><%= anuncio.precio %></span>
-                  </p>
-                  <p class="<%= anuncio.venta === 'undefined' ? 'hidden' : '' %>">
-                      <span class="lbl">Tipo: </span><span class="value"><%= anuncio.venta ? 'Venta' : 'Búsqueda' %></span>
-                  </p>
+                </header>
+                <div class="data">
+                  <div class="fields">
+                    <div class="<%= anuncio.precio ? '' : 'hidden' %>">
+                        <span class="lbl">Precio: </span>
+                        <span class="value"><%= anuncio.precio + ' €' %></span>
+                    </div>
+                    <div class="<%= anuncio.venta === 'undefined' ? 'hidden' : '' %>">
+                        <div><span class="lbl">Tipo: </span></div>
+                        <div><span class="value"><%= anuncio.venta ? 'Venta' : 'Búsqueda' %></span></div>
+                    </div>
+                    <div class="<%= anuncio.tags ? '' : 'hidden' %>">
+                      <div><span class="lbl">Tags: </span></div>
+                      <div><span class="value">
+                        <% if (anuncio.tags) { 
+                          anuncio.tags.forEach((tag, index, arr) => { %>
+                            <%= tag + (index < arr.length - 1 ? ', ' : '') %>
+                          <% })
+                        } %>
+                        </span>
+                      </div>
+                    </div>                    
+                  </div>
+                  <div class="picture <%= anuncio.foto ? '' : 'hidden' %>">
+                    <img class="shadow-box-light" src=<%=`/images/anuncios/${anuncio.foto}` %> alt="<%= anuncio.foto %>">
+                  </div>                  
                 </div>
-                <div class="picture <%= anuncio.foto ? '' : 'hidden' %>"">
-                  <img class="shadow-box-light" src=<%=`/images/anuncios/${anuncio.foto}` %> alt="<%= anuncio.foto %>">
-                </div>
-              </div>   
-              <div class="anuncio-footer">
-                <p class="<%= anuncio.tags ? '' : 'hidden' %>">
-                    <span class="lbl">Tags: </span><span class="value"><%= anuncio.tags %></span>
-                </p>
               </div>
-            </div>
-          <% }) 
-          } else { %>
-            <h4>No se encontró ningún anuncio para los filtros de búsqueda indicados</h4> 
-          <% } %>  
+            </article> 
+        <% }) 
+        } else { %>
+          <h4>No se encontró ningún anuncio para los filtros de búsqueda indicados</h4> 
+        <% } %>  
       </div>
 
     </section>
 
-  </div>    
+ 
 
   </main>
 </body>

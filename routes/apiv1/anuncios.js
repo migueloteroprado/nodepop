@@ -19,17 +19,15 @@ const Anuncio = require('../../models/anuncios/Anuncio');
  */
 const {
 	getFilters,
-	upload,
+	fotoUploader,
 	queryValidations,
 	bodyValidationsPost,
 	bodyValidationsPut
 } = require('../../models/anuncios/helperAnuncio');
 
 // express validator
-const {
-	param,
-	validationResult
-} = require('express-validator/check');
+const {	param, validationResult } = require('express-validator/check');
+
 
 /**
  * GET /
@@ -58,6 +56,23 @@ router.get('/', queryValidations, async (req, res, next) => {
 		res.json({
 			success: true,
 			result: anuncios
+		});
+	} catch (err) {
+		next(err);
+	}
+});
+
+/**
+ * GET /tags
+ * Obtain all existing tags from anuncios
+ */
+router.get('/tags', async (req, res, next) => {
+	try {
+		// Get all distinct tags from all anuncios
+		const tags = await Anuncio.distinct('tags');
+		res.json({
+			success: true,
+			result: tags
 		});
 	} catch (err) {
 		next(err);
@@ -100,17 +115,14 @@ router.get('/:id', [
  * POST /
  * Upload image file and insert new Anuncio into database
  */
-router.post('/', upload.single('foto'), bodyValidationsPost, async (req, res, next) => {
+router.post('/', fotoUploader.single('foto'), bodyValidationsPost, async (req, res, next) => {
 
 	try {
 
-		// check if file was received and uploaded
-		if (!(req.file && req.file.originalname)) {
-			throw new Error('Image file is required');
+		// extract name from uploaded file, and put it to req.body field 'foto'.
+		if (req.file && req.file.filename) {
+			req.body.foto = req.file.filename;
 		}
-
-		// extract original name from uploaded file, and add it to req.body field 'foto'.
-		req.body.foto = req.file.originalname;
 
 		// validate data from body and throw possible validation errors
 		validationResult(req).throw();
@@ -139,17 +151,16 @@ router.post('/', upload.single('foto'), bodyValidationsPost, async (req, res, ne
 /** PUT /:id
  * Updates one document
  */
-router.put('/:id', upload.single('foto'), [
+router.put('/:id', fotoUploader.single('foto'), [
 	...bodyValidationsPut,
 	param('id').isMongoId().withMessage('invalid ID')
 ], async (req, res, next) => {
 
 	try {
 
-		// check if file was received and uploaded
-		if (req.file && req.file.originalname) {
-			// extract original name from uploaded file, and add it to req.body field 'foto'.
-			req.body.foto = req.file.originalname;
+		// extract name from uploaded file, and put it to req.body field 'foto'.
+		if (req.file && req.file.filename) {
+			req.body.foto = req.file.filename;
 		}
 
 		// validate data from body and throw possible validation errors
@@ -195,23 +206,6 @@ router.delete('/:id', [
 		next(err);
 	}
 
-});
-
-/**
- * GET /tags
- * Obtain all existing tags from anuncios
- */
-router.get('/tags', async (req, res, next) => {
-	try {
-		// Get all distinct tags from all anuncios
-		const tags = await Anuncio.distinct('tags');
-		res.json({
-			success: true,
-			result: tags
-		});
-	} catch (err) {
-		next(err);
-	}
 });
 
 module.exports = router;

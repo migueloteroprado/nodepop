@@ -135,7 +135,6 @@ section {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  /* margin: 0.1rem; */
   padding: 0.2rem 0.5rem 0 0.5rem;
 }
 
@@ -150,14 +149,14 @@ section {
 }
 
 label {
-  margin-right: 1rem;
+  margin-right: 0.5rem;
   display: inline-block;
-  text-align: left;
+  text-align: right;
   line-height: 1.9rem;
 }
 
 label.tag {
-  width: 50px;
+  width: 60px;
 }
 
 input {
@@ -172,6 +171,10 @@ input[type="checkbox"] {
 select {
   padding: 0.1rem;
   width: 150px;
+}
+
+#fields {
+  width: 220px;
 }
 
 .search-form .buttons {
@@ -211,6 +214,7 @@ section.list header {
 	margin-left: -10px;
 	margin-top: -10px;
 	justify-content: space-evenly;
+	margin-bottom: 10px;
 }
 
 .wrapper-anuncios > h4 {
@@ -230,11 +234,13 @@ section.list header {
 
 .anuncio .wrapper-anuncio {
   display: flex;
-  flex-direction: row;
-  padding: 0.8rem;
+  flex-direction: column;
+  padding: 0.8rem 0.8rem 1rem 0.8rem;
 }
 
-
+.anuncio .wrapper-anuncio ul {
+  list-style: none;
+}
 
 .anuncio img {
   border-radius: 5px;
@@ -242,35 +248,46 @@ section.list header {
   border: 1px solid grey;
 }
 
-.anuncio .data {
+.anuncio .title {
   width: 100%;
-  padding: 0rem 1rem 0rem 0rem;
-}
-.anuncio .data h4 {
   padding: 0.1rem 0.1rem 0.1rem 0.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
   background-color: #333333;
   color: white;
   border-radius: 5px;
   font-size: 0.9rem;
 }
-.anuncio .data span.lbl {
-  min-width: 60px;
-  display: inline-block;
-  text-align: right;
+
+.anuncio .data {
+  display: flex;
+  flex-direction: row;
+}
+
+.anuncio .fields {
+  width: 50%;
   margin-right: 0.5rem;
 }
-.anuncio span.value {
+
+.anuncio .fields > div {
+  display: flex;
+  flex-direction: row;
+}
+
+.anuncio span.lbl {
+  min-width: 50px;
+  display: inline-block;
+  text-align: right;
+  margin-right: 0.6rem;
   font-weight: bold;
+}
+.anuncio span.value {
+  /* font-weight: bold; */
   display: inline-block;
 }
 .anuncio .picture {
-  width: 100%;
+  width: 50%;
   border-radius: 5px;
-}
-.anuncio .anuncio-footer {
-  text-align: right;
-  margin: 0 1.1rem 0.6rem;
+  margin-right: 2px;
 }
 
 .hidden {
@@ -288,7 +305,7 @@ section.paginator {
 }
 
 section.paginator span {
-  line-height: 2rem;
+  line-height: 2.2rem;
   margin-right: 1rem;
 }
 
@@ -302,7 +319,6 @@ ul.pagination {
 ul.pagination li {
   border: 1px solid #aaaaaa;
   margin-left: 4px;
-  margin-bottom: 4px;
   border-radius: 5px;
   display: block;
 }
@@ -329,6 +345,7 @@ ul.pagination li.disabled:hover {
 }
 
 /*** media queries **/
+
 @media (max-width: 799px) {
   .anuncio {
     max-width: calc(100% - 10px);
