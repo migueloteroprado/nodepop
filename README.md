@@ -247,8 +247,8 @@ To pass more than one tag, insert multiple tag parameters with every value, to c
 - **foto**:
 An image file.
 Must be a .jpg, .jpeg, .png or .gif file
-The file will be uploaded to the server in the folder /images/anuncios. A timestamp will be added to the file name.
-The name of the file will be saved in the database.
+The file will be uploaded to the server in the folder /images/anuncios. The name of the field ('foto' and a timestamp will be added as a prefix of the original file name.
+The name of the uploaded file will be saved in the database.
 
 ##### Returns
 
@@ -271,7 +271,7 @@ An object with:
         "_id": "5b643d43ffe63a4172e7c486",
         "nombre": "Google Pixel 2",
         "precio": 755.5,
-        "foto": "google-pixel2.png",
+        "foto": "foto-1533341231478-google-pixel2.png",
         "__v": 0
     }
 }
