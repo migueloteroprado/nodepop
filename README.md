@@ -247,7 +247,7 @@ To pass more than one tag, insert multiple tag parameters with every value, to c
 - **foto**:
 An image file.
 Must be a .jpg, .jpeg, .png or .gif file
-The file will be uploaded to the server in the folder /images/anuncios.
+The file will be uploaded to the server in the folder /images/anuncios. A timestamp will be added to the file name.
 The name of the file will be saved in the database.
 
 ##### Returns

@@ -27,7 +27,13 @@ module.exports = {
         "quotmark": "single",
         "undef": true,
         "unused": true,
-        "no-console": 0
+        "no-console": "off",
+        "no-unused-vars": [
+            "warn", {
+                "vars": "all", 
+                "args": "after-used"
+            }
+        ]
     }
 };
 

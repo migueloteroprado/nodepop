@@ -37,8 +37,8 @@ router.get('/', queryValidations, async (req, res, next) => {
 		const currentPage = limit > 0 ? Math.floor(start/limit) + 1 : 1;
 		const totalPages = limit > 0 ? Math.ceil(count/limit) : 1;
 
-		// Obtain filters and sort from querystring, without start and limit
-		// (Pagination buttons will modify only 'start' and 'limit' parameters, and will keep all others (filters, sort and fields)
+		// Extract filters and sort params from querystring, without start and limit. This string will be passed to the view to render pagination links 
+		// (Pagination button links will modify only 'start' and 'limit' parameters, and will keep all others untouched (filters, sort and fields)
 		const queryParsed = queryString.parseUrl(req.originalUrl).query;
 		let queryFilters = {};
 		let keys = Object.keys(queryParsed);
@@ -50,7 +50,7 @@ router.get('/', queryValidations, async (req, res, next) => {
 		const filtersInQuery = queryString.stringify(queryFilters);
 
 		// render page
-		res.render('anuncios', {anuncios: anuncios, currentPage: currentPage, totalPages: totalPages, limit: limit, filtersInQuery: filtersInQuery});
+		res.render('anuncios/anuncios', {anuncios: anuncios, currentPage: currentPage, totalPages: totalPages, limit: limit, filtersInQuery: filtersInQuery});
 	}
 	catch (err) {
 		next(err);

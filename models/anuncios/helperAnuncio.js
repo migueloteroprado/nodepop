@@ -6,6 +6,7 @@ const { query, body } = require('express-validator/check');
 // multer instance to upload image files for field 'foto'
 const path = require('path');
 const multer  = require('multer');
+
 const storage = multer.diskStorage({
 	destination: function (req, file, cb) {
 		cb(null, path.join(__dirname, '../../public/images/anuncios'));
@@ -14,6 +15,7 @@ const storage = multer.diskStorage({
 		cb(null, `${file.fieldname}-${Date.now()}-${file.originalname}`);
 	}
 });
+
 const fotoUploader = multer({
 	storage: storage,
 	fileFilter: function (req, file, cb) {
@@ -67,7 +69,7 @@ const getFilters = queryString => {
 		}
 	}
 	return filters;
-}
+};
 
 // List of posible tags
 const tags = ['work', 'lifestyle', 'motor', 'mobile'];
@@ -107,7 +109,7 @@ const checkFoto = value => {
 		throw new Error('foto is required');
 	}
 	if (!value.match(new RegExp(/\.(gif|jpe?g|png)$/i))) {
-		throw new Error(`'foto' must be a .gif, .jpg, .jpeg or .png image file name`);
+		throw new Error('foto field must contain a .gif, .jpg, .jpeg or .png image file name');
 	}
 	return true;
 };

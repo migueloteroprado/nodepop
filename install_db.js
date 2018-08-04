@@ -22,12 +22,12 @@ conn.once('open', async() => {
 
 		// check json
 		if (!anuncios) {
-			console.info('The json file anuncios.js has no documents');
+			console.log('The json file anuncios.js has no documents');
 			process.exit(1);
 		}
 
 		if (!users) {
-			console.info('The json file users.js has no users');
+			console.log('The json file users.js has no users');
 			process.exit(1);
 		}
 

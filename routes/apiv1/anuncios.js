@@ -4,15 +4,12 @@ const express = require('express');
 const router = express.Router();
 var createError = require('http-errors');
 
-// upload files with multer
-//const upload = require('../../lib/upload');
-
 // Anuncio model
 const Anuncio = require('../../models/anuncios/Anuncio');
 
 /**
  * Auxiliar module, returns: 
- * - getFilters: Method that returns a filters object created form querystring parameters, to pass to model list method
+ * - getFilters: Method that returns a filters object created form querystring parameters, to pass to the model 'list' static method
  * - queryValidations: Array of validations for querystring in GET requests
  * - bodyValidationsPost: Array of validations for body object passed to POST requests
  * - bodyValidationsPut: Array of validations for body object passed to PUT requests
@@ -27,7 +24,6 @@ const {
 
 // express validator
 const {	param, validationResult } = require('express-validator/check');
-
 
 /**
  * GET /
@@ -118,7 +114,7 @@ router.get('/:id', [
 router.post('/', fotoUploader.single('foto'), bodyValidationsPost, async (req, res, next) => {
 
 	try {
-
+	
 		// extract name from uploaded file, and put it to req.body field 'foto'.
 		if (req.file && req.file.filename) {
 			req.body.foto = req.file.filename;

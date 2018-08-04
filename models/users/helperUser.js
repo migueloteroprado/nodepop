@@ -22,7 +22,7 @@ const getFilters = queryString => {
 	}
 
 	return filters;
-}
+};
 
 // validation array for querystring
 const queryValidations = [
@@ -45,7 +45,7 @@ const bodyValidationsPut = [
 	body('name').optional().not().isArray().not().isEmpty().withMessage('is required'),
 	body('email').optional().not().isArray().isEmail().normalizeEmail().withMessage('must be a valid email'),
 	body('password').optional().not().isArray().not().isEmpty().isLength({ min: 6 }).withMessage('must have 6 characters at least')
-]
+];
 
 // Objects exported by the module
 module.exports = {

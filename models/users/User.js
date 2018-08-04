@@ -22,7 +22,7 @@ const userSchema = mongoose.Schema({
 
 // If an indexing error occurs, exit app with error code
 userSchema.on('index', function(error) {
-	console.log(error);
+	console.error(error);
 	process.exit(1);
 });
 
