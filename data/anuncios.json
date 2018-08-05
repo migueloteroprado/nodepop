@@ -40,7 +40,7 @@
 			]
 		},
 		{
-			"nombre": "Ipad",
+			"nombre": "iPad",
 			"venta": false,
 			"precio": 250,
 			"foto": "ipad.jpg",

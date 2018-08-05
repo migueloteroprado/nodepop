@@ -70,7 +70,7 @@ app.use(function (err, req, res, next) {
 
 	res.status(err.status || 500);
 
-	// si el error es de una petición a la api, devolvemos un jason, no una página renderizada
+	// if error comes from API, return a JSON object, otherwise render error page
 	if (isAPI(req)) {
 		res.json({ success: false, error: err.message });
 		return;

@@ -2,12 +2,22 @@
 
 const express = require('express');
 const router = express.Router();
-var createError = require('http-errors');
+const createError = require('http-errors');
 
+// constants
+const { MAX_LIMIT }  = require('../../lib/constants');
+
+// express-validator
 const { param, validationResult } = require('express-validator/check');
 
+// User model
 const User = require('../../models/users/User');
-const { queryValidations, bodyValidationsPost, bodyValidationsPut, getFilters } = require('../../models/users/helperUser');
+
+// function that returns a filters object created form querystring parameters, to pass to the model 'list' static method
+const getFilters = require('../../lib/users/filter');
+
+// Arrays of validators for GET, POST and PUT requests 
+const { queryValidations,	bodyValidationsPost, bodyValidationsPut } = require('../../lib/users/validators');
 
 /**
  * GET /
@@ -24,7 +34,7 @@ router.get('/', queryValidations, async (req, res, next) => {
 		const filters = getFilters(req.query);
 
 		// get query config
-		const limit = Math.min(parseInt(req.query.limit), 100);
+		const limit = Math.min(parseInt(req.query.limit), MAX_LIMIT); // maximum MAX_LIMIT users at one time 
 		const start = parseInt(req.query.start);
 		const sort = req.query.sort;
 

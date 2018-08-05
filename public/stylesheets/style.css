@@ -270,6 +270,7 @@ section.list header {
 .anuncio .fields {
   width: 50%;
   margin-right: 0.5rem;
+  margin-left: 3px;
 }
 
 .anuncio .fields > div {

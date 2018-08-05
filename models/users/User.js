@@ -36,6 +36,12 @@ userSchema.statics.list = function(filter, limit, start, sort) {
 	return query.exec();
 };
 
+// Static method to get document count
+userSchema.statics.count = function(filters) {
+	const query = User.countDocuments(filters);
+	return query.exec();
+};
+
 // Create model
 const User = mongoose.model('User', userSchema);
 

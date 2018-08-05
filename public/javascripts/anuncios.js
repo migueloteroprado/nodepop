@@ -1,5 +1,8 @@
 'use strict';
 
+// Maximum number allowed for 'limit' parameter
+const MAX_LIMIT = 100;
+
 class Anuncios {
 
 	constructor() {
@@ -35,6 +38,9 @@ class Anuncios {
 		this.inputLimit = document.querySelector('#limit');
 
 		this.inputFields = document.querySelector('#fields');
+
+		// Add maximun value attribute to 'limit' input
+		this.inputLimit.setAttribute('max', MAX_LIMIT);
 
 		// intialize form values
 		this.inputNombre.value = this.nombre ? this.nombre : '';

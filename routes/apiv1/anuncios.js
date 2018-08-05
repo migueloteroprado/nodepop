@@ -2,28 +2,25 @@
 
 const express = require('express');
 const router = express.Router();
-var createError = require('http-errors');
+const createError = require('http-errors');
+
+// express validator
+const {	param, validationResult } = require('express-validator/check');
 
 // Anuncio model
 const Anuncio = require('../../models/anuncios/Anuncio');
 
-/**
- * Auxiliar module, returns: 
- * - getFilters: Method that returns a filters object created form querystring parameters, to pass to the model 'list' static method
- * - queryValidations: Array of validations for querystring in GET requests
- * - bodyValidationsPost: Array of validations for body object passed to POST requests
- * - bodyValidationsPut: Array of validations for body object passed to PUT requests
- */
-const {
-	getFilters,
-	fotoUploader,
-	queryValidations,
-	bodyValidationsPost,
-	bodyValidationsPut
-} = require('../../models/anuncios/helperAnuncio');
+// constants
+const { MAX_LIMIT }  = require('../../lib/constants');
 
-// express validator
-const {	param, validationResult } = require('express-validator/check');
+// function that returns a filters object created form querystring parameters, to pass to the model 'list' static method
+const getFilters = require('../../lib/anuncios/filter');
+
+// multer uploader for foto field image file
+const fotoUploader = require('../../lib/anuncios/uploader');
+
+// Arrays of validators for GET, POST and PUT requests 
+const { queryValidations,	bodyValidationsPost, bodyValidationsPut } = require('../../lib/anuncios/validators');
 
 /**
  * GET /
@@ -40,7 +37,7 @@ router.get('/', queryValidations, async (req, res, next) => {
 		const filters = getFilters(req.query);
 
 		// get query config
-		const limit = Math.min(parseInt(req.query.limit), 100); // maximum 100 documents at one time 
+		const limit = Math.min(parseInt(req.query.limit), MAX_LIMIT); // maximum MAX_LIMIT documents at one time 
 		const start = parseInt(req.query.start);
 		const fields = req.query.fields;
 		const sort = req.query.sort;

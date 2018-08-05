@@ -13,18 +13,15 @@ npm install
 
 All modules required will be downloaded and installed.
 
-### Configure Port
+### Configure Port and Database URL
 
-1. Copy file *.env.example* to *.env*
-2. Edit *.env* file to configure environment variable "PORT" (default 3000).
+1. Copy file "*.env.example*" to "*.env*"
+2. In "*.env*" file, configure Port, in environment variable "NODEPOP_PORT"
+Default value is 3000.
+3. In "*.env*" file, configure MongoDB Database URL, in environment variable "NODEPOP_MONGOOSE_CONNECTION_STRING"
+Default value is "mongodb://localhost:27017/nodepop"
 
-### Configure Database
-
-#### Set Database URL
-
-1. Edit *.env* file to configure environment variable "MONGOOSE_CONNECTION_STRING".
-
-#### Initialize database
+### Initialize database
 
 Use command:
 
@@ -55,7 +52,7 @@ npm run dev
 
 # Lint
 
-To run eslint validations, execute the command:
+To run eslint code validations, execute the command:
 
 ``` shell
 npm run eslint
