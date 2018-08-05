@@ -148,6 +148,10 @@ section {
   padding: 0.5rem 0.6rem 0.3rem 0.6rem;
 }
 
+.wrapper-tags {
+  display: flex;
+}
+
 label {
   margin-right: 0.5rem;
   display: inline-block;
