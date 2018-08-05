@@ -17,7 +17,7 @@ const { MAX_LIMIT }  = require('../../lib/constants');
 const getFilters = require('../../lib/anuncios/filter');
 
 // multer uploader for foto field image file
-const fotoUploader = require('../../lib/anuncios/uploader');
+const uploader = require('../../lib/anuncios/uploader');
 
 // Arrays of validators for GET, POST and PUT requests 
 const { queryValidations,	bodyValidationsPost, bodyValidationsPut } = require('../../lib/anuncios/validators');
@@ -108,14 +108,9 @@ router.get('/:id', [
  * POST /
  * Upload image file and insert new Anuncio into database
  */
-router.post('/', fotoUploader.single('foto'), bodyValidationsPost, async (req, res, next) => {
+router.post('/', uploader.single('foto'), bodyValidationsPost, async (req, res, next) => {
 
 	try {
-	
-		// extract name from uploaded file, and put it to req.body field 'foto'.
-		if (req.file && req.file.filename) {
-			req.body.foto = req.file.filename;
-		}
 
 		// validate data from body and throw possible validation errors
 		validationResult(req).throw();
@@ -144,26 +139,19 @@ router.post('/', fotoUploader.single('foto'), bodyValidationsPost, async (req, r
 /** PUT /:id
  * Updates one document
  */
-router.put('/:id', fotoUploader.single('foto'), [
+router.put('/:id', uploader.single('foto'), [
 	...bodyValidationsPut,
 	param('id').isMongoId().withMessage('invalid ID')
 ], async (req, res, next) => {
 
 	try {
 
-		// extract name from uploaded file, and put it to req.body field 'foto'.
-		if (req.file && req.file.filename) {
-			req.body.foto = req.file.filename;
-		}
-
 		// validate data from body and throw possible validation errors
 		validationResult(req).throw();
 
 		const _id = req.params.id;
 		const anuncio = req.body;
-		const updatedAnuncio = await Anuncio.findByIdAndUpdate(_id, anuncio, {
-			new: true
-		}).exec();
+		const updatedAnuncio = await Anuncio.findByIdAndUpdate(_id, anuncio, { new: true }).exec();
 		res.json({
 			success: true,
 			result: updatedAnuncio
