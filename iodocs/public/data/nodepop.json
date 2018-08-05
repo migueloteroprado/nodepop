@@ -1,0 +1,374 @@
+{
+	"name": "Nodepop API",
+	"description": "Nodepop API",
+	"protocol": "rest",
+	"basePath": "http://localhost:3000",
+	"publicPath": "/apiv1",
+	"resources": {
+		"Anuncios Resources": {
+			"methods": {
+				"list_anuncios": {
+					"name": "Get Anuncios",
+					"path": "/anuncios",
+					"httpMethod": "GET",
+					"description": "Gets anuncios",
+					"parameters": {
+						"nombre": {
+							"type": "string",
+							"required": false,
+							"default": "",
+							"location": "query",
+							"description": "Name (will match documents beginnig with the text introduced, case insensitive"
+						},
+						"precio": {
+							"type": "string",
+							"required": false,
+							"default": "",
+							"location": "query",
+							"description": "Precio (Examples: 50, 50-, -50, 50-100)"
+						},
+						"venta": {
+							"type": "boolean",
+							"required": false,
+							"default": "",
+							"location": "query",
+							"description": "Venta (true or false)"
+						},
+						"tag": {
+							"type": "array",
+							"items": {
+								"tag": {
+									"tag": "tag",
+									"required": false,
+									"description": "Tags (One or many of: 'work', 'lifestyle', 'mobile', 'motor'",
+									"enum": [
+										"work",
+										"lifestyle",
+										"mobile",
+										"motor"
+									]
+								}
+							},
+							"required": false,
+							"default": "",
+							"location": "query",
+							"description": "Tags (One or many of: 'work', 'lifestyle', 'mobile', 'motor'"
+						},
+						"start": {
+							"type": "string",
+							"required": false,
+							"location": "query",
+							"description": "Number of documents to skip"
+						},
+						"limit": {
+							"type": "string",
+							"required": false,
+							"location": "query",
+							"description": "Number of documetns to get"
+						},
+						"sort": {
+							"type": "string",
+							"required": false,
+							"location": "query",
+							"description": "Sort fields (Examples: 'nombre', '-precio', 'precio -nombre')."
+						}
+					}
+				},
+				"get_anuncio": {
+					"name": "Get one Anuncio",
+					"path": "/anuncios/{id}",
+					"httpMethod": "GET",
+					"description": "Get one anuncio",
+					"parameters": {
+						"id": {
+							"type": "string",
+							"required": false,
+							"default": "",
+							"location": "path",
+							"description": "ID"
+						}
+					}
+				},
+				"add_anuncio": {
+					"name": "Insert Anuncio",
+					"path": "/anuncios",
+					"httpMethod": "POST",
+					"description": "Insert anuncio",
+					"parameters": {
+						"nombre": {
+							"type": "string",
+							"required": true,
+							"default": "",
+							"location": "body",
+							"description": "Name"
+						},
+						"precio": {
+							"type": "string",
+							"required": true,
+							"default": "",
+							"location": "body",
+							"description": "Precio"
+						},
+						"venta": {
+							"type": "boolean",
+							"required": true,
+							"default": "",
+							"location": "body",
+							"description": "Venta"
+						},
+						"tags": {
+							"type": "array",
+							"items": {
+								"tag": {
+									"title": "tag",
+									"required": true,
+									"description": "Tags (One or many of: 'work', 'lifestyle', 'mobile', 'motor'",
+									"enum": [
+										"work",
+										"lifestyle",
+										"mobile",
+										"motor"
+									]
+								}
+							},
+							"required": true,
+							"default": "",
+							"location": "body",
+							"description": "Tags (One or many of: 'work', 'lifestyle', 'mobile', 'motor'"
+						},
+						"foto": {
+							"type": "string",
+							"required": true,
+							"default": "",
+							"location": "body",
+							"description": "URL of image file"
+						}
+					}
+				},
+				"update_anuncio": {
+					"name": "Update Anuncio",
+					"path": "/anuncios/{id}",
+					"httpMethod": "PUT",
+					"description": "Update anuncio",
+					"parameters": {
+						"id": {
+							"type": "string",
+							"required": true,
+							"default": "",
+							"location": "path",
+							"description": "ID"
+						},
+						"nombre": {
+							"type": "string",
+							"required": false,
+							"default": "",
+							"location": "body",
+							"description": "Name"
+						},
+						"precio": {
+							"type": "string",
+							"required": false,
+							"default": "",
+							"location": "body",
+							"description": "Precio"
+						},
+						"venta": {
+							"type": "boolean",
+							"required": false,
+							"default": "",
+							"location": "body",
+							"description": "Venta"
+						},
+						"tags": {
+							"type": "array",
+							"items": {
+								"tag": {
+									"title": "tag",
+									"required": true,
+									"description": "Tags (One or many of: 'work', 'lifestyle', 'mobile', 'motor'",
+									"enum": [
+										"work",
+										"lifestyle",
+										"mobile",
+										"motor"
+									]
+								}
+							},
+							"required": false,
+							"default": "",
+							"location": "body",
+							"description": "Tags (One or many of: 'work', 'lifestyle', 'mobile', 'motor'"
+						},
+						"foto": {
+							"type": "string",
+							"required": false,
+							"default": "",
+							"location": "body",
+							"description": "URL of image file"
+						}
+					}
+				},
+				"delete_anuncio": {
+					"name": "Delete Anuncio",
+					"path": "/anuncios/{id}",
+					"httpMethod": "DELETE",
+					"description": "Delete anuncio",
+					"parameters": {
+						"id": {
+							"type": "string",
+							"required": true,
+							"default": "",
+							"location": "path",
+							"description": "ID"
+						}
+					}
+				},
+				"list_tags": {
+					"name": "List Tags",
+					"path": "/anuncios/tags",
+					"httpMethod": "GET",
+					"description": "List all tags"
+				}
+			}
+		},
+		"Users Resources": {
+			"methods": {
+				"list_users": {
+					"name": "Get Users",
+					"path": "/users",
+					"httpMethod": "GET",
+					"description": "Gets users",
+					"parameters": {
+						"name": {
+							"type": "string",
+							"required": false,
+							"default": "",
+							"location": "query",
+							"description": "Name (will match documents which contains the text introduced, case insensitive"
+						},
+						"email": {
+							"type": "string",
+							"required": false,
+							"default": "",
+							"location": "query",
+							"description": "Email (will match documents which contains the text introduced, case insensitive"
+						},
+						"start": {
+							"type": "string",
+							"required": false,
+							"location": "query",
+							"description": "Number of documents to skip"
+						},
+						"limit": {
+							"type": "string",
+							"required": false,
+							"location": "query",
+							"description": "Number of documetns to get"
+						},
+						"sort": {
+							"type": "string",
+							"required": false,
+							"location": "query",
+							"description": "Sort fields (Examples: 'name', '-email', 'email -name')."
+						}
+					}
+				},
+				"get_user": {
+					"name": "Get one User",
+					"path": "/users/{id}",
+					"httpMethod": "GET",
+					"description": "Get one user",
+					"parameters": {
+						"id": {
+							"type": "string",
+							"required": false,
+							"default": "",
+							"location": "path",
+							"description": "ID"
+						}
+					}
+				},
+				"add_user": {
+					"name": "Insert User",
+					"path": "/users",
+					"httpMethod": "POST",
+					"description": "Insert user",
+					"parameters": {
+						"name": {
+							"type": "string",
+							"required": true,
+							"default": "",
+							"location": "body",
+							"description": "Name"
+						},
+						"email": {
+							"type": "string",
+							"required": true,
+							"default": "",
+							"location": "body",
+							"description": "Email"
+						},
+						"password": {
+							"type": "string",
+							"required": true,
+							"default": "",
+							"location": "body",
+							"description": "Password"
+						}
+					}
+				},
+				"update_user": {
+					"name": "Update User",
+					"path": "/users/{id}",
+					"httpMethod": "PUT",
+					"description": "Update user",
+					"parameters": {
+						"id": {
+							"type": "string",
+							"required": true,
+							"default": "",
+							"location": "path",
+							"description": "ID"
+						},
+						"name": {
+							"type": "string",
+							"required": false,
+							"default": "",
+							"location": "body",
+							"description": "Name"
+						},
+						"email": {
+							"type": "string",
+							"required": false,
+							"default": "",
+							"location": "body",
+							"description": "Email"
+						},
+						"password": {
+							"type": "string",
+							"required": false,
+							"default": "",
+							"location": "body",
+							"description": "Password"
+						}
+					}
+				},
+				"delete_user": {
+					"name": "Delete User",
+					"path": "/users/{id}",
+					"httpMethod": "DELETE",
+					"description": "Delete user",
+					"parameters": {
+						"id": {
+							"type": "string",
+							"required": true,
+							"default": "",
+							"location": "path",
+							"description": "ID"
+						}
+					}
+				}
+			}
+		}
+	}
+}
