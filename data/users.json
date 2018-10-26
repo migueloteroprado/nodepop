@@ -1,19 +1,19 @@
 {
 	"users": [
 		{
-			"name": "Miguel",
-			"email": "miguel@nodepop.com",
-			"password": "Nod3Pop"
-		},
-		{
 			"name": "User1",
-			"email": "user1@nodepop.com",
-			"password": "s3cret1"
+			"email": "user@example.com",
+			"password": "1234"
 		},
 		{
 			"name": "User2",
 			"email": "user2@nodepop.com",
 			"password": "s3cret2"
+		},
+		{
+			"name": "User3",
+			"email": "user3@nodepop.com",
+			"password": "s3cret3"
 		}
 	]
 }

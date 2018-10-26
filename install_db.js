@@ -77,6 +77,11 @@ async function initUsers(users) {
 	const deleted = await User.deleteMany();
 	console.log(`Removed ${deleted.n} users.`);
 
+	// hash passwords
+	for (let i=0; i<users.length; i++) {
+		users[i].password = await User.hashPassword(users[i].password);
+	}
+
 	// Insert new users from json file
 	const inserted = await User.insertMany(users);
 	console.log(`Inserted ${inserted.length} users.`);

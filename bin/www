@@ -4,6 +4,8 @@
  * Module dependencies.
  */
 
+'use strict';
+
 require('dotenv').config();
 
 var app = require('../app');

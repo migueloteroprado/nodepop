@@ -1,6 +1,7 @@
 'use strict';
 
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 	
 const userSchema = mongoose.Schema({
 	name: {
@@ -40,6 +41,11 @@ userSchema.statics.list = function(filter, limit, start, sort) {
 userSchema.statics.count = function(filters) {
 	const query = User.countDocuments(filters);
 	return query.exec();
+};
+
+userSchema.statics.hashPassword = async function(plainPassword) {
+	// returns a promesa with hashed password
+	return bcrypt.hash(plainPassword, 10);
 };
 
 // Create model

@@ -10,6 +10,8 @@ var logger = require('morgan');
 
 const { isAPI } = require('./lib/utils');
 
+const loginController = require('./routes/loginController');
+
 var app = express();
 
 // view engine setup
@@ -42,8 +44,11 @@ require('./models/anuncios/Anuncio');
 /**
  * API routes
  */
+app.post('/apiv2/authenticate', loginController.postJWT);
 app.use('/apiv1/anuncios', require('./routes/apiv1/anuncios'));
 app.use('/apiv1/users', require('./routes/apiv1/users'));
+app.use('/apiv2/anuncios', require('./routes/apiv2/anuncios'));
+app.use('/apiv2/users', require('./routes/apiv2/users'));
 
 /**
  * Web application routes
@@ -68,6 +73,11 @@ app.use(function (err, req, res, next) {
 			: `Not valid - ${errorInfo.param} : ${errorInfo.msg}`;
 	}
 
+	// JWT errors, return status code 401 (unauthorized)
+	if (err.message === 'no token provided' || err.message === 'invalid token') {
+		err.status = 401;
+	}
+
 	res.status(err.status || 500);
 
 	// if error comes from API, return a JSON object, otherwise render error page
@@ -78,10 +88,9 @@ app.use(function (err, req, res, next) {
 
 	// set locals, only providing error in development
 	res.locals.message = err.message;
-	res.locals.error = req.app.get('env') === 'development' ? err : {};
+	res.locals.error = process.env.NODE_ENV === 'development' ? err : {};
 
 	// render the error page
-	res.status(err.status || 500);
 	res.render('error');
 });
 
