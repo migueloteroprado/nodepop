@@ -7,6 +7,8 @@ const createError = require('http-errors');
 // check if user privides a valid token
 const jwtAuth = require('../../lib/jwtAuth');
 
+const cote = require('cote');
+
 // express validator
 const {	param, validationResult } = require('express-validator/check');
 
@@ -27,6 +29,11 @@ const { queryValidations,	bodyValidationsPost, bodyValidationsPut } = require('.
 
 // middleware to verify if user provides a valid authentication JWT
 router.use(jwtAuth());
+
+// Thumbnail generation Microservice
+const thumbnailService = require('../../microservices/thumbnailService');
+const generateThumbnail = require('../../microservices/thumbnailClient');
+
 
 /**
  * GET /
@@ -112,7 +119,7 @@ router.get('/:id', [
 
 /**
  * POST /
- * Upload image file and insert new Anuncio into database
+ * Upload image file, generate thumbnail using a cote microservice, and insert new Anuncio into database
  */
 router.post('/', uploader.single('foto'), bodyValidationsPost, async (req, res, next) => {
 
@@ -129,6 +136,20 @@ router.post('/', uploader.single('foto'), bodyValidationsPost, async (req, res, 
 
 		// save document in database
 		const savedAnuncio = await newAnuncio.save();
+
+		// Invoke microservice to generate image thumbnail
+		generateThumbnail({
+			fileName: req.body.foto, 
+			width: 100, 
+			height: 100 
+		}, (err, res) => {
+			if (err) {
+				console.log('Error generating thumbnail: ', err);
+				return;
+			}
+			console.log('Thumbnail succesfully generated');
+			return;
+		});
 
 		// return result
 		res.json({

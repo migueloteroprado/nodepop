@@ -61,6 +61,9 @@ router.get('/', queryValidations, async (req, res, next) => {
 		}
 		const filtersInQuery = queryString.stringify(queryFilters);
 
+		// set page title
+		res.locals.title = 'Nodepop - Anuncios';
+
 		// render page
 		res.render('anuncios/anuncios', {anuncios: anuncios, currentPage: currentPage, totalPages: totalPages, limit: limit, filtersInQuery: filtersInQuery});
 	}

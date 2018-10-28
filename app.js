@@ -19,6 +19,14 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 app.engine('html', require('ejs').__express);
 
+/**
+ * Configuración Multiidioma
+ */
+
+const i18n = require('./lib/i18nConfigure')();
+app.use(i18n.init);
+
+
 // Logger setup. Uncomment next line to enable logging to file 'access.log'
 // app.use(logger('common', { stream: fs.createWriteStream('./access.log', {flags: 'a'}) }));
 app.use(logger('dev'));
@@ -29,7 +37,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Variables globales de template
-app.locals.title = 'Nodepop';
+app.locals.app_name = 'Nodepop';
 
 /**
  * Connect to database and register models
@@ -44,11 +52,12 @@ require('./models/anuncios/Anuncio');
 /**
  * API routes
  */
-app.post('/apiv2/authenticate', loginController.postJWT);
 app.use('/apiv1/anuncios', require('./routes/apiv1/anuncios'));
 app.use('/apiv1/users', require('./routes/apiv1/users'));
-app.use('/apiv2/anuncios', require('./routes/apiv2/anuncios'));
-app.use('/apiv2/users', require('./routes/apiv2/users'));
+
+app.post('/api/authenticate', loginController.postJWT);
+app.use('/api/anuncios', require('./routes/api/anuncios'));
+app.use('/api/users', require('./routes/api/users'));
 
 /**
  * Web application routes
@@ -74,7 +83,7 @@ app.use(function (err, req, res, next) {
 	}
 
 	// JWT errors, return status code 401 (unauthorized)
-	if (err.message === 'no token provided' || err.message === 'invalid token') {
+	if (err.message === 'no token provided' || err.message === 'invalid token' || err.message == 'jwt expired') {
 		err.status = 401;
 	}
 

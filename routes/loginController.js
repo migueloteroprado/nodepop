@@ -53,7 +53,7 @@ class loginController {
 			// usuario encontrado y password ok
 			// OJO: no meter instancias de mongoose en el token
 			jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-				expiresIn: '5m'
+				expiresIn: '5h'
 			}, (err, token) => {
 				if (err) {
 					next(err);

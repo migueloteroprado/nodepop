@@ -66,13 +66,20 @@ body > header.ads {
   width: 100%;
   border: 1px solid grey;
   padding: 0.7rem;
-  position: fixed;
+  /*position: fixed;
   top: 0;
   left: 0;
-  right: 0;  
+  right: 0;  */
 }
 
 /***** Anuncios ****/
+
+.navbar {
+  z-index: 2;
+}
+.bg-dark {
+  background-color: #222222!important;
+}
 
 
 h1 {
@@ -82,6 +89,7 @@ h3 {
   font-size: 1rem;
 }
 
+/*
 body > header {
   background-color: #222222;
   color: white;
@@ -91,13 +99,14 @@ body > header {
   left: 0;
   right: 0;
 }
+*/
 
 main {
-  position: fixed;
+  /*position: fixed;
   top: 3.3rem;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: 0;*/
   overflow: auto;
   padding: 1rem;
 }
@@ -185,7 +194,7 @@ select {
   display: flex;
   justify-content: flex-end;
 }
-button {
+.search-form .buttons button {
   margin: 0.5rem 0.1rem 0.2rem 0.4rem;
   padding: 0.5rem 1rem;
   width: 100px;
@@ -195,7 +204,7 @@ button {
   border-radius: 5px;
   font-weight: bold;
 }
-button:hover {
+.search-form .buttons button:hover {
   cursor: pointer;
   background-color: #555555;
 }

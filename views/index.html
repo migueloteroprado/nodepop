@@ -1,20 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      <title>Welcome to <%= title %></title>
-      <link rel='stylesheet' href='/stylesheets/reset.css' />
-      <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <header class="home">
-      <div class="cover">
-        <h1 class="title shadow">Welcome to <%= title %></h1>
-        <a class="btn" href="/anuncios">Enter</a>
-      </div>
-    </header>
-  </body>
-</html>
-
+<% include partials/header.html %>
+  <header class="home">
+    <div class="cover">
+      <h1 class="title">Welcome to <%= app_name %></h1>
+      <a class="btn" href="/anuncios">Enter</a>
+    </div>
+  </header>
+<% include partials/footer.html %>

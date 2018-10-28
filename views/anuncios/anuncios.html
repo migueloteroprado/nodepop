@@ -1,28 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>
-    <%= title %> - Anuncios
-  </title>
-  <link rel='stylesheet' href='/stylesheets/reset.css' />
-  <link rel='stylesheet' href='/stylesheets/style.css' />
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-  <script src="/javascripts/anuncios.js" type="module"></script>
-</head>
-
-<body>
-
-  <header>
-    <h1>
-      <a href="/">
-        <%= title %>
-      </a>
-    </h1>
-  </header>
+<% include ../partials/header.html %>
 
   <main>
 
@@ -41,10 +17,10 @@
                     <label class="tag">Tags: </label>
                   </div>
                   <div>
-                    <label><input type="checkbox" id="tag-work" name="tag" value="work">Work</label>
-                    <label><input type="checkbox" id="tag-lifestyle" name="tag" value="lifestyle">Lifestyle</label>
-                    <label><input type="checkbox" id="tag-motor" name="tag" value="motor">Motor</label>
-                    <label><input type="checkbox" id="tag-mobile" name="tag" value="mobile">Mobile</label>
+                    <label><input type="checkbox" id="tag-work" name="tag" value="work"> Work</label>
+                    <label><input type="checkbox" id="tag-lifestyle" name="tag" value="lifestyle"> Lifestyle</label>
+                    <label><input type="checkbox" id="tag-motor" name="tag" value="motor"> Motor</label>
+                    <label><input type="checkbox" id="tag-mobile" name="tag" value="mobile"> Mobile</label>
                   </div>
                 </div>                
               </div>
@@ -178,9 +154,6 @@
 
     </section>
 
- 
-
   </main>
-</body>
 
-</html>
+<% include ../partials/footer.html %>
