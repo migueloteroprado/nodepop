@@ -5,7 +5,13 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/users/User');
 
 class loginController {
-
+	
+	// GET "/"
+	index(req, res, next) {
+		res.locals.title = 'Login';
+		res.render('login/login');
+	}
+	
 	// Login for website
 	async post(req, res, next) {
 		// get email and password from request body
@@ -14,7 +20,7 @@ class loginController {
 
 		try {
 
-			// search user
+			// find user
 			const user = await User.findOne({email: email}).exec();
 
 			if (!user || !await bcrypt.compare(password, user.password)) {
@@ -26,7 +32,7 @@ class loginController {
 			// save user in a session
 			req.session.authUser = { _id: user._id };
 
-			res.redirect('/');
+			res.redirect('/anuncios');
 
 		} catch (err) {
 			next(err);
@@ -42,7 +48,7 @@ class loginController {
 
 		try {
 
-			// buscar el usuario
+			// find user
 			const user = await User.findOne({email: email}).exec();
 
 			if (!user || !await bcrypt.compare(password, user.password)) {
@@ -50,10 +56,9 @@ class loginController {
 				return;
 			}
 
-			// usuario encontrado y password ok
-			// OJO: no meter instancias de mongoose en el token
-			jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-				expiresIn: '5h'
+			// usuario found and password is correct
+			jwt.sign({ _id: user._id }, process.env.AUTH_JWT_SECRET, {
+				expiresIn: '1h'
 			}, (err, token) => {
 				if (err) {
 					next(err);

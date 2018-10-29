@@ -5,7 +5,7 @@ const router = express.Router();
 const createError = require('http-errors');
 
 // check if user privides a valid token
-const jwtAuth = require('../../lib/jwtAuth');
+const jwtAuth = require('../../lib/auth/jwtAuth');
 
 const cote = require('cote');
 
@@ -31,9 +31,7 @@ const { queryValidations,	bodyValidationsPost, bodyValidationsPut } = require('.
 router.use(jwtAuth());
 
 // Thumbnail generation Microservice
-const thumbnailService = require('../../microservices/thumbnailService');
-const generateThumbnail = require('../../microservices/thumbnailClient');
-
+const { generateThumbnail, deleteImage } = require('../../microservices/thumbnailClient');
 
 /**
  * GET /
@@ -137,7 +135,7 @@ router.post('/', uploader.single('foto'), bodyValidationsPost, async (req, res, 
 		// save document in database
 		const savedAnuncio = await newAnuncio.save();
 
-		// Invoke microservice to generate image thumbnail
+		// send message to thumbnail generation microservice, passing file name, width and height
 		generateThumbnail({
 			fileName: req.body.foto, 
 			width: 100, 
@@ -179,6 +177,24 @@ router.put('/:id', uploader.single('foto'), [
 		const _id = req.params.id;
 		const anuncio = req.body;
 		const updatedAnuncio = await Anuncio.findByIdAndUpdate(_id, anuncio, { new: true }).exec();
+
+		// If a new photo was uploaded, update thumbnail
+		// Send message to thumbnail generator microservice, passing file name, width and height
+		if (req.body.foto) {
+			generateThumbnail({
+				fileName: req.body.foto+'-', 
+				width: 100, 
+				height: 100 
+			}, (err, res) => {
+				if (err) {
+					console.log('Error generating thumbnail: ', err);
+					return;
+				}
+				console.log('Thumbnail succesfully generated');
+				return;
+			});
+		}
+
 		res.json({
 			success: true,
 			result: updatedAnuncio
@@ -190,7 +206,7 @@ router.put('/:id', uploader.single('foto'), [
 });
 
 /** DELETE /:id
- * Delete one document
+ * Delete one anuncio
  */
 router.delete('/:id', [
 	param('id').isMongoId().withMessage('invalid ID')
@@ -201,9 +217,25 @@ router.delete('/:id', [
 		validationResult(req).throw();
 
 		const _id = req.params.id;
+
+		// Send message to microservice to delete image and thumbnail(s)
+		// Get document from database
+		const anuncio = await Anuncio.findById(_id).exec();
+		deleteImage({fileName: anuncio.foto}, (err, res) => {
+			if (err) {
+				console.log('Error generating thumbnail: ', err);
+				return;
+			}
+			console.log('Image and Thumbnail(s) succesfully deleted');
+			return;
+		});
+		
+		// delete anuncio from database
 		const deleted = await Anuncio.remove({
 			_id: _id
 		}).exec();
+
+		// return result
 		res.json({
 			sucess: true,
 			result: {
@@ -211,6 +243,7 @@ router.delete('/:id', [
 			}
 		});
 	} catch (err) {
+		// pass error to next middleware
 		next(err);
 	}
 

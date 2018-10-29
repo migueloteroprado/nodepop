@@ -3,6 +3,16 @@ body {
   font-size: 0.9rem;
 }
 
+/*** Navigation basr ***/
+button.navbar-toggler {
+  outline: none;
+  border: none;
+  padding: .25rem .25rem;
+  border: 1px solid transparent;
+}
+button.navbar-toggler:hover {
+  color: white;
+}
 
 /*** Index  ****/
 
@@ -17,7 +27,7 @@ body {
 }
 
 body > header.home {
-  height: 100vh;
+  height: calc(100vh - 56px);
   background-image: url(../images/portada.jpg);
   background-repeat: no-repeat;
   background-size: cover;
@@ -66,10 +76,10 @@ body > header.ads {
   width: 100%;
   border: 1px solid grey;
   padding: 0.7rem;
-  /*position: fixed;
+  position: fixed;
   top: 0;
   left: 0;
-  right: 0;  */
+  right: 0;  
 }
 
 /***** Anuncios ****/
@@ -102,13 +112,14 @@ body > header {
 */
 
 main {
-  /*position: fixed;
+  position: fixed;
   top: 3.3rem;
   left: 0;
   right: 0;
-  bottom: 0;*/
+  bottom: 0;
   overflow: auto;
   padding: 1rem;
+  margin: 0 auto;
 }
 
 section {
@@ -128,7 +139,7 @@ section {
 .form-title h3, section.list h3 {
   background-color: #333333;
   color: white;
-  padding: 0.2rem 0 0.2rem 0.4rem;
+  padding: 0.4rem 0 0.4rem 0.6rem;
   border-radius: 5px;
 }
 
@@ -151,43 +162,69 @@ section {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  padding: 0 10px;
 }
 
 .filters-wrapper div {
   padding: 0.5rem 0.6rem 0.3rem 0.6rem;
 }
 
-.wrapper-tags {
-  display: flex;
+.filters-wrapper .row {
+  width: 240px;
+  align-items: center;
+  margin-right: 0;
 }
 
-label {
-  margin-right: 0.5rem;
-  display: inline-block;
-  text-align: right;
-  line-height: 1.9rem;
+.wrapper-tags {
+  display: flex;
+  align-items: flex-start;
+  padding: 0 10px;
 }
 
 label.tag {
-  width: 60px;
+  margin-right: 1rem;
+  display: inline-block;
+  text-align: right;
+  line-height: 1.9rem;
+  width: 62px;
+}
+
+div.tags label {
+  padding-top: 5px;
+  margin-right: 15px;
+}
+
+label.field {
+  text-align: right;
+}
+
+.form-control {
+  padding: 5px;
+  height: 2rem;
 }
 
 input {
   padding: 0rem 0.5rem 0.2rem 0.3rem;
-  width: 150px;
+  min-width: 130px;
 }
 
 input[type="checkbox"] {
   width: inherit;
+  min-width: inherit;
 }
 
 select {
   padding: 0.1rem;
-  width: 150px;
+  min-width: 130px;
+}
+
+
+.form-check-inline {
+  margin-right: 0.2rem !important;
 }
 
 #fields {
-  width: 220px;
+  width: 100px;
 }
 
 .search-form .buttons {
@@ -212,20 +249,20 @@ select {
 section.list {
   left: 0.5rem;
   right: 0.5rem;
-  padding: 0.5rem;
+  padding: 0.8rem;
   border: 1px solid grey;
   border-radius: 5px;
 }
 
 section.list header {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
 }
 
 .wrapper-anuncios {
 	display: flex;
 	flex-wrap: wrap;
-	margin-left: -10px;
-	margin-top: -10px;
+	margin-left: -15px;
+	margin-top: -15px;
 	justify-content: space-evenly;
 	margin-bottom: 10px;
 }
@@ -237,8 +274,8 @@ section.list header {
 .anuncio {
 	flex: 1 0 200px;
 	box-sizing: border-box;
-	margin-left: 10px;
-	margin-top: 10px;
+	margin-left: 15px;
+	margin-top: 15px;
 	border: 1px solid grey;
 	border-radius: 5px;
 	background-color: #f9f9f9;
@@ -267,7 +304,7 @@ section.list header {
 }
 
 .anuncio .title h4 {
-  padding: 0.1rem 0.1rem 0.1rem 0.5rem;
+  padding: 0.3rem 0.3rem 0.3rem 0.6rem;
   margin-bottom: 0.8rem;
   background-color: #333333;
   color: white;
@@ -299,7 +336,6 @@ section.list header {
   font-weight: bold;
 }
 .anuncio span.value {
-  /* font-weight: bold; */
   display: inline-block;
 }
 .anuncio .picture {
@@ -320,11 +356,13 @@ section.paginator {
   border-radius: 5px;
   padding: 0.5rem;
   justify-content: flex-end;
+  align-items: baseline;
 }
 
 section.paginator span {
   line-height: 2.2rem;
-  margin-right: 1rem;
+  margin: 0 1rem;
+  text-align: right;
 }
 
 ul.pagination {
@@ -332,6 +370,7 @@ ul.pagination {
   list-style: none;
   justify-content: flex-end;
   flex-wrap: wrap;
+  padding-right: 5px;
 }
 
 ul.pagination li {
@@ -339,6 +378,7 @@ ul.pagination li {
   margin-left: 4px;
   border-radius: 5px;
   display: block;
+  margin: 5px 0 5px 5px;
 }
 ul.pagination li.disabled {
   color: #aaaaaa;
@@ -352,6 +392,10 @@ ul.pagination li.active:hover {
 ul.pagination li a {
   padding: 0.3rem 1rem;
   display: block;
+}
+ul.pagination li a:hover {
+  color: white;
+  text-decoration: none;
 }
 ul.pagination li:hover {
   background-color: #555555;
@@ -373,8 +417,8 @@ ul.pagination li.disabled:hover {
 
 @media (min-width: 800px) {
   .anuncio {
-    max-width: calc(50% - 10px);
-    min-width: calc(50% - 10px);
+    max-width: calc(50% - 15px);
+    min-width: calc(50% - 15px);
   }
 }
 

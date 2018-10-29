@@ -7,6 +7,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
 const { isAPI } = require('./lib/utils');
 
@@ -60,9 +62,42 @@ app.use('/api/anuncios', require('./routes/api/anuncios'));
 app.use('/api/users', require('./routes/api/users'));
 
 /**
+ * Init user session
+ */
+app.use(session({
+	name: 'nodepop-session',
+	secret: process.env.AUTH_SESSION_SECRET,
+	resave: false,
+	saveUninitialized: true,
+	cookie: { 
+		httpOnly: true, // cookie can't be read from javascript, only from http
+		maxAge: 2 * 24 * 60 * 60 * 1000, // session expires in 2 days
+		secure: false
+	},
+	store: new MongoStore({
+		// store session in mongo database
+		url: process.env.NODEPOP_MONGOOSE_CONNECTION_STRING
+	})
+}));
+
+// auth helper middleware - da accesso a sesión desde cualquier vista
+app.use((req, res, next) => {
+	res.locals.session = req.session;
+	next();
+});
+
+/**
  * Web application routes
  */
+// index page
 app.use('/', require('./routes/index'));
+
+// user routes
+app.get('/login', loginController.index);
+app.post('/login', loginController.post);
+app.get('/logout', loginController.logout);
+
+// anuncios routes
 app.use('/anuncios', require('./routes/anuncios'));
 
 // catch 404 and forward to error handler
@@ -83,7 +118,10 @@ app.use(function (err, req, res, next) {
 	}
 
 	// JWT errors, return status code 401 (unauthorized)
-	if (err.message === 'no token provided' || err.message === 'invalid token' || err.message == 'jwt expired') {
+	if (err.message === 'no token provided' 
+			|| err.message === 'invalid token'
+			|| err.message == 'jwt expired'
+			|| err.message === 'invalid signature') {
 		err.status = 401;
 	}
 
@@ -100,6 +138,7 @@ app.use(function (err, req, res, next) {
 	res.locals.error = process.env.NODE_ENV === 'development' ? err : {};
 
 	// render the error page
+	res.locals.title = 'Error';
 	res.render('error');
 });
 

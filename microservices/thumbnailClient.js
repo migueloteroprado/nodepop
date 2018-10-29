@@ -18,5 +18,22 @@ const generateThumbnail = function (req, cb) {
 		return cb(null, res);
 	});
 };
+
+const deleteImage = function (req, cb) {
+	// Invoke microservice to delete image and thumbnail(s)
+	return requester.send({
+		type: 'delete image',
+		file: req.fileName
+	}, (err, res) => {
+		if (err) {
+			return cb(err);
+		}
+		return cb(null, res);
+	});
+};
+
 		
-module.exports = generateThumbnail;
+module.exports = {
+	generateThumbnail,
+	deleteImage
+};

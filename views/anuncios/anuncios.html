@@ -16,46 +16,46 @@
                   <div>
                     <label class="tag">Tags: </label>
                   </div>
-                  <div>
-                    <label><input type="checkbox" id="tag-work" name="tag" value="work"> Work</label>
-                    <label><input type="checkbox" id="tag-lifestyle" name="tag" value="lifestyle"> Lifestyle</label>
-                    <label><input type="checkbox" id="tag-motor" name="tag" value="motor"> Motor</label>
-                    <label><input type="checkbox" id="tag-mobile" name="tag" value="mobile"> Mobile</label>
+                  <div class="tags">
+                    <label><input type="checkbox" id="tag-work" name="tag" value="work" class="form-check form-check-inline">Work</label>
+                    <label><input type="checkbox" id="tag-lifestyle" name="tag" value="lifestyle" class="form-check form-check-inline">Lifestyle</label>
+                    <label><input type="checkbox" id="tag-motor" name="tag" value="motor" class="form-check form-check-inline">Motor</label>
+                    <label><input type="checkbox" id="tag-mobile" name="tag" value="mobile" class="fform-check form-check-inline">Mobile</label>
                   </div>
                 </div>                
               </div>
               <div class="filters-wrapper">
-                <div>
-                  <label class="tag">Nombre: </label>
-                  <input type="text" id="nombre" name="nombre">
+                <div class="row">
+                  <label class="field col">Nombre: </label>
+                  <input type="text" id="nombre" name="nombre" class="form-control col">
                 </div>
-                <div>
-                  <label class="tag">Tipo: </label>
-                  <select id="venta" name="venta">
+                <div class="row">
+                  <label class="field col">Tipo: </label>
+                  <select id="venta" name="venta" class="form-control col">
                     <option value="">-</option>
                     <option value="true">Venta </option>
                     <option value="false">Búsqueda </option>
                   </select>
                 </div>     
-                <div>
-                  <label class="tag">Precio:</label>
-                  <input type="text" name="precio" id="precio">
+                <div class="row">
+                  <label class="field col">Precio:</label>
+                  <input type="text" name="precio" id="precio" class="form-control col">
                 </div>
-                <div>
-                  <label class="tag">Sort: </label>
-                  <input type="text" name="sort" id="sort">
+                <div class="row">
+                  <label class="field col">Sort: </label>
+                  <input type="text" name="sort" id="sort" class="form-control col">
                 </div>
-                <div>
-                  <label class="tag">Start: </label>
-                  <input type="number" min="0" name="start" id="start">
+                <div class="row">
+                  <label class="field col">Start: </label>
+                  <input type="number" min="0" name="start" id="start" class="form-control col">
                 </div>
-                <div>
-                  <label class="tag">Limit: </label>
-                  <input type="number" min="0" name="limit" id="limit">
+                <div class="row">
+                  <label class="field col">Limit: </label>
+                  <input type="number" min="0" name="limit" id="limit" class="form-control col">
                 </div>
-                <div>
-                  <label class="tag">Fields: </label>
-                  <input type="text" id="fields" name="fields" width="100">
+                <div class="row">
+                  <label class="field col">Fields: </label>
+                  <input type="text" id="fields" name="fields" width="100" class="form-control col">
                 </div>
               </div>
             </div>

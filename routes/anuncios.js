@@ -18,9 +18,14 @@ const getFilters = require('../lib/anuncios/filter');
 // Arrays of validators for GET, POST and PUT requests 
 const { queryValidations } = require('../lib/anuncios/validators');
 
-
 // constants
 const { MAX_LIMIT }  = require('../lib/constants');
+
+const sessionAuth = require('../lib/auth/sessionAuth');
+
+// Todas las llamadas a este router requieren autentificación
+router.use(sessionAuth());
+
 
 /**
  * GET /
