@@ -2,7 +2,8 @@
 
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-	
+
+// Schema
 const userSchema = mongoose.Schema({
 	name: {
 		type: String,
@@ -18,6 +19,12 @@ const userSchema = mongoose.Schema({
 	password: {
 		type: String,
 		required: true
+	},
+	rol: {
+		type: String,
+		required: true,
+		default: 'user',
+		index: true
 	}
 });
 
@@ -43,8 +50,9 @@ userSchema.statics.count = function(filters) {
 	return query.exec();
 };
 
+
 userSchema.statics.hashPassword = async function(plainPassword) {
-	// returns a promesa with hashed password
+	// returns a promise with hashed password
 	return bcrypt.hash(plainPassword, 10);
 };
 

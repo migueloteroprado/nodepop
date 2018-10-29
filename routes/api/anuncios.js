@@ -7,8 +7,6 @@ const createError = require('http-errors');
 // check if user privides a valid token
 const jwtAuth = require('../../lib/auth/jwtAuth');
 
-const cote = require('cote');
-
 // express validator
 const {	param, validationResult } = require('express-validator/check');
 

@@ -71,7 +71,7 @@ app.use(session({
 	saveUninitialized: true,
 	cookie: { 
 		httpOnly: true, // cookie can't be read from javascript, only from http
-		maxAge: 2 * 24 * 60 * 60 * 1000, // session expires in 2 days
+		maxAge: 2 * 60 * 60 * 1000, // session expires in 2 hours
 		secure: false
 	},
 	store: new MongoStore({
@@ -89,6 +89,7 @@ app.use((req, res, next) => {
 /**
  * Web application routes
  */
+
 // index page
 app.use('/', require('./routes/index'));
 
@@ -116,7 +117,6 @@ app.use(function (err, req, res, next) {
 			? { message: 'Not valid', errors: err.mapped() }
 			: `Not valid - ${errorInfo.param} : ${errorInfo.msg}`;
 	}
-
 	// JWT errors, return status code 401 (unauthorized)
 	if (err.message === 'no token provided' 
 			|| err.message === 'invalid token'
@@ -124,7 +124,6 @@ app.use(function (err, req, res, next) {
 			|| err.message === 'invalid signature') {
 		err.status = 401;
 	}
-
 	res.status(err.status || 500);
 
 	// if error comes from API, return a JSON object, otherwise render error page
@@ -134,11 +133,11 @@ app.use(function (err, req, res, next) {
 	}
 
 	// set locals, only providing error in development
+	res.locals.title = 'Error';
 	res.locals.message = err.message;
 	res.locals.error = process.env.NODE_ENV === 'development' ? err : {};
 
 	// render the error page
-	res.locals.title = 'Error';
 	res.render('error');
 });
 

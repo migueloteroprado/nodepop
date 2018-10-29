@@ -21,10 +21,21 @@ const { queryValidations } = require('../lib/anuncios/validators');
 // constants
 const { MAX_LIMIT }  = require('../lib/constants');
 
+// middleware to verify if user is logged
 const sessionAuth = require('../lib/auth/sessionAuth');
 
-// Todas las llamadas a este router requieren autentificación
-router.use(sessionAuth());
+// multer uploader for foto field image file
+const uploader = require('../lib/anuncios/uploader');
+
+// Arrays of validators for GET, POST and PUT requests 
+const { bodyValidationsPost, bodyValidationsPut } = require('../lib/anuncios/validators');
+
+// Thumbnail generation Microservice
+const { generateThumbnail, deleteImage } = require('../microservices/thumbnailClient');
+
+
+// All querys to this roter require authentication
+//router.use(sessionAuth());
 
 
 /**
@@ -75,6 +86,71 @@ router.get('/', queryValidations, async (req, res, next) => {
 	catch (err) {
 		next(err);
 	}
+});
+
+/**
+ * GET /add
+ * Renders a form to add a new Anuncio
+ */ 
+router.get('/add', sessionAuth(), async (req, res, next) => {
+	res.locals.title = 'Add Anuncio';
+	res.render('anuncios/addAnuncio.html');
+});
+
+function getSell(req, res, next) {
+	req.body.venta = req.body.venta ? 'true' : 'false';
+	return next();
+}
+
+/**
+ * POST /
+ * Adds a new Anuncio
+ */
+router.post('/', sessionAuth(), uploader.single('foto'), bodyValidationsPost, async (req, res, next) => {
+	
+	try {
+
+		console.log(req.body);
+
+		// validate data from body and throw possible validation errors
+		validationResult(req).throw();
+
+		// get data from request body
+		const anuncio = req.body;
+
+		//console.log(anuncio);
+
+		// create a new document using the model
+		const newAnuncio = new Anuncio(anuncio);
+
+		// save document in database
+		const savedAnuncio = await newAnuncio.save();
+
+		// send message to thumbnail generation microservice, passing file name, width and height
+		generateThumbnail({
+			fileName: req.body.foto, 
+			width: 100, 
+			height: 100 
+		}, (err, res) => {
+			if (err) {
+				console.log('Error generating thumbnail: ', err);
+				return;
+			}
+			console.log('Thumbnail succesfully generated');
+			return;
+		});
+
+		// return result
+		res.json({
+			success: true,
+			result: savedAnuncio
+		});
+
+	} catch (err) {
+console.log(err);		
+		next(err);
+	}	
+
 });
 
 module.exports = router;

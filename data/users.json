@@ -3,17 +3,20 @@
 		{
 			"name": "User1",
 			"email": "user@example.com",
-			"password": "1234"
+			"password": "1234",
+			"rol": "admin"
 		},
 		{
 			"name": "User2",
 			"email": "user2@nodepop.com",
-			"password": "s3cret2"
+			"password": "s3cret2",
+			"rol": "user"
 		},
 		{
 			"name": "User3",
 			"email": "user3@nodepop.com",
-			"password": "s3cret3"
+			"password": "s3cret3",
+			"rol": "user"
 		}
 	]
 }
