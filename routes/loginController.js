@@ -9,6 +9,10 @@ class loginController {
 	// GET "/"
 	index(req, res, next) {
 		res.locals.title = 'Login';
+		res.locals.email = process.env.NODE_ENV === 'development' 
+			? 'user@example.com'
+			: '';
+		res.locals.error = '';
 		res.render('login/login');
 	}
 	
@@ -24,8 +28,10 @@ class loginController {
 			const user = await User.findOne({email: email}).exec();
 
 			if (!user || !await bcrypt.compare(password, user.password)) {
+				res.locals.email = email;
 				res.locals.error = res.__('Invalid credentials');
-				res.render('login');
+				res.locals.title = 'Login';
+				res.render('login/login');
 				return;
 			}
 
