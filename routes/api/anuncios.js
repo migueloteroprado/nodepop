@@ -20,7 +20,9 @@ const { MAX_LIMIT }  = require('../../lib/constants');
 const getFilters = require('../../lib/anuncios/filter');
 
 // multer uploader for foto field image file
-const uploader = require('../../lib/anuncios/uploader');
+const path = require('path');
+const fotoFolder = path.join(__dirname, '..', '..', 'public', 'images', 'anuncios');
+const uploader = require('../../lib/anuncios/uploader')(fotoFolder);
 
 // Arrays of validators for GET, POST and PUT requests 
 const { queryValidations,	bodyValidationsPost, bodyValidationsPut } = require('../../lib/anuncios/validators');
@@ -175,42 +177,39 @@ router.put('/:id', uploader.single('foto'), [
 		// validate data from body and throw possible validation errors
 		validationResult(req).throw();
 
-// TODO: comprobar que el usuario es el creador o tiene el rol admin
-
-
-
-
-
-
-
-
-
 		const _id = req.params.id;
-		const anuncio = req.body;
-		const updatedAnuncio = await Anuncio.findByIdAndUpdate(_id, anuncio, { new: true }).exec();
 
-		// If a new photo was uploaded, update thumbnail
-		// Send message to thumbnail generator microservice, passing file name, width and height
-		if (req.body.foto) {
-			generateThumbnail({
-				fileName: req.body.foto+'-', 
-				width: 100, 
-				height: 100 
-			}, (err, res) => {
-				if (err) {
-					console.log('Error generating thumbnail: ', err);
+		// check if logged user has permissions to update (is the anuncio creator or has an admin role)
+		const originalAnuncio = await Anuncio.findById(_id).exec();
+		if (!(req.apiUserId === originalAnuncio.user._id || req.apiUserRole === 'admin')) {
+			throw new Error('You don\'t have permissions to update this anuncio');
+		} else {
+			
+			const anuncio = req.body;
+			const updatedAnuncio = await Anuncio.findByIdAndUpdate(_id, anuncio, { new: true }).exec();
+
+			// If a new photo was uploaded, update thumbnail
+			// Send message to thumbnail generator microservice, passing file name, width and height
+			if (req.body.foto) {
+				generateThumbnail({
+					fileName: req.body.foto, 
+					width: 100, 
+					height: 100 
+				}, (err, res) => {
+					if (err) {
+						console.log('Error generating thumbnail: ', err);
+						return;
+					}
+					console.log('Thumbnail succesfully generated');
 					return;
-				}
-				console.log('Thumbnail succesfully generated');
-				return;
+				});
+			}
+
+			res.json({
+				success: true,
+				result: updatedAnuncio
 			});
 		}
-
-		res.json({
-			success: true,
-			result: updatedAnuncio
-		});
-
 	} catch (err) {
 		next(err);
 	}

@@ -186,18 +186,22 @@ main {
   margin: 0 auto;
 }
 
+.container {
+  margin-top: 25px;
+}
+
 section {
   margin-bottom: 1rem;
 }
 
 .search-form {
-  padding: 0.5rem;
+  padding: 0.8rem;
   border: 1px solid grey;
   border-radius: 5px;
 }
 
 .form-title {
-  margin-bottom: 0.5rem;
+  margin-bottom: 15px;
 }
 
 .form-title h3, section.list h3 {
@@ -206,7 +210,6 @@ section {
   padding: 0.4rem 0 0.4rem 0.6rem;
   border-radius: 5px;
 }
-
 
 .form-content {
   border: 1px solid grey;
@@ -246,7 +249,7 @@ section {
 }
 
 label.tag {
-  margin-right: 1rem;
+  margin-right: 1.1rem;
   display: inline-block;
   text-align: right;
   line-height: 1.9rem;
@@ -319,7 +322,7 @@ section.list {
 }
 
 section.list header {
-  margin-bottom: 5px;
+  margin-bottom: 15px;
 }
 
 .wrapper-anuncios {
@@ -413,6 +416,10 @@ section.list header {
   align-items: flex-end;
 }
 
+.anuncio .btn-edit, .anuncio .btn-delete {
+  margin: 15px 10px 0 0;
+}
+
 .hidden {
   display: none;
 }
@@ -474,6 +481,60 @@ ul.pagination li.disabled:hover {
   background-color: white;
   color: #aaaaaa;
 }
+
+/* Forms **/
+
+.bold {
+  font-weight: bold;
+}
+
+/** login form **/
+
+#login-form {
+  padding: 15px;
+}
+#login-form .form-login-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+@media (min-width: 768px) {
+  #login-form .form-login-wrapper {
+    flex-direction: row;
+  }
+}
+#login-form .form-login-wrapper .form-group {
+  margin-right: 15px;
+  width: 100%;
+}
+#login-form button {
+  margin: 0 0 5px 5px;
+}
+
+/** Add/Edit anuncio forms **/
+
+#form-add-anuncio, #form-edit-anuncio {
+  padding: 15px;
+}
+#form-add-anuncio .form-login-wrapper,
+#form-edit-anuncio .form-login-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+}
+#form-add-anuncio .form-login-wrapper .form-group,
+#form-edit-anuncio .form-login-wrapper .form-group {
+  margin-right: 15px;
+  width: 100%;
+}
+#form-add-anuncio #precio, #form-add-anuncio #venta,
+#form-edit-anuncio #precio, #form-edit-anuncio #venta {
+  max-width: 200px;
+}
+#login-add-anuncio button {
+  margin: 0 0 5px 5px;
+}
+
 
 /** footer ***/
 

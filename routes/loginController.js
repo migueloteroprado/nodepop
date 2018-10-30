@@ -32,16 +32,16 @@ class loginController {
 				res.locals.error = res.__('Invalid user name or password');
 				res.locals.title = 'Login';
 
-req.flash('error', res.__('Invalid user name or password'));
+				req.flash('error', res.__('Invalid user name or password'));
 
 				res.render('login/login');
 				return;
 			}
 
 			// save user in a session and redirect to /anuncios
-			req.session.authUser = { _id: user._id, email: user.email, rol: user.rol };
+			req.session.authUser = { _id: user._id, email: user.email, role: user.role };
 
-req.flash('success', res.__('Logged in successfully'));
+			req.flash('success', res.__('Logged in successfully'));
 
 			res.redirect('/anuncios');
 
@@ -68,7 +68,7 @@ req.flash('success', res.__('Logged in successfully'));
 			}
 
 			// usuario found and password is correct
-			jwt.sign({ _id: user._id }, process.env.AUTH_JWT_SECRET, {
+			jwt.sign({ _id: user._id, role: user.role }, process.env.AUTH_JWT_SECRET, {
 				expiresIn: '1h'
 			}, (err, token) => {
 				if (err) {
@@ -92,9 +92,8 @@ req.flash('success', res.__('Logged in successfully'));
 				next(err);
 				return;
 			}
-
-req.flash('success', res.__('Logged out successfully'));
-
+			// set flash message and redirect to home page
+			req.flash('success', res.__('Logged out successfully'));
 			res.redirect('/');
 		});
 	}

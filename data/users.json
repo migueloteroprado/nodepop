@@ -4,19 +4,19 @@
 			"name": "User1",
 			"email": "user@example.com",
 			"password": "1234",
-			"rol": "admin"
+			"role": "admin"
 		},
 		{
 			"name": "User2",
-			"email": "user2@nodepop.com",
-			"password": "s3cret2",
-			"rol": "user"
+			"email": "user2@example.com",
+			"password": "s3cret",
+			"role": "user"
 		},
 		{
 			"name": "User3",
-			"email": "user3@nodepop.com",
-			"password": "s3cret3",
-			"rol": "user"
+			"email": "user3@example.com",
+			"password": "s3cret",
+			"role": "user"
 		}
 	]
 }

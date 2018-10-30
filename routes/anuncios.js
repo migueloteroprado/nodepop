@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 // express-validator
-const { validationResult } = require('express-validator/check');
+const { param, validationResult } = require('express-validator/check');
 
 // querystring utilities, to get an object from querystring and viceversa
 const queryString = require('querystring');
@@ -25,7 +25,9 @@ const { MAX_LIMIT }  = require('../lib/constants');
 const sessionAuth = require('../lib/auth/sessionAuth');
 
 // multer uploader for foto field image file
-const uploader = require('../lib/anuncios/uploader');
+const path = require('path');
+const fotoFolder = path.join(__dirname, '..', 'public', 'images', 'anuncios');
+const uploader = require('../lib/anuncios/uploader')(fotoFolder);
 
 // Arrays of validators for GET, POST and PUT requests 
 const { bodyValidationsPost, bodyValidationsPut } = require('../lib/anuncios/validators');
@@ -33,10 +35,8 @@ const { bodyValidationsPost, bodyValidationsPut } = require('../lib/anuncios/val
 // Thumbnail generation Microservice
 const { generateThumbnail, deleteImage } = require('../microservices/thumbnailClient');
 
-
 // All querys to this roter require authentication
 //router.use(sessionAuth());
-
 
 /**
  * GET /
@@ -136,14 +136,129 @@ router.post('/', sessionAuth(), uploader.single('foto'), bodyValidationsPost, as
 			return;
 		});
 
-		// OK
-req.flash('error', res.__('Announcement successfully created'));		
+		// OK, set message an redirect to /anuncios
+		req.flash('success', res.__('Announcement successfully created'));		
 		res.redirect('/anuncios');
 
 	} catch (err) {
-req.flash('error', res.__(`Error: ${err.message}`));		
+		req.flash('error', `Error: ${res.__(err.message)}`);		
 		next(err);
 	}	
+
+});
+
+/** GET /:id/edit
+ * Shows a form to update one Anuncio
+ */
+router.get('/:id/edit', [param('id').isMongoId().withMessage('invalid ID')], async (req, res, next) => {
+
+	try {
+		// validate data from body and throw possible validation errors
+		validationResult(req).throw();
+
+		const foundAnuncio = await Anuncio.findById(req.params.id);
+		if (!foundAnuncio) {
+			req.flash('error', 'Anuncio nof found in database');
+			res.redirect('/anuncios');
+		}
+		res.locals.title = 'Edit Anuncio';
+		res.render('anuncios/editAnuncio', { anuncio: foundAnuncio }); 
+
+	} catch(err) {
+		req.flash('error', `Error: ${err.message}`);
+		res.redirect('/anuncios');
+	}
+});
+
+/** PUT /:id
+ * Updates one document
+ */
+router.put('/:id', sessionAuth(), uploader.single('foto'), [
+	...bodyValidationsPut,
+	param('id').isMongoId().withMessage('invalid ID')
+], async (req, res, next) => {
+
+	try {
+
+		// validate data from body and throw possible validation errors
+		validationResult(req).throw();
+
+		const _id = req.params.id;
+
+		// check if logged user has permissions to update (is the anuncio creator or has an admin role)
+		const originalAnuncio = await Anuncio.findById(_id).exec();
+		if (!(originalAnuncio.user && (req.session.authUser._id === originalAnuncio.user || req.session.authUser.role === 'admin'))) {
+			req.flash('You don\'t have permissions to update this anuncio');
+			res.redirect(req.header('Referer'));
+		} else {
+			
+			const anuncio = req.body;
+			const updatedAnuncio = await Anuncio.findByIdAndUpdate(_id, anuncio, { new: true }).exec();
+
+			// If a new photo was uploaded, update thumbnail
+			// Send message to thumbnail generator microservice, passing file name, width and height
+			if (req.body.foto) {
+				generateThumbnail({
+					fileName: req.body.foto, 
+					width: 100, 
+					height: 100 
+				}, (err, res) => {
+					if (err) {
+						console.log('Error generating thumbnail: ', err);
+						return;
+					}
+					console.log('Thumbnail succesfully generated');
+					return;
+				});
+			}
+
+			// OK, set flash message and redirect to /anuncios
+			req.flash('success', res.__('Announcement successfully updated'));		
+			res.redirect('/anuncios');
+		}
+	} catch (err) {
+		next(err);
+	}
+});
+
+/** DELETE /:id
+ * Delete one anuncio
+ */
+router.delete('/:id', [
+	param('id').isMongoId().withMessage('invalid ID')
+], async (req, res, next) => {
+	try {
+
+		// validate id param
+		validationResult(req).throw();
+
+		const _id = req.params.id;
+
+		// Send message to microservice to delete image and thumbnail(s)
+		// Get document from database
+		const anuncio = await Anuncio.findById(_id).exec();
+		deleteImage({fileName: anuncio.foto}, (err, res) => {
+			if (err) {
+				console.log('Error generating thumbnail: ', err);
+				return;
+			}
+			console.log('Image and Thumbnail(s) succesfully deleted');
+			return;
+		});
+		
+		// delete anuncio from database
+		const deleted = await Anuncio.remove({
+			_id: _id
+		}).exec();
+
+		// OK, set flash message and redirect to /anuncios
+		req.flash('success', res.__('Announcement successfully deleted'));		
+		res.redirect('/anuncios');
+
+	} catch (err) {
+		// pass error to next middleware
+		next(err);
+	}
 
 });
 

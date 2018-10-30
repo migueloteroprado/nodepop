@@ -6,6 +6,7 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const methodOverride = require('method-override'); // allows send PUT and DELETE requests from HTML forms
 const logger = require('morgan');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
@@ -30,6 +31,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(methodOverride('_method')); // send PUT and DELETE requests from forms
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Flash messages

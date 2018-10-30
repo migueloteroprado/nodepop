@@ -6,5 +6,10 @@
 	"Welcome to": "Welcome to",
 	"Enter": "Enter",
 	"Announcement successfully created": "Announcement successfully created",
-	"announcements": "announcements"
+	"announcements": "announcements",
+	"Error: Validation failed": "Error: Validation failed",
+	"You need to be logged to do that": "You need to be logged to do that",
+	"Announcement successfully deleted": "Announcement successfully deleted",
+	"Validation failed": "Validation failed",
+	"Announcement successfully updated": "Announcement successfully updated"
 }

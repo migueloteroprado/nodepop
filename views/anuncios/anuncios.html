@@ -4,68 +4,64 @@
 
     <section class="search-section">
       <form class="search-form shadow-box-light" method="GET" action="/anuncios">
-
         <div class="form-wrapper">
           <div class="form-title">
             <h3 class="shadow-box">Filtros</h3>
           </div>
-
-            <div class="form-content shadow-box-light">
-              <div class="form-content-wrapper">
-                <div class="wrapper-tags">
-                  <div>
-                    <label class="tag">Tags: </label>
-                  </div>
-                  <div class="tags">
-                    <label><input type="checkbox" id="tag-work" name="tag" value="work" class="form-check form-check-inline">Work</label>
-                    <label><input type="checkbox" id="tag-lifestyle" name="tag" value="lifestyle" class="form-check form-check-inline">Lifestyle</label>
-                    <label><input type="checkbox" id="tag-motor" name="tag" value="motor" class="form-check form-check-inline">Motor</label>
-                    <label><input type="checkbox" id="tag-mobile" name="tag" value="mobile" class="fform-check form-check-inline">Mobile</label>
-                  </div>
-                </div>                
-              </div>
-              <div class="filters-wrapper">
-                <div class="row">
-                  <label class="field col">Nombre: </label>
-                  <input type="text" id="nombre" name="nombre" class="form-control col">
+          <div class="form-content shadow-box-light">
+            <div class="form-content-wrapper">
+              <div class="wrapper-tags">
+                <div>
+                  <label class="tag bold">Tags: </label>
                 </div>
-                <div class="row">
-                  <label class="field col">Tipo: </label>
-                  <select id="venta" name="venta" class="form-control col">
-                    <option value="">-</option>
-                    <option value="true">Venta </option>
-                    <option value="false">Búsqueda </option>
-                  </select>
-                </div>     
-                <div class="row">
-                  <label class="field col">Precio:</label>
-                  <input type="text" name="precio" id="precio" class="form-control col">
+                <div class="tags">
+                  <label><input type="checkbox" id="tag-work" name="tag" value="work" class="form-check form-check-inline">Work</label>
+                  <label><input type="checkbox" id="tag-lifestyle" name="tag" value="lifestyle" class="form-check form-check-inline">Lifestyle</label>
+                  <label><input type="checkbox" id="tag-motor" name="tag" value="motor" class="form-check form-check-inline">Motor</label>
+                  <label><input type="checkbox" id="tag-mobile" name="tag" value="mobile" class="fform-check form-check-inline">Mobile</label>
                 </div>
-                <div class="row">
-                  <label class="field col">Sort: </label>
-                  <input type="text" name="sort" id="sort" class="form-control col">
-                </div>
-                <div class="row">
-                  <label class="field col">Start: </label>
-                  <input type="number" min="0" name="start" id="start" class="form-control col">
-                </div>
-                <div class="row">
-                  <label class="field col">Limit: </label>
-                  <input type="number" min="0" name="limit" id="limit" class="form-control col">
-                </div>
-                <div class="row">
-                  <label class="field col">Fields: </label>
-                  <input type="text" id="fields" name="fields" width="100" class="form-control col">
-                </div>
-              </div>
+              </div>                
             </div>
-            <div class="buttons">
-              <button type="Reset">Reset</button>
-              <button type="submit">Buscar</button>
+            <div class="filters-wrapper">
+              <div class="row">
+                <label class="field col bold">Nombre: </label>
+                <input type="text" id="nombre" name="nombre" class="form-control col">
+              </div>
+              <div class="row">
+                <label class="field col bold">Tipo: </label>
+                <select id="venta" name="venta" class="form-control col">
+                  <option value="">-</option>
+                  <option value="true">Venta </option>
+                  <option value="false">Búsqueda </option>
+                </select>
+              </div>     
+              <div class="row">
+                <label class="field col bold">Precio:</label>
+                <input type="text" name="precio" id="precio" class="form-control col">
+              </div>
+              <div class="row">
+                <label class="field col bold">Sort: </label>
+                <input type="text" name="sort" id="sort" class="form-control col">
+              </div>
+              <div class="row">
+                <label class="field col bold">Start: </label>
+                <input type="number" min="0" name="start" id="start" class="form-control col">
+              </div>
+              <div class="row">
+                <label class="field col bold">Limit: </label>
+                <input type="number" min="0" name="limit" id="limit" class="form-control col">
+              </div>
+              <div class="row">
+                <label class="field col bold">Fields: </label>
+                <input type="text" id="fields" name="fields" width="100" class="form-control col">
+              </div>
             </div>
           </div>
+          <div class="buttons">
+            <button type="Reset">Reset</button>
+            <button type="submit">Buscar</button>
+          </div>
         </div>
-
       </form>
 
     </section>
@@ -138,16 +134,18 @@
                         } %>
                         </span>
                       </div>
-                    </div>                    
+                    </div> 
+                    <div>
+                      <% if (session.authUser && session.authUser._id && session.authUser.role && anuncio.user && (session.authUser._id === anuncio.user || session.authUser.role === 'admin')) { %>
+                        <a href="<%= `/anuncios/${anuncio._id}/edit` %>" class="btn btn-warning btn-sm btn-edit">Edit</a>
+                        <form action="<%= `/anuncios/${anuncio._id}?_method=DELETE` %>" method="POST">
+                          <button type="submit" class="btn btn-danger btn-sm btn-delete">Delete</button>
+                        </form>
+                      <% } %>
+                    </div>                   
                   </div>
                   <div class="picture <%= anuncio.foto ? '' : 'hidden' %>">
                     <img class="shadow-box-light" src=<%=`/images/anuncios/thumbs/100x100-${anuncio.foto}` %> alt="<%= anuncio.foto %>">
-
-<% if (session.authUser && session.authUser._id && session.authUser.rol && anuncio.user && (session.authUser._id === anuncio.user || session.authUser.rol === 'admin')) { %>
-  <button>Edit</button>
-  <button>Remove</button>
-<% } %>
-
                   </div>                  
                 </div>
               </div>

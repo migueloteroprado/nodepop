@@ -11,6 +11,8 @@ const User = require('./models/users/User');
 const anuncios = require('./data/anuncios.json').anuncios;
 const users = require('./data/users.json').users;
 
+const { generateThumbnail } = require('./microservices/thumbnailClient');
+
 conn.once('open', async() => {
 	try {
 		// ask user
@@ -81,24 +83,38 @@ async function initUsers(users) {
 async function initAnuncios(anuncios) {
 	for (let i=0; i<anuncios.length; i++) {
 		const user = await User.findOne({email: anuncios[i].user});
-console.log(user);
+		console.log(user);
 		if (user) {
-			anuncios[i].user = user._id
+			anuncios[i].user = user._id;
 		} else {
 			anuncios[i].user = null;
 		}
 
 	}
-console.log(anuncios);	
+	console.log(anuncios);	
 	// Delete all documents from database
 	const deleted = await Anuncio.deleteMany();
 	console.log(`Removed ${deleted.n} anuncios.`);
 
-// TODO: generate thumbnails
-
 	// Insert new documents from json file
 	const inserted = await Anuncio.insertMany(anuncios);
 	console.log(`Inserted ${inserted.length} anuncios.`);
+
+	// Generate thumbnails
+	for (let i=0; i<anuncios.length; i++) {
+		generateThumbnail({
+			fileName: anuncios[i].foto, 
+			width: 100,
+			height: 100
+		}, (err, res) => {
+			if (err) {
+				console.log('Error generating thumbnail: ', err);
+				return;
+			}
+			console.log('Thumbnail succesfully generated');
+			return;
+		});
+	}	
 }
 
 

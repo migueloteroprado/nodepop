@@ -2,25 +2,25 @@
 
 <div class="container">
   <div class="form-wrapper">
-    <form id="form-add-anuncio" class="search-form shadow-box-light" action="/anuncios" method="POST" enctype="multipart/form-data">
+    <form id="form-edit-anuncio" class="search-form shadow-box-light" action="<%= `/anuncios/${anuncio._id}?_method=PUT` %>" method="POST" enctype="multipart/form-data">
       <div class="form-title">
-        <h3 class="shadow-box">Add Anuncio</h3>
+        <h3 class="shadow-box">Edit Anuncio</h3>
       </div>
       <div class="form-login-wrapper">
         <div class="form-group">
           <label for="nombre" class="bold">Name:</label>
-          <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Name" required>
+          <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Name" value="<%= anuncio.nombre %>" required>
         </div>
         <div class="form-group">
           <label for="venta" class="bold">Type:</label>
           <select id="venta" name="venta" class="form-control" required>
-            <option value="true" selected>Sell</option>
-            <option value="false">Search</option>
-          </select>
-        </div>
+              <option value="true" <%= anuncio.venta ? 'selected' : '' %>>Sell</option>
+              <option value="false" <%= anuncio.venta? '' : 'selected' %>>Search</option>
+            </select>
+          </div>
         <div class="form-group">
           <label for="precio" class="bold">Price:</label>
-          <input id="precio" type="number" class="form-control" name="precio" min="0.00" step="0.01" placeholder="Price" required>
+          <input id="precio" type="number" class="form-control" name="precio" min="0.00" step="0.01" placeholder="Price" value="<%= anuncio.precio %>" required>
         </div>
         <div class="form-group">
           <label for="foto" class="bold">Photo:</label>
@@ -29,19 +29,19 @@
         <div class="form-group">
           <div class="bold">Tags:</div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="tags" id="work" value="work">
+            <input class="form-check-input" type="checkbox" name="tags" id="work" value="work" <%= anuncio.tags.indexOf('work') >= 0 ? 'checked' : '' %> >
             <label class="form-check-label" for="work">Work</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="tags" id="lifestyle" value="lifestyle">
+            <input class="form-check-input" type="checkbox" name="tags" id="lifestyle" value="lifestyle" <%= anuncio.tags.indexOf('lifestyle') >= 0 ? 'checked' : '' %> >
             <label class="form-check-label" for="lifestyle">Lifestyle</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="tags" id="motor" value="motor">
+            <input class="form-check-input" type="checkbox" name="tags" id="motor" value="motor" <%= anuncio.tags.indexOf('motor') >= 0 ? 'checked' : '' %> >
             <label class="form-check-label" for="motor">Motor</label>
           </div>
           <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="tags" id="mobile" value="mobile">
+            <input class="form-check-input" type="checkbox" name="tags" id="mobile" value="mobile" <%= anuncio.tags.indexOf('mobile') >= 0 ? 'checked' : '' %> >
             <label class="form-check-label" for="mobile">Mobile</label>
           </div>
         </div>
@@ -50,5 +50,3 @@
   </form>
 
 </section>
-
-<% include ../partials/footer.html %>

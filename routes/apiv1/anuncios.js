@@ -17,7 +17,9 @@ const { MAX_LIMIT }  = require('../../lib/constants');
 const getFilters = require('../../lib/anuncios/filter');
 
 // multer uploader for foto field image file
-const uploader = require('../../lib/anuncios/uploader');
+const path = require('path');
+const fotoFolder = path.join(__dirname, '..', '..', 'public', 'images', 'anuncios');
+const uploader = require('../../lib/anuncios/uploader')(fotoFolder);
 
 // Arrays of validators for GET, POST and PUT requests 
 const { queryValidations,	bodyValidationsPost, bodyValidationsPut } = require('../../lib/anuncios/validators');

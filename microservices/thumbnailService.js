@@ -37,14 +37,11 @@ responder.on('delete image', async (req, done) => {
 	console.log(`delete image -> ${req.file}`);
 	
 	// Delete image
-
 	try {
 
 		// delete file
-
 		fs.unlink(path.join(__dirname, '..', 'public', 'images', 'anuncios', req.file), (err) => {
 			if (err) {
-				console.log('ERR_DELETE_IMAGE', err)
 				done(err);
 				return;
 			}
@@ -54,7 +51,6 @@ responder.on('delete image', async (req, done) => {
 			// read files in thumbs directory
 			fs.readdir(path.join(__dirname, '..', 'public', 'images', 'anuncios', 'thumbs'), (err, files) => {
 				if (err) {
-					console.log('ERR_READDIR', err);
 					done(err);
 					return;
 				}
@@ -76,13 +72,9 @@ responder.on('delete image', async (req, done) => {
 			});
 			done(null);
 		});
-		
-
-
-		
+	
 	} catch (err) {
 		// invoke callback with error
-		console.log('ERRRRRRR', err)
 		done(err);
 	}
 });
