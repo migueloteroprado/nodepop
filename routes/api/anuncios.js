@@ -127,6 +127,9 @@ router.post('/', uploader.single('foto'), bodyValidationsPost, async (req, res, 
 		// get data from request body
 		const anuncio = req.body;
 
+		// add anuncio author (logged user)
+		anuncio.user = req.apiUserId;
+
 		// create a new document using the model
 		const newAnuncio = new Anuncio(anuncio);
 
@@ -171,6 +174,16 @@ router.put('/:id', uploader.single('foto'), [
 
 		// validate data from body and throw possible validation errors
 		validationResult(req).throw();
+
+// TODO: comprobar que el usuario es el creador o tiene el rol admin
+
+
+
+
+
+
+
+
 
 		const _id = req.params.id;
 		const anuncio = req.body;

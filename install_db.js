@@ -31,11 +31,12 @@ conn.once('open', async() => {
 			process.exit(1);
 		}
 
+		// delete old users and insert new ones from json file
+		await initUsers(users);
+
 		// delete old anuncios and insert new ones from json file
 		await initAnuncios(anuncios);
 
-		// delete old anuncios and insert new ones from json file
-		await initUsers(users);
 
 		// close database connection
 		conn.close();
@@ -62,16 +63,6 @@ function askUser(question) {
 	});
 }
 
-async function initAnuncios(anuncios) {
-	// Delete all documents from database
-	const deleted = await Anuncio.deleteMany();
-	console.log(`Removed ${deleted.n} anuncios.`);
-
-	// Insert new documents from json file
-	const inserted = await Anuncio.insertMany(anuncios);
-	console.log(`Inserted ${inserted.length} anuncios.`);
-}
-
 async function initUsers(users) {
 	// Delete all users from database
 	const deleted = await User.deleteMany();
@@ -86,3 +77,28 @@ async function initUsers(users) {
 	const inserted = await User.insertMany(users);
 	console.log(`Inserted ${inserted.length} users.`);
 }
+
+async function initAnuncios(anuncios) {
+	for (let i=0; i<anuncios.length; i++) {
+		const user = await User.findOne({email: anuncios[i].user});
+console.log(user);
+		if (user) {
+			anuncios[i].user = user._id
+		} else {
+			anuncios[i].user = null;
+		}
+
+	}
+console.log(anuncios);	
+	// Delete all documents from database
+	const deleted = await Anuncio.deleteMany();
+	console.log(`Removed ${deleted.n} anuncios.`);
+
+// TODO: generate thumbnails
+
+	// Insert new documents from json file
+	const inserted = await Anuncio.insertMany(anuncios);
+	console.log(`Inserted ${inserted.length} anuncios.`);
+}
+
+

@@ -1,3 +1,10 @@
 {
-	"Invalid credentials": "Invalid credentials"
+	"Invalid user name or password": "Invalid user name or password",
+	"Anuncios": "Announcements",
+	"Logged out successfully": "Logged out successfully",
+	"Logged in successfully": "Logged in successfully",
+	"Welcome to": "Welcome to",
+	"Enter": "Enter",
+	"Announcement successfully created": "Announcement successfully created",
+	"announcements": "announcements"
 }

@@ -8,7 +8,8 @@
 			"tags": [
 				"lifestyle",
 				"motor"
-			]
+			],
+			"user": "user@example.com"
 		},
 		{
 			"nombre": "iPhone 3GS",
@@ -18,7 +19,8 @@
 			"tags": [
 				"lifestyle",
 				"mobile"
-			]
+			],
+			"user": "user2@nodepop.com"
 		},
 		{
 			"nombre": "Bicicleta de montaña",
@@ -28,7 +30,8 @@
 			"tags": [
 				"lifestyle",
 				"motor"
-			]
+			],
+			"user": "user@example.com"
 		},
 		{
 			"nombre": "Anillo",
@@ -37,7 +40,8 @@
 			"foto": "anillo.jpg",
 			"tags": [
 				"lifestyle"
-			]
+			],
+			"user": "user2@nodepop.com"
 		},
 		{
 			"nombre": "iPad",
@@ -48,7 +52,8 @@
 				"lifestyle", 
 				"mobile",
 				"work"
-			]
+			],
+			"user": "user3@nodepop.com"
 		},
 		{
 			"nombre": "Samsung Galaxy S8",
@@ -58,7 +63,8 @@
 			"tags": [
 				"lifestyle",
 				"mobile"
-			]
+			],
+			"user": "user@example.com"
 		},
 		{
 			"nombre": "Moto",
@@ -67,7 +73,8 @@
 			"foto": "moto.jpg",
 			"tags": [
 				"motor"
-			]
+			],
+			"user": "user2@nodepop.com"
 		},
 		{
 			"nombre": "Cubo de Rubik",
@@ -76,7 +83,8 @@
 			"foto": "cubo-rubik.jpg",
 			"tags": [
 				"lifestyle"
-			]
+			],
+			"user": "user@example.com"
 		},
 		{
 			"nombre": "Corbata",
@@ -85,7 +93,8 @@
 			"foto": "corbata.jpg",
 			"tags": [
 				"lifestyle"
-			]
+			],
+			"user": "user3@nodepop.com"
 		},
 		{
 			"nombre": "Impresora",
@@ -94,7 +103,8 @@
 			"foto": "impresora.jpg",
 			"tags": [
 				"work"
-			]
+			],
+			"user": "user3@nodepop.com"
 		},
 		{
 			"nombre": "Ferrari",
@@ -104,7 +114,8 @@
 			"tags": [
 				"motor",
 				"lifestyle"
-			]
+			],
+			"user": "user2@nodepop.com"
 		},
 		{
 			"nombre": "Reloj",
@@ -113,7 +124,8 @@
 			"foto": "reloj.jpg",
 			"tags": [
 				"lifestyle"
-			]
+			],
+			"user": "user@example.com"
 		},
 		{
 			"nombre": "Televisión",
@@ -122,7 +134,8 @@
 			"foto": "tv.jpg",
 			"tags": [
 				"lifestyle"
-			]
+			],
+			"user": "user2@nodepop.com"
 		},
 		{
 			"nombre": "Yate",
@@ -132,7 +145,8 @@
 			"tags": [
 				"motor",
 				"lifestyle"
-			]
+			],
+			"user": "user@example.com"
 		},
 		{
 			"nombre": "Zapatos",
@@ -141,7 +155,8 @@
 			"foto": "zapatos.jpg",
 			"tags": [
 				"lifestyle"
-			]
+			],
+			"user": "user3@nodepop.com"
 		},
 		{
 			"nombre": "Portátil",
@@ -151,7 +166,8 @@
 			"tags": [
 				"work",
 				"lifestyle"
-			]
+			],
+			"user": "user2@nodepop.com"
 		}
 	]
 }

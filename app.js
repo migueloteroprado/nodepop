@@ -2,32 +2,26 @@
 
 // Uncoomet this line if you want Logger to write file 'access.log'
 // var fs = require('fs');
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
-const { isAPI } = require('./lib/utils');
+const flash = require('express-flash'); // Flash messages
 
 const loginController = require('./routes/loginController');
 
-var app = express();
+const { isAPI } = require('./lib/utils');
+
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 app.engine('html', require('ejs').__express);
-
-/**
- * Configuración Multiidioma
- */
-
-const i18n = require('./lib/i18nConfigure')();
-app.use(i18n.init);
-
 
 // Logger setup. Uncomment next line to enable logging to file 'access.log'
 // app.use(logger('common', { stream: fs.createWriteStream('./access.log', {flags: 'a'}) }));
@@ -37,6 +31,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Flash messages
+app.use(flash());
+
+
+/**
+ * Configuración Multiidioma
+ */
+
+const i18n = require('./lib/i18nConfigure')();
+app.use(i18n.init);
 
 // Variables globales de template
 app.locals.app_name = 'Nodepop';
@@ -92,6 +97,9 @@ app.use((req, res, next) => {
 
 // index page
 app.use('/', require('./routes/index'));
+
+// language route
+app.use('/lang', require('./routes/lang'));
 
 // user routes
 app.get('/login', loginController.index);

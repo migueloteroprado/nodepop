@@ -1,8 +1,8 @@
 <% include partials/header.html %>
   <header class="home">
     <div class="cover">
-      <h1 class="title">Welcome to <%= app_name %></h1>
-      <a class="btn" href="/anuncios">Enter</a>
+      <h1 class="title"><%= `${__('Welcome to')} ${app_name}` %></h1>
+      <a class="btn" href="/anuncios"><%= __('Enter') %></a>
     </div>
   </header>
 <% include partials/footer.html %>

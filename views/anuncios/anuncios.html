@@ -141,7 +141,13 @@
                     </div>                    
                   </div>
                   <div class="picture <%= anuncio.foto ? '' : 'hidden' %>">
-                    <img class="shadow-box-light" src=<%=`/images/anuncios/${anuncio.foto}` %> alt="<%= anuncio.foto %>">
+                    <img class="shadow-box-light" src=<%=`/images/anuncios/thumbs/100x100-${anuncio.foto}` %> alt="<%= anuncio.foto %>">
+
+<% if (session.authUser && session.authUser._id && session.authUser.rol && anuncio.user && (session.authUser._id === anuncio.user || session.authUser.rol === 'admin')) { %>
+  <button>Edit</button>
+  <button>Remove</button>
+<% } %>
+
                   </div>                  
                 </div>
               </div>

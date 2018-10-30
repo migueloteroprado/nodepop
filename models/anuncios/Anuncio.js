@@ -30,6 +30,12 @@ const anuncioSchema = mongoose.Schema({
 	foto: {
 		type: String,
 		required: true
+	},
+	user: {
+		type: String,
+		ref: 'User',
+		required: true,
+		index: true
 	}
 });
 

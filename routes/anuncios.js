@@ -97,11 +97,6 @@ router.get('/add', sessionAuth(), async (req, res, next) => {
 	res.render('anuncios/addAnuncio.html');
 });
 
-function getSell(req, res, next) {
-	req.body.venta = req.body.venta ? 'true' : 'false';
-	return next();
-}
-
 /**
  * POST /
  * Adds a new Anuncio
@@ -110,15 +105,16 @@ router.post('/', sessionAuth(), uploader.single('foto'), bodyValidationsPost, as
 	
 	try {
 
-		console.log(req.body);
-
 		// validate data from body and throw possible validation errors
 		validationResult(req).throw();
 
 		// get data from request body
 		const anuncio = req.body;
-
-		//console.log(anuncio);
+		
+		anuncio.user = {
+			_id: req.session.authUser._id,
+			email: req.session.authUser.email
+		};
 
 		// create a new document using the model
 		const newAnuncio = new Anuncio(anuncio);
@@ -140,14 +136,12 @@ router.post('/', sessionAuth(), uploader.single('foto'), bodyValidationsPost, as
 			return;
 		});
 
-		// return result
-		res.json({
-			success: true,
-			result: savedAnuncio
-		});
+		// OK
+req.flash('error', res.__('Announcement successfully created'));		
+		res.redirect('/anuncios');
 
 	} catch (err) {
-console.log(err);		
+req.flash('error', res.__(`Error: ${err.message}`));		
 		next(err);
 	}	
 

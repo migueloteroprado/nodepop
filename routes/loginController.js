@@ -29,14 +29,19 @@ class loginController {
 
 			if (!user || !await bcrypt.compare(password, user.password)) {
 				res.locals.email = email;
-				res.locals.error = res.__('Invalid credentials');
+				res.locals.error = res.__('Invalid user name or password');
 				res.locals.title = 'Login';
+
+req.flash('error', res.__('Invalid user name or password'));
+
 				res.render('login/login');
 				return;
 			}
 
-			// save user in a session
-			req.session.authUser = { _id: user._id };
+			// save user in a session and redirect to /anuncios
+			req.session.authUser = { _id: user._id, email: user.email, rol: user.rol };
+
+req.flash('success', res.__('Logged in successfully'));
 
 			res.redirect('/anuncios');
 
@@ -58,7 +63,7 @@ class loginController {
 			const user = await User.findOne({email: email}).exec();
 
 			if (!user || !await bcrypt.compare(password, user.password)) {
-				res.json({ success: false, error: 'Invalid credentials' });
+				res.json({ success: false, error: res.__('Invalid credentials') });
 				return;
 			}
 
@@ -87,6 +92,9 @@ class loginController {
 				next(err);
 				return;
 			}
+
+req.flash('success', res.__('Logged out successfully'));
+
 			res.redirect('/');
 		});
 	}
