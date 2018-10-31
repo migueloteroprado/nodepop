@@ -363,8 +363,8 @@ section.list header {
   border-radius: 5px;
   display: flex;
   border: 1px solid grey;
-  width: 100px;
-  height: 100px;
+  max-width: 100px;
+  height: auto;
 }
 
 .anuncio .title {
@@ -374,7 +374,6 @@ section.list header {
 
 .anuncio .title h4 {
   padding: 0.3rem 0.3rem 0.3rem 0.6rem;
-  margin-bottom: 0.8rem;
   background-color: #343a40;
   color: white;
   border-radius: 5px;
@@ -397,6 +396,18 @@ section.list header {
   flex-direction: row;
 }
 
+.anuncio .fields a,
+.anuncio .fields button {
+  background: #444a50;
+  color: white;
+  border: none;
+  font-size: 0.7rem;
+}
+.anuncio .fields a:hover,
+.anuncio .fields button:hover {
+  background: #656565;
+}
+
 .anuncio span.lbl {
   min-width: 50px;
   display: inline-block;
@@ -417,7 +428,7 @@ section.list header {
 }
 
 .anuncio .btn-edit, .anuncio .btn-delete {
-  margin: 15px 10px 0 0;
+  margin: 15px 0 0 5px;
 }
 
 .hidden {

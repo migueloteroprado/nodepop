@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 const createError = require('http-errors');
 
-// check if user privides a valid token
+// authentication: check if user provides a valid token
 const jwtAuth = require('../../lib/auth/jwtAuth');
 
 // express validator

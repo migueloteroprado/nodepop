@@ -11,5 +11,6 @@
 	"You need to be logged to do that": "You need to be logged to do that",
 	"Announcement successfully deleted": "Announcement successfully deleted",
 	"Validation failed": "Validation failed",
-	"Announcement successfully updated": "Announcement successfully updated"
+	"Announcement successfully updated": "Announcement successfully updated",
+	"Invalid credentials": "Invalid credentials"
 }

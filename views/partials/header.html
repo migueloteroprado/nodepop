@@ -9,10 +9,12 @@
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
       <link rel='stylesheet' href='/stylesheets/reset.css' />
       <link rel='stylesheet' href='/stylesheets/style.css' />
+      <link rel='stylesheet' href='/stylesheets/colorbox.css' />
       <script src="/javascripts/anuncios.js" type="module"></script>
       <script src="/javascripts/scroll.js" type="module"></script>
-      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+      <script src="/javascripts/jquery.colorbox-min.js"></script>
   </head>
   <body>
     <header class="header-main">
@@ -36,8 +38,6 @@
                 <a class="nav-link" href="/anuncios/add">Add Anuncio</a>
               </li>
             <% } %>
-          <!--</ul>
-          <ul class="navbar-nav auth">-->
             <% if (session.authUser) { %>
               <li class="nav-item">
                 <a class="nav-link" href="/logout">Logout</a>

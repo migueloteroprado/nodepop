@@ -81,9 +81,9 @@ async function initUsers(users) {
 }
 
 async function initAnuncios(anuncios) {
+	// replace user email for user id in every anuncio
 	for (let i=0; i<anuncios.length; i++) {
-		const user = await User.findOne({email: anuncios[i].user});
-		console.log(user);
+		const user = await User.findOne({ email: anuncios[i].user });
 		if (user) {
 			anuncios[i].user = user._id;
 		} else {
@@ -91,7 +91,6 @@ async function initAnuncios(anuncios) {
 		}
 
 	}
-	console.log(anuncios);	
 	// Delete all documents from database
 	const deleted = await Anuncio.deleteMany();
 	console.log(`Removed ${deleted.n} anuncios.`);

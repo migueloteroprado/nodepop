@@ -39,7 +39,7 @@ userSchema.statics.list = function(filter, limit, start, sort) {
 	const query = User.find(filter);
 	query.limit(limit);
 	query.skip(start);	
-	query.select('name email');
+	query.select('name email role');
 	query.sort(sort).collation({ locale: 'es', caseLevel: true }); // collation with caseLevel:true to perform case insensitive sorting 
 	return query.exec();
 };

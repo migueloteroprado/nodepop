@@ -20,7 +20,7 @@
 				"lifestyle",
 				"mobile"
 			],
-			"user": "user2@nodepop.com"
+			"user": "user2@example.com"
 		},
 		{
 			"nombre": "Bicicleta de montaña",
@@ -41,7 +41,7 @@
 			"tags": [
 				"lifestyle"
 			],
-			"user": "user2@nodepop.com"
+			"user": "user2@example.com"
 		},
 		{
 			"nombre": "iPad",
@@ -53,7 +53,7 @@
 				"mobile",
 				"work"
 			],
-			"user": "user3@nodepop.com"
+			"user": "user3@example.com"
 		},
 		{
 			"nombre": "Samsung Galaxy S8",
@@ -74,7 +74,7 @@
 			"tags": [
 				"motor"
 			],
-			"user": "user2@nodepop.com"
+			"user": "user2@example.com"
 		},
 		{
 			"nombre": "Cubo de Rubik",
@@ -94,7 +94,7 @@
 			"tags": [
 				"lifestyle"
 			],
-			"user": "user3@nodepop.com"
+			"user": "user3@example.com"
 		},
 		{
 			"nombre": "Impresora",
@@ -104,7 +104,7 @@
 			"tags": [
 				"work"
 			],
-			"user": "user3@nodepop.com"
+			"user": "user3@example.com"
 		},
 		{
 			"nombre": "Ferrari",
@@ -115,7 +115,7 @@
 				"motor",
 				"lifestyle"
 			],
-			"user": "user2@nodepop.com"
+			"user": "user2@example.com"
 		},
 		{
 			"nombre": "Reloj",
@@ -135,7 +135,7 @@
 			"tags": [
 				"lifestyle"
 			],
-			"user": "user2@nodepop.com"
+			"user": "user2@example.com"
 		},
 		{
 			"nombre": "Yate",
@@ -156,7 +156,7 @@
 			"tags": [
 				"lifestyle"
 			],
-			"user": "user3@nodepop.com"
+			"user": "user3@example.com"
 		},
 		{
 			"nombre": "Portátil",
@@ -167,7 +167,7 @@
 				"work",
 				"lifestyle"
 			],
-			"user": "user2@nodepop.com"
+			"user": "user2@example.com"
 		}
 	]
 }

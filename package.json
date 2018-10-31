@@ -6,6 +6,7 @@
     "start": "node ./bin/www NODE_ENV=production",
     "dev": "cross-env DEBUG=nodepop:* NODE_ENV=development nodemon",
     "install_db": "node ./install_db.js",
+    "service": "node ./microservices/thumbnailService.js",
     "eslint": "node_modules/.bin/eslint ."
   },
   "dependencies": {

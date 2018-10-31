@@ -19,6 +19,10 @@ const getFilters = require('../../lib/users/filter');
 // Arrays of validators for GET, POST and PUT requests 
 const { queryValidations,	bodyValidationsPost, bodyValidationsPut } = require('../../lib/users/validators');
 
+// authentication: check if user provides a valid token
+const jwtAuth = require('../../lib/auth/jwtAuth');
+router.use(jwtAuth());
+
 /**
  * GET /
  * Returns a list of users sorted, filtered and paginated
