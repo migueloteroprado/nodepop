@@ -17,12 +17,12 @@ responder.on('generate thumbnail', async (req, done) => {
 	// Generate thumbnail
 	try {
 		// read file
-		const image = await jimp.read(path.join(__dirname, '..', 'public', 'images', 'anuncios', req.file));
+		const image = await jimp.read(path.join(__dirname, '..', 'public', 'uploads', 'anuncios', req.file));
 		// generate thumbnail
 		const resizedImage = await image
 			.cover(Math.min(image.getWidth(), image.getHeight()), Math.min(image.getWidth(), image.getHeight()))
 			.resize(req.width, req.height, jimp.AUTO)
-			.writeAsync(path.join(__dirname, '..', 'public', 'images', 'anuncios', 'thumbs', `${req.width}x${req.height}-${req.file}`));
+			.writeAsync(path.join(__dirname, '..', 'public', 'uploads', 'anuncios', 'thumbs', `${req.width}x${req.height}-${req.file}`));
 		// invoke done callback
 		done(null, resizedImage);
 	} catch (err) {
@@ -40,7 +40,7 @@ responder.on('delete image', async (req, done) => {
 	try {
 
 		// delete file
-		fs.unlink(path.join(__dirname, '..', 'public', 'images', 'anuncios', req.file), (err) => {
+		fs.unlink(path.join(__dirname, '..', 'public', 'uploads', 'anuncios', req.file), (err) => {
 			if (err) {
 				done(err);
 				return;
@@ -49,7 +49,7 @@ responder.on('delete image', async (req, done) => {
 			// delete thumbnails
 
 			// read files in thumbs directory
-			fs.readdir(path.join(__dirname, '..', 'public', 'images', 'anuncios', 'thumbs'), (err, files) => {
+			fs.readdir(path.join(__dirname, '..', 'public', 'uplodas', 'anuncios', 'thumbs'), (err, files) => {
 				if (err) {
 					done(err);
 					return;
@@ -60,7 +60,7 @@ responder.on('delete image', async (req, done) => {
 
 						console.log(`delete thumb -> ${files[i]}`);
 
-						fs.unlink(path.join(__dirname, '..', 'public', 'images', 'anuncios', 'thumbs', files[i]), (err) => {
+						fs.unlink(path.join(__dirname, '..', 'public', 'uploads', 'anuncios', 'thumbs', files[i]), (err) => {
 							if (err) {
 								console.log('ERR_DELETE_THUMB', err);
 								done(err);
