@@ -26,7 +26,7 @@ const sessionAuth = require('../lib/auth/sessionAuth');
 
 // multer uploader for foto field image file
 const path = require('path');
-const fotoFolder = path.join(__dirname, '..', 'public', 'uploads', 'anuncios');
+const fotoFolder = path.join(__dirname, '..', 'public', 'images', 'anuncios');
 const uploader = require('../lib/anuncios/uploader')(fotoFolder);
 
 // Arrays of validators for GET, POST and PUT requests 
@@ -138,7 +138,7 @@ router.post('/', sessionAuth(), uploader.single('foto'), bodyValidationsPost, as
 
 		// OK, set message an redirect to /anuncios
 		req.flash('success', res.__('Announcement successfully created'));		
-		res.redirect('/anuncios');
+		res.redirect('/anuncios/add');
 
 	} catch (err) {
 		req.flash('error', `Error: ${res.__(err.message)}`);		
