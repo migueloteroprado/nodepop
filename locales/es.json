@@ -1,10 +1,10 @@
 {
-	"must be true or false": "must be true or false",
-	"must be a non-negative integer": "must be a non-negative integer",
-	"must be integer": "must be integer",
-	"maximum": "maximum",
-	"is required": "is required",
-	"must be a positive number": "must be a positive number",
+	"must be true or false": "debe ser true o false",
+	"must be a non-negative integer": "debe ser un entero no negativo",
+	"must be integer": "debe ser entero",
+	"maximum": "máximo",
+	"is required": "es obligatorio",
+	"must be a positive number": "debe ser un número positivo",
 	"Invalid ID": "ID inválido",
 	"must be an string": "debe ser un string",
 	"must be a valid email": "debe ser un email válido",
@@ -54,7 +54,6 @@
 	"Image and Thumbnail succesfully deleted": "Imagen y Thumbnail eliminados correctamente",
 	"Ad successfully deleted": "Anuncio eliminado correctamente",
 	"Logged out successfully": "Desconectado con éxito",
-	"Cannot set headers after they are sent to the client": "Cannot set headers after they are sent to the client",
-	"Thumbnail succesfully generated": "Thumbnail succesfully generated",
-	"Error generating thumbnail": "Error generating thumbnail"
+	"Thumbnail succesfully generated": "Thumbnail generado con éxito",
+	"Error generating thumbnail": "Error generando thumbnail"
 }

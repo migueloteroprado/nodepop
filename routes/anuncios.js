@@ -38,9 +38,6 @@ const { generateThumbnail, deleteImage } = require('../microservices/thumbnailCl
 // translations
 const i18n = require('../lib/i18nConfigure')();
 
-// All querys to this roter require authentication
-//router.use(sessionAuth());
-
 /**
  * GET /
  * Renders a list of documents sorted, filtered and paginated
@@ -125,7 +122,7 @@ router.post('/', sessionAuth(), uploader.single('foto'), bodyValidationsPost, as
 		const newAnuncio = new Anuncio(anuncio);
 
 		// save document in database
-		const savedAnuncio = await newAnuncio.save();
+		await newAnuncio.save();
 
 		// send message to thumbnail generation microservice, passing file name, width and height
 
@@ -135,12 +132,10 @@ router.post('/', sessionAuth(), uploader.single('foto'), bodyValidationsPost, as
 			height: 100 
 		}, (error, result) => {
 			if (error) {
-				console.log(`${res.__('Error generating thumbnail')}: ${error.message}`);
+				console.log(res.__('Error generating thumbnail'));
 				return;
 			}
 			console.log(res.__('Thumbnail succesfully generated'));
-			//successThumb = true;
-			return;
 		});
 
 		// OK, set message an redirect to /anuncios
@@ -156,7 +151,7 @@ router.post('/', sessionAuth(), uploader.single('foto'), bodyValidationsPost, as
 /** GET /:id/edit
  * Shows a form to update one Anuncio
  */
-router.get('/:id/edit', [param('id').isMongoId().withMessage(i18n.__('Invalid ID'))], async (req, res, next) => {
+router.get('/:id/edit', sessionAuth(), [param('id').isMongoId().withMessage(i18n.__('Invalid ID'))], async (req, res, next) => {
 
 	try {
 		// validate data from body and throw possible validation errors
@@ -200,7 +195,7 @@ router.put('/:id', sessionAuth(), uploader.single('foto'), [
 		} else {
 			
 			const anuncio = req.body;
-			const updatedAnuncio = await Anuncio.findByIdAndUpdate(_id, anuncio, { new: true }).exec();
+			await Anuncio.findByIdAndUpdate(_id, anuncio, { new: true }).exec();
 
 			// If a new photo was uploaded, update thumbnail
 			// Send message to thumbnail generator microservice, passing file name, width and height
@@ -211,11 +206,10 @@ router.put('/:id', sessionAuth(), uploader.single('foto'), [
 					height: 100 
 				}, (err, result) => {
 					if (err) {
-						console.log(`${res.__('Error generating thumbnail')}: ${err.message}`);
+						console.log(res.__('Error generating thumbnail'));
 						return;
 					}
 					console.log(res.__('Thumbnail succesfully generated'));
-					return;
 				});
 			}
 
@@ -231,7 +225,7 @@ router.put('/:id', sessionAuth(), uploader.single('foto'), [
 /** DELETE /:id
  * Delete one anuncio
  */
-router.delete('/:id', [
+router.delete('/:id', sessionAuth(), [
 	param('id').isMongoId().withMessage(i18n.__('Invalid ID'))
 ], async (req, res, next) => {
 	try {
@@ -246,11 +240,10 @@ router.delete('/:id', [
 		const anuncio = await Anuncio.findById(_id).exec();
 		deleteImage({fileName: anuncio.foto}, (err, result) => {
 			if (err) {
-				console.log(`${res.__('Error generating thumbnail')}: ${err.message}`);
+				console.log(res.__('Error deleting image and thumbnail'));
 				return;
 			}
 			console.log(res.__('Image and Thumbnail succesfully deleted'));
-			return;
 		});
 		
 		// delete anuncio from database

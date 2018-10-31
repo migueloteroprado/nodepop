@@ -28,6 +28,7 @@ const uploader = require('../../lib/anuncios/uploader')(fotoFolder);
 const { queryValidations,	bodyValidationsPost, bodyValidationsPut } = require('../../lib/anuncios/validators');
 
 // middleware to verify if user provides a valid authentication JWT
+// all endpoints are protected
 router.use(jwtAuth());
 
 // translations
@@ -148,11 +149,10 @@ router.post('/', uploader.single('foto'), bodyValidationsPost, async (req, res, 
 			height: 100 
 		}, (err, result) => {
 			if (err) {
-				console.log(`${res.__('Error generating thumbnail')}: ${err.message}`);
+				console.log(res.__('Error generating thumbnail'));
 				return;
 			}
 			console.log(res.__('Thumbnail succesfully generated'));
-			return;
 		});
 
 		// return result
@@ -200,11 +200,10 @@ router.put('/:id', uploader.single('foto'), [
 					height: 100 
 				}, (err, result) => {
 					if (err) {
-						console.log(`${res.__('Error generating thumbnail')}: ${err.message}`);
+						console.log(res.__('Error generating thumbnail'));
 						return;
 					}
 					console.log(res.__('Thumbnail succesfully generated'));
-					return;
 				});
 			}
 
@@ -236,11 +235,10 @@ router.delete('/:id', [
 		const anuncio = await Anuncio.findById(_id).exec();
 		deleteImage({fileName: anuncio.foto}, (err, result) => {
 			if (err) {
-				console.log(`${res.__('Error generating thumbnail')}: ${err.message}`);
+				console.log(res.__('Error deleting image and thumbnail'));
 				return;
 			}
 			console.log(res.__('Image and Thumbnail succesfully deleted'));
-			return;
 		});
 		
 		// delete anuncio from database

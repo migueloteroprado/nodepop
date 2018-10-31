@@ -39,26 +39,27 @@ class Anuncios {
 
 		this.inputFields = document.querySelector('#fields');
 
-		// Add maximun value attribute to 'limit' input
-		this.inputLimit.setAttribute('max', MAX_LIMIT);
+		if (this.searchForm && this.inputNombre && this.checkWork) {
+			// Add maximun value attribute to 'limit' input
+			this.inputLimit.setAttribute('max', MAX_LIMIT);
 
-		// intialize form values
-		this.inputNombre.value = this.nombre ? this.nombre : '';
-		
-		this.checkWork.checked = this.tag && this.tag.indexOf('work') >= 0;
-		this.checkLifestyle.checked = this.tag && this.tag.indexOf('lifestyle') >= 0;
-		this.checkMotor.checked = this.tag && this.tag.indexOf('motor') >= 0;
-		this.checkMobile.checked = tag && tag.indexOf('mobile') >= 0;
+			// intialize form values
+			this.inputNombre.value = this.nombre ? this.nombre : '';
+			
+			this.checkWork.checked = this.tag && this.tag.indexOf('work') >= 0;
+			this.checkLifestyle.checked = this.tag && this.tag.indexOf('lifestyle') >= 0;
+			this.checkMotor.checked = this.tag && this.tag.indexOf('motor') >= 0;
+			this.checkMobile.checked = tag && tag.indexOf('mobile') >= 0;
 
-		this.selectVenta.value = this.venta ? this.venta : '';
-		this.inputPrecio.value = this.precio ? this.precio : '';
-		this.inputOrden.value = this.sort ? this.sort : '';
+			this.selectVenta.value = this.venta ? this.venta : '';
+			this.inputPrecio.value = this.precio ? this.precio : '';
+			this.inputOrden.value = this.sort ? this.sort : '';
 
-		this.inputStart.value = this.start ? this.start : '';
-		this.inputLimit.value = this.limit ? this.limit : '';
+			this.inputStart.value = this.start ? this.start : '';
+			this.inputLimit.value = this.limit ? this.limit : '';
 
-		this.inputFields.value = this.fields ? this.fields : '';
-
+			this.inputFields.value = this.fields ? this.fields : '';
+		}
 	}
 
 	// returns an objects with all the params extracted from the querystring
@@ -85,17 +86,6 @@ class Anuncios {
 		return params;
 	}
 }
-
-const doesFileExist = (urlToFile) => {
-	var xhr = new XMLHttpRequest();
-	xhr.open('HEAD', urlToFile, false);
-	xhr.send();
-	if (xhr.status == '404') {
-		return false;
-	} else {
-		return true;
-	}
-};
 
 // Wait for DOM loaded
 window.addEventListener('load', () => {
