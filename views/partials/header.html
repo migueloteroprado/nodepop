@@ -4,7 +4,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta http-equiv="X-UA-Compatible" content="ie=edge">
-      <title><%= title %></title>
+      <title><%= app_name %> - <%= title %></title>
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
       <link rel='stylesheet' href='/stylesheets/reset.css' />
@@ -20,7 +20,7 @@
     <header class="header-main">
       <nav class="navbar navbar-expand-md navbar-dark bg-dark">
           
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand <%= page === 'home' ? 'active' : '' %>" href="/">
           <i class="fas fa-shopping-cart logo"></i>
           <%= app_name %>
         </a>
@@ -31,11 +31,11 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav links">
             <li class="nav-item">
-              <a class="nav-link" href="/anuncios"><%= __('Ads') %></a>
+              <a class="nav-link <%= page === 'ads' ? 'active' : '' %>" href="/anuncios"><%= __('Ad List') %></a>
             </li>
             <% if (session.authUser) { %>
               <li class="nav-item">
-                <a class="nav-link" href="/anuncios/new"><%= __('New Ad') %></a>
+                <a class="nav-link <%= page === 'new_ad' ? 'active' : '' %>" href="/anuncios/new"><%= __('New Ad') %></a>
               </li>
             <% } %>
             <% if (session.authUser) { %>
@@ -44,7 +44,7 @@
               </li>
             <% } else { %>
               <li class="nav-item">
-                <a class="nav-link" href="/login"><%= __('Login') %></a>
+                <a class="nav-link <%= page === 'login' ? 'active' : '' %>" href="/login"><%= __('Login') %></a>
               </li>
             <% } %>
           </ul>
@@ -53,7 +53,7 @@
             <span class="lang-label"><%= __('Language:') %></span>
             <% getLocales().forEach(lang => { %>
               <li class="nav-item">
-                <a class="nav-link" href="/lang/<%= lang %>"><%= lang.toUpperCase() %></a>
+                <a class="nav-link <%= lang === locale ? 'active' : '' %>" href="/lang/<%= lang %>"><%= lang.toUpperCase() %></a>
               </li>
             <% }) %>
           </ul>

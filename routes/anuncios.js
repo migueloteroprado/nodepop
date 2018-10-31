@@ -81,9 +81,10 @@ router.get('/', queryValidations, async (req, res, next) => {
 		const filtersInQuery = queryString.stringify(queryFilters);
 
 		// set page title
-		res.locals.title = `${res.locals.app_name} - ${res.__('Ads')}`;
+		res.locals.title = `${res.__('Ad List')}`;
 
 		// render page
+		res.locals.page = 'ads';
 		res.render('anuncios/anuncios', {anuncios: anuncios, currentPage: currentPage, totalPages: totalPages, limit: limit, filtersInQuery: filtersInQuery});
 	}
 	catch (err) {
@@ -96,7 +97,8 @@ router.get('/', queryValidations, async (req, res, next) => {
  * Renders a form to add a new Anuncio
  */ 
 router.get('/new', sessionAuth(), async (req, res, next) => {
-	res.locals.title = `${res.locals.app_name} - ${res.__('New Ad')}`;
+	res.locals.title = `${res.__('New Ad')}`;
+	res.locals.page = 'new_ad';
 	res.render('anuncios/newAnuncio.html');
 });
 
@@ -164,7 +166,8 @@ router.get('/:id/edit', [param('id').isMongoId().withMessage(i18n.__('Invalid ID
 			req.flash('error', res.__('Ad not found in database'));
 			res.redirect('/anuncios');
 		}
-		res.locals.title = `${res.locals.app_name} - ${res.__('Edit Ad')}`;
+		res.locals.title = `${res.__('Edit Ad')}`;
+		res.locals.page = 'edit_add';
 		res.render('anuncios/editAnuncio', { anuncio: foundAnuncio }); 
 
 	} catch(err) {

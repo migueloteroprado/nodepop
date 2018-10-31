@@ -12,7 +12,8 @@ class loginController {
 		res.locals.email = process.env.NODE_ENV === 'development' 
 			? 'user@example.com'
 			: '';
-		res.locals.error = '';
+//		res.locals.error = '';
+		res.locals.page = 'login';
 		res.render('login/login');
 	}
 	
@@ -31,9 +32,10 @@ class loginController {
 				res.locals.email = email;
 				res.locals.error = res.__('Invalid credentials');
 				res.locals.title = res.__('Login');
+				res.locals.page = 'login';
 
 				req.flash('error', res.__('Invalid credentials'));
-
+				
 				res.render('login/login');
 				return;
 			}

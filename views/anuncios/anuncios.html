@@ -12,7 +12,7 @@
             <div class="form-content-wrapper">
               <div class="wrapper-tags">
                 <div>
-                  <label class="tag bold">Tags: </label>
+                  <label class="tag bold"><%= __('Tags') %>: </label>
                 </div>
                 <div class="tags">
                   <label><input type="checkbox" id="tag-work" name="tag" value="work" class="form-check form-check-inline"><%= __('Work') %></label>
@@ -101,7 +101,7 @@
 
     <section class="list">
       <header>
-        <h3 class="shadow-box"><%= __('List of Ads') %></h3>
+        <h3 class="shadow-box"><%= __('Ad List') %></h3>
       </header>
 
       <div class="wrapper-anuncios">
@@ -117,15 +117,15 @@
                 <div class="data">
                   <div class="fields">
                     <div class="<%= anuncio.precio ? '' : 'hidden' %>">
-                        <span class="lbl"><%= __('Price') %></span>
+                        <span class="lbl"><%= __('Price') %>:</span>
                         <span class="value"><%= anuncio.precio + ' €' %></span>
                     </div>
                     <div class="<%= anuncio.venta === 'undefined' ? 'hidden' : '' %>">
-                        <div><span class="lbl"><%= __('Type') %></span></div>
+                        <div><span class="lbl"><%= __('Type') %>:</span></div>
                         <div><span class="value"><%= anuncio.venta ? __('Sell') : __('Search') %></span></div>
                     </div>
                     <div class="<%= anuncio.tags ? '' : 'hidden' %>">
-                      <div><span class="lbl"><%= __('Tags') %> </span></div>
+                      <div><span class="lbl"><%= __('Tags') %>: </span></div>
                       <div><span class="value">
                         <% if (anuncio.tags) { 
                           anuncio.tags.forEach((tag, index, arr) => { %>
