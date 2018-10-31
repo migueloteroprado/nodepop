@@ -2,7 +2,7 @@
 
 const cote = require('cote');
 
-const requester = new cote.Requester({ name: 'thumbnail generator client' });
+const requester = new cote.Requester({ name: 'thumbnail generator client' }, { log:false });
 
 const generateThumbnail = function (req, cb) {
 	// Invoke microservice to generate image thumbnail

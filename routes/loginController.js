@@ -8,7 +8,7 @@ class loginController {
 	
 	// GET "/"
 	index(req, res, next) {
-		res.locals.title = 'Login';
+		res.locals.title = res.__('Login');
 		res.locals.email = process.env.NODE_ENV === 'development' 
 			? 'user@example.com'
 			: '';
@@ -29,10 +29,10 @@ class loginController {
 
 			if (!user || !await bcrypt.compare(password, user.password)) {
 				res.locals.email = email;
-				res.locals.error = res.__('Invalid user name or password');
-				res.locals.title = 'Login';
+				res.locals.error = res.__('Invalid credentials');
+				res.locals.title = res.__('Login');
 
-				req.flash('error', res.__('Invalid user name or password'));
+				req.flash('error', res.__('Invalid credentials'));
 
 				res.render('login/login');
 				return;
@@ -49,6 +49,20 @@ class loginController {
 			next(err);
 		}
 
+	}
+
+	// GET /logout
+	logout(req, res, next) {
+		delete req.session.authUser; // delete authUser from session
+		req.session.regenerate(function(err) { // delete session
+			if (err) {
+				next(err);
+				return;
+			}
+			// set flash message and redirect to home page
+			req.flash('success', res.__('Logged out successfully'));
+			res.redirect('/');
+		});
 	}
 
 	// Login for API
@@ -69,7 +83,7 @@ class loginController {
 
 			// usuario found and password is correct
 			jwt.sign({ _id: user._id, role: user.role }, process.env.AUTH_JWT_SECRET, {
-				expiresIn: '1h'
+				expiresIn: '2h'
 			}, (err, token) => {
 				if (err) {
 					next(err);
@@ -82,21 +96,7 @@ class loginController {
 			next(err);
 		}
 
-	}  
-
-	// GET /logout
-	logout(req, res, next) {
-		delete req.session.authUser; // delete authUser from session
-		req.session.regenerate(function(err) { // delete session
-			if (err) {
-				next(err);
-				return;
-			}
-			// set flash message and redirect to home page
-			req.flash('success', res.__('Logged out successfully'));
-			res.redirect('/');
-		});
-	}
+	}  	
 
 }
 

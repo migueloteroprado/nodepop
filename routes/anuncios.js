@@ -35,6 +35,9 @@ const { bodyValidationsPost, bodyValidationsPut } = require('../lib/anuncios/val
 // Thumbnail generation Microservice
 const { generateThumbnail, deleteImage } = require('../microservices/thumbnailClient');
 
+// translations
+const i18n = require('../lib/i18nConfigure')();
+
 // All querys to this roter require authentication
 //router.use(sessionAuth());
 
@@ -78,7 +81,7 @@ router.get('/', queryValidations, async (req, res, next) => {
 		const filtersInQuery = queryString.stringify(queryFilters);
 
 		// set page title
-		res.locals.title = 'Nodepop - Anuncios';
+		res.locals.title = `${res.locals.app_name} - ${res.__('Ads')}`;
 
 		// render page
 		res.render('anuncios/anuncios', {anuncios: anuncios, currentPage: currentPage, totalPages: totalPages, limit: limit, filtersInQuery: filtersInQuery});
@@ -92,9 +95,9 @@ router.get('/', queryValidations, async (req, res, next) => {
  * GET /add
  * Renders a form to add a new Anuncio
  */ 
-router.get('/add', sessionAuth(), async (req, res, next) => {
-	res.locals.title = 'Add Anuncio';
-	res.render('anuncios/addAnuncio.html');
+router.get('/new', sessionAuth(), async (req, res, next) => {
+	res.locals.title = `${res.locals.app_name} - ${res.__('New Ad')}`;
+	res.render('anuncios/newAnuncio.html');
 });
 
 /**
@@ -127,18 +130,18 @@ router.post('/', sessionAuth(), uploader.single('foto'), bodyValidationsPost, as
 			fileName: req.body.foto, 
 			width: 100, 
 			height: 100 
-		}, (err, res) => {
+		}, (err, result) => {
 			if (err) {
-				console.log('Error generating thumbnail: ', err);
+				console.log(`${res.__('Error generating thumbnail')}: ${err}`);
 				return;
 			}
-			console.log('Thumbnail succesfully generated');
+			console.log(res.__('Thumbnail succesfully generated'));
 			return;
 		});
 
 		// OK, set message an redirect to /anuncios
-		req.flash('success', res.__('Announcement successfully created'));		
-		res.redirect('/anuncios/add');
+		req.flash('success', res.__('Ad successfully created'));		
+		res.redirect('/anuncios/new');
 
 	} catch (err) {
 		req.flash('error', `Error: ${res.__(err.message)}`);		
@@ -150,7 +153,7 @@ router.post('/', sessionAuth(), uploader.single('foto'), bodyValidationsPost, as
 /** GET /:id/edit
  * Shows a form to update one Anuncio
  */
-router.get('/:id/edit', [param('id').isMongoId().withMessage('invalid ID')], async (req, res, next) => {
+router.get('/:id/edit', [param('id').isMongoId().withMessage(i18n.__('Invalid ID'))], async (req, res, next) => {
 
 	try {
 		// validate data from body and throw possible validation errors
@@ -158,10 +161,10 @@ router.get('/:id/edit', [param('id').isMongoId().withMessage('invalid ID')], asy
 
 		const foundAnuncio = await Anuncio.findById(req.params.id);
 		if (!foundAnuncio) {
-			req.flash('error', 'Anuncio nof found in database');
+			req.flash('error', res.__('Ad not found in database'));
 			res.redirect('/anuncios');
 		}
-		res.locals.title = 'Edit Anuncio';
+		res.locals.title = `${res.locals.app_name} - ${res.__('Edit Ad')}`;
 		res.render('anuncios/editAnuncio', { anuncio: foundAnuncio }); 
 
 	} catch(err) {
@@ -175,7 +178,7 @@ router.get('/:id/edit', [param('id').isMongoId().withMessage('invalid ID')], asy
  */
 router.put('/:id', sessionAuth(), uploader.single('foto'), [
 	...bodyValidationsPut,
-	param('id').isMongoId().withMessage('invalid ID')
+	param('id').isMongoId().withMessage(i18n.__('Invalid ID'))
 ], async (req, res, next) => {
 
 	try {
@@ -188,7 +191,7 @@ router.put('/:id', sessionAuth(), uploader.single('foto'), [
 		// check if logged user has permissions to update (is the anuncio creator or has an admin role)
 		const originalAnuncio = await Anuncio.findById(_id).exec();
 		if (!(originalAnuncio.user && (req.session.authUser._id === originalAnuncio.user || req.session.authUser.role === 'admin'))) {
-			req.flash('You don\'t have permissions to update this anuncio');
+			req.flash(res.__('You don\'t have permissions to update this Ad'));
 			res.redirect(req.header('Referer'));
 		} else {
 			
@@ -202,18 +205,18 @@ router.put('/:id', sessionAuth(), uploader.single('foto'), [
 					fileName: req.body.foto, 
 					width: 100, 
 					height: 100 
-				}, (err, res) => {
+				}, (err, result) => {
 					if (err) {
-						console.log('Error generating thumbnail: ', err);
+						console.log(`${res.__('Error generating thumbnail')}: ${err.message}`);
 						return;
 					}
-					console.log('Thumbnail succesfully generated');
+					console.log(res.__('Thumbnail succesfully generated'));
 					return;
 				});
 			}
 
 			// OK, set flash message and redirect to /anuncios
-			req.flash('success', res.__('Announcement successfully updated'));		
+			req.flash('success', res.__('Ad successfully updated'));		
 			res.redirect('/anuncios');
 		}
 	} catch (err) {
@@ -225,7 +228,7 @@ router.put('/:id', sessionAuth(), uploader.single('foto'), [
  * Delete one anuncio
  */
 router.delete('/:id', [
-	param('id').isMongoId().withMessage('invalid ID')
+	param('id').isMongoId().withMessage(i18n.__('Invalid ID'))
 ], async (req, res, next) => {
 	try {
 
@@ -237,12 +240,12 @@ router.delete('/:id', [
 		// Send message to microservice to delete image and thumbnail(s)
 		// Get document from database
 		const anuncio = await Anuncio.findById(_id).exec();
-		deleteImage({fileName: anuncio.foto}, (err, res) => {
+		deleteImage({fileName: anuncio.foto}, (err, result) => {
 			if (err) {
-				console.log('Error generating thumbnail: ', err);
+				console.log(`${res.__('Error generating thumbnail')}: ${err.message}`);
 				return;
 			}
-			console.log('Image and Thumbnail(s) succesfully deleted');
+			console.log(res.__('Image and Thumbnail succesfully deleted'));
 			return;
 		});
 		
@@ -252,7 +255,7 @@ router.delete('/:id', [
 		}).exec();
 
 		// OK, set flash message and redirect to /anuncios
-		req.flash('success', res.__('Announcement successfully deleted'));		
+		req.flash('success', res.__('Ad successfully deleted'));		
 		res.redirect('/anuncios');
 
 	} catch (err) {

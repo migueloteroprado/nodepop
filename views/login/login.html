@@ -8,15 +8,15 @@
       </div>
       <div class="form-login-wrapper">
         <div class="form-group">
-          <label for="email" class="bold">Email address</label>
-          <input type="email" class="form-control" name="email" placeholder="Enter email" value="<%= email %>" required>
+          <label for="email" class="bold"><%= __('Email address') %></label>
+          <input type="email" class="form-control" name="email" placeholder="<%= __('Enter email') %>" value="<%= email %>" required>
         </div>
         <div class="form-group">
-          <label for="password" class="bold">Password</label>
-          <input type="password" class="form-control" name="password" placeholder="Password" required>
+          <label for="password" class="bold"><%= __('Password') %></label>
+          <input type="password" class="form-control" name="password" placeholder="<%= __('Enter password') %>" required>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">Login</button>
+      <button type="submit" class="btn btn-primary"><%= __('Login') %></button>
     </form>
   </div>
 </div>

@@ -23,6 +23,9 @@ const { queryValidations,	bodyValidationsPost, bodyValidationsPut } = require('.
 const jwtAuth = require('../../lib/auth/jwtAuth');
 router.use(jwtAuth());
 
+// translations
+const i18n = require('../../lib/i18nConfigure')();
+
 /**
  * GET /
  * Returns a list of users sorted, filtered and paginated
@@ -60,7 +63,7 @@ router.get('/', queryValidations, async (req, res, next) => {
  * Get one user by Id
  */
 router.get('/:id', [
-	param('id').isMongoId().withMessage('invalid ID')
+	param('id').isMongoId().withMessage(i18n.__('Invalid ID'))
 ], async (req, res, next) => {
 
 	try {
@@ -105,7 +108,7 @@ router.post('/', bodyValidationsPost, async (req, res, next) => {
 		// check that user doesn't already exists
 		const userExists = await User.find({ email: user.email }).exec();
 		if (userExists.length > 0) {
-			throw new Error('Email already in use');
+			throw new Error(res.__('Email already in use'));
 		}
 
 		// create a new user using the model
@@ -130,7 +133,7 @@ router.post('/', bodyValidationsPost, async (req, res, next) => {
  */
 router.put('/:id', [
 	...bodyValidationsPut,
-	param('id').isMongoId().withMessage('invalid ID')
+	param('id').isMongoId().withMessage(i18n.__('Invalid ID'))
 ], async (req, res, next) => {
 
 	try {
@@ -148,7 +151,7 @@ router.put('/:id', [
 				_id: { $ne: _id }
 			}).exec();
 			if (userExists.length > 0) {
-				throw new Error('Email already in use');
+				throw new Error(res.__('Email already in use'));
 			}
 		}
 		const updatedUser = await User.findByIdAndUpdate(_id, user, { new: true }).exec();
@@ -166,7 +169,7 @@ router.put('/:id', [
  * Delete one user
  */
 router.delete('/:id', [
-	param('id').isMongoId().withMessage('invalid ID')
+	param('id').isMongoId().withMessage(i18n.__('Invalid ID'))
 ], async (req, res, next) => {
 	try {
 

@@ -7,7 +7,7 @@ const jimp = require('jimp');
 
 // Thumbnail generation service
 
-const responder = new cote.Responder({ name: 'thumbnail generator service' });
+const responder = new cote.Responder({ name: 'thumbnail generator service' }, { log: false });
 
 // generate thumbnail message
 responder.on('generate thumbnail', async (req, done) => {

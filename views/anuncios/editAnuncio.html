@@ -4,49 +4,49 @@
   <div class="form-wrapper">
     <form id="form-edit-anuncio" class="search-form shadow-box-light" action="<%= `/anuncios/${anuncio._id}?_method=PUT` %>" method="POST" enctype="multipart/form-data">
       <div class="form-title">
-        <h3 class="shadow-box">Edit Anuncio</h3>
+        <h3 class="shadow-box"><%= __('Edit Ad') %></h3>
       </div>
       <div class="form-login-wrapper">
         <div class="form-group">
-          <label for="nombre" class="bold">Name:</label>
-          <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Name" value="<%= anuncio.nombre %>" required>
+          <label for="nombre" class="bold"><%= __('Name') %></label>
+          <input type="text" class="form-control" name="nombre" id="nombre" placeholder="<%= __('Name') %>" value="<%= anuncio.nombre %>" required>
         </div>
         <div class="form-group">
-          <label for="venta" class="bold">Type:</label>
+          <label for="venta" class="bold"><%= __('Type') %></label>
           <select id="venta" name="venta" class="form-control" required>
-              <option value="true" <%= anuncio.venta ? 'selected' : '' %>>Sell</option>
-              <option value="false" <%= anuncio.venta? '' : 'selected' %>>Search</option>
+              <option value="true" <%= anuncio.venta ? 'selected' : '' %>><%= __('Sell') %></option>
+              <option value="false" <%= anuncio.venta? '' : 'selected' %>><%= __('Search') %></option>
             </select>
           </div>
         <div class="form-group">
-          <label for="precio" class="bold">Price:</label>
-          <input id="precio" type="number" class="form-control" name="precio" min="0.00" step="0.01" placeholder="Price" value="<%= anuncio.precio %>" required>
+          <label for="precio" class="bold"><%= __('Price') %></label>
+          <input id="precio" type="number" class="form-control" name="precio" min="0.00" step="0.01" placeholder="<%= __('Price') %>" value="<%= anuncio.precio %>" required>
         </div>
         <div class="form-group">
-          <label for="foto" class="bold">Photo:</label>
-          <input type="file" class="form-control-file" name="foto" placeholder="Choose photo file..." >
+          <label for="foto" class="bold"><%= __('Photo') %></label>
+          <input type="file" class="form-control-file" name="foto" placeholder="<%= __('Choose photo file...') %>'" >
         </div>
         <div class="form-group">
-          <div class="bold">Tags:</div>
+          <div class="bold"><%= __('Tags') %></div>
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="checkbox" name="tags" id="work" value="work" <%= anuncio.tags.indexOf('work') >= 0 ? 'checked' : '' %> >
-            <label class="form-check-label" for="work">Work</label>
+            <label class="form-check-label" for="work"><%= __('Work') %></label>
           </div>
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="checkbox" name="tags" id="lifestyle" value="lifestyle" <%= anuncio.tags.indexOf('lifestyle') >= 0 ? 'checked' : '' %> >
-            <label class="form-check-label" for="lifestyle">Lifestyle</label>
+            <label class="form-check-label" for="lifestyle"><%= __('Lifestyle') %></label>
           </div>
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="checkbox" name="tags" id="motor" value="motor" <%= anuncio.tags.indexOf('motor') >= 0 ? 'checked' : '' %> >
-            <label class="form-check-label" for="motor">Motor</label>
+            <label class="form-check-label" for="motor"><%= __('Motor') %></label>
           </div>
           <div class="form-check form-check-inline">
             <input class="form-check-input" type="checkbox" name="tags" id="mobile" value="mobile" <%= anuncio.tags.indexOf('mobile') >= 0 ? 'checked' : '' %> >
-            <label class="form-check-label" for="mobile">Mobile</label>
+            <label class="form-check-label" for="mobile"><%= __('Mobile') %></label>
           </div>
         </div>
       </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary"><%= __('Submit') %></button>
   </form>
 
 </section>

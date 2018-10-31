@@ -6,7 +6,7 @@
       <form class="search-form shadow-box-light" method="GET" action="/anuncios">
         <div class="form-wrapper">
           <div class="form-title">
-            <h3 class="shadow-box">Filtros</h3>
+            <h3 class="shadow-box"><%= __('Filters') %></h3>
           </div>
           <div class="form-content shadow-box-light">
             <div class="form-content-wrapper">
@@ -15,51 +15,51 @@
                   <label class="tag bold">Tags: </label>
                 </div>
                 <div class="tags">
-                  <label><input type="checkbox" id="tag-work" name="tag" value="work" class="form-check form-check-inline">Work</label>
-                  <label><input type="checkbox" id="tag-lifestyle" name="tag" value="lifestyle" class="form-check form-check-inline">Lifestyle</label>
-                  <label><input type="checkbox" id="tag-motor" name="tag" value="motor" class="form-check form-check-inline">Motor</label>
-                  <label><input type="checkbox" id="tag-mobile" name="tag" value="mobile" class="fform-check form-check-inline">Mobile</label>
+                  <label><input type="checkbox" id="tag-work" name="tag" value="work" class="form-check form-check-inline"><%= __('Work') %></label>
+                  <label><input type="checkbox" id="tag-lifestyle" name="tag" value="lifestyle" class="form-check form-check-inline"><%= __('Lifestyle') %></label>
+                  <label><input type="checkbox" id="tag-motor" name="tag" value="motor" class="form-check form-check-inline"><%= __('Motor') %></label>
+                  <label><input type="checkbox" id="tag-mobile" name="tag" value="mobile" class="fform-check form-check-inline"><%= __('Mobile') %></label>
                 </div>
               </div>                
             </div>
             <div class="filters-wrapper">
               <div class="row">
-                <label class="field col bold">Nombre: </label>
+                <label class="field col bold"><%= __('Name') %></label>
                 <input type="text" id="nombre" name="nombre" class="form-control col">
               </div>
               <div class="row">
-                <label class="field col bold">Tipo: </label>
+                <label class="field col bold"><%= __('Type') %></label>
                 <select id="venta" name="venta" class="form-control col">
                   <option value="">-</option>
-                  <option value="true">Venta </option>
-                  <option value="false">Búsqueda </option>
+                  <option value="true"><%= __('Sell') %></option>
+                  <option value="false"><%= __('Search') %></option>
                 </select>
               </div>     
               <div class="row">
-                <label class="field col bold">Precio:</label>
+                <label class="field col bold"><%= __('Price') %></label>
                 <input type="text" name="precio" id="precio" class="form-control col">
               </div>
               <div class="row">
-                <label class="field col bold">Sort: </label>
+                <label class="field col bold"><%= __('Sort') %></label>
                 <input type="text" name="sort" id="sort" class="form-control col">
               </div>
               <div class="row">
-                <label class="field col bold">Start: </label>
+                <label class="field col bold"><%= __('Start') %></label>
                 <input type="number" min="0" name="start" id="start" class="form-control col">
               </div>
               <div class="row">
-                <label class="field col bold">Limit: </label>
+                <label class="field col bold"><%= __('Limit') %></label>
                 <input type="number" min="0" name="limit" id="limit" class="form-control col">
               </div>
               <div class="row">
-                <label class="field col bold">Fields: </label>
+                <label class="field col bold"><%= __('Fields') %></label>
                 <input type="text" id="fields" name="fields" width="100" class="form-control col">
               </div>
             </div>
           </div>
           <div class="buttons">
-            <button type="Reset">Reset</button>
-            <button type="submit">Buscar</button>
+            <button type="Reset"><%= __('Reset') %></button>
+            <button type="submit"><%= __('Search') %></button>
           </div>
         </div>
       </form>
@@ -68,12 +68,12 @@
 
     <% if (totalPages > 0 && currentPage <= totalPages) { %>
       <section class="paginator shadow-box-light">
-        <span>Página</span>
+        <span><%= __('Page') %></span>
         <ul class="pagination text-center">
             <% if (currentPage == 1) { %>
-                <li class="disabled"><a>Primera</a></li>
+                <li class="disabled"><a><%= __('First') %></a></li>
             <% } else { %>
-                <li><a href="/anuncios?start=0&limit=<%= limit %>&<%= filtersInQuery %>">Primera</a></li>
+                <li><a href="/anuncios?start=0&limit=<%= limit %>&<%= filtersInQuery %>"><%= __('First') %></a></li>
             <% } %>
             <% var i = (Number(currentPage) > 5 ? Number(currentPage) - 4 : 1) %>
             <% if (i !== 1) { %>
@@ -90,7 +90,7 @@
                 <% } %>
             <% } %>
             <% if (currentPage == totalPages) { %>
-                <li class="disabled"><a>Última</a></li>
+                <li class="disabled"><a><%= __('Last') %></a></li>
             <% } else { %>
                 <li><a href="/anuncios?start=<%= (totalPages * limit) - limit %>&limit=<%= limit %>&<%= filtersInQuery %>">Última</a></li>
             <% } %>
@@ -101,7 +101,7 @@
 
     <section class="list">
       <header>
-        <h3 class="shadow-box">Listado de Anuncios</h3>
+        <h3 class="shadow-box"><%= __('List of Ads') %></h3>
       </header>
 
       <div class="wrapper-anuncios">
@@ -117,15 +117,15 @@
                 <div class="data">
                   <div class="fields">
                     <div class="<%= anuncio.precio ? '' : 'hidden' %>">
-                        <span class="lbl">Precio: </span>
+                        <span class="lbl"><%= __('Price') %></span>
                         <span class="value"><%= anuncio.precio + ' €' %></span>
                     </div>
                     <div class="<%= anuncio.venta === 'undefined' ? 'hidden' : '' %>">
-                        <div><span class="lbl">Tipo: </span></div>
-                        <div><span class="value"><%= anuncio.venta ? 'Venta' : 'Búsqueda' %></span></div>
+                        <div><span class="lbl"><%= __('Type') %></span></div>
+                        <div><span class="value"><%= anuncio.venta ? __('Sell') : __('Search') %></span></div>
                     </div>
                     <div class="<%= anuncio.tags ? '' : 'hidden' %>">
-                      <div><span class="lbl">Tags: </span></div>
+                      <div><span class="lbl"><%= __('Tags') %> </span></div>
                       <div><span class="value">
                         <% if (anuncio.tags) { 
                           anuncio.tags.forEach((tag, index, arr) => { %>
@@ -137,9 +137,9 @@
                     </div> 
                     <div>
                       <% if (session.authUser && session.authUser._id && session.authUser.role && anuncio.user && (session.authUser._id === anuncio.user || session.authUser.role === 'admin')) { %>
-                        <a href="<%= `/anuncios/${anuncio._id}/edit` %>" class="btn btn-warning btn-sm btn-edit">Edit</a>
+                        <a href="<%= `/anuncios/${anuncio._id}/edit` %>" class="btn btn-warning btn-sm btn-edit"><%= __('Edit') %></a>
                         <form action="<%= `/anuncios/${anuncio._id}?_method=DELETE` %>" method="POST">
-                          <button type="submit" class="btn btn-danger btn-sm btn-delete">Delete</button>
+                          <button type="submit" class="btn btn-danger btn-sm btn-delete"><%= __('Delete') %></button>
                         </form>
                       <% } %>
                     </div>                   
@@ -154,7 +154,7 @@
             </article> 
         <% }) 
         } else { %>
-          <h4>No se encontró ningún anuncio para los filtros de búsqueda indicados</h4> 
+          <h4><%= __('No ads found for selected filters') %></h4> 
         <% } %>  
       </div>
 

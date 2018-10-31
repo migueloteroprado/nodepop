@@ -37,7 +37,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Flash messages
 app.use(flash());
 
-
 /**
  * Configuración Multiidioma
  */
@@ -61,9 +60,6 @@ require('./models/anuncios/Anuncio');
 /**
  * API routes
  */
-app.use('/apiv1/anuncios', require('./routes/apiv1/anuncios'));
-app.use('/apiv1/users', require('./routes/apiv1/users'));
-
 app.post('/api/authenticate', loginController.postJWT);
 app.use('/api/anuncios', require('./routes/api/anuncios'));
 app.use('/api/users', require('./routes/api/users'));
@@ -87,7 +83,7 @@ app.use(session({
 	})
 }));
 
-// auth helper middleware - da accesso a sesión desde cualquier vista
+// auth helper middleware - gives us access to sesion from any view
 app.use((req, res, next) => {
 	res.locals.session = req.session;
 	next();
@@ -124,7 +120,7 @@ app.use(function (err, req, res, next) {
 		err.status = 422;
 		const errorInfo = err.array({ onlyFirstError: true })[0];
 		err.message = isAPI(req)
-			? { message: 'Not valid', errors: err.mapped() }
+			? { message: res.__('Not valid'), errors: err.mapped() }
 			: `Not valid - ${errorInfo.param} : ${errorInfo.msg}`;
 	}
 	// JWT errors, return status code 401 (unauthorized)
