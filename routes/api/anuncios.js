@@ -21,7 +21,7 @@ const getFilters = require('../../lib/anuncios/filter');
 
 // multer uploader for foto field image file
 const path = require('path');
-const fotoFolder = path.join(__dirname, '..', '..', 'public', 'images', 'anuncios');
+const fotoFolder = path.join(__dirname, '..', '..', 'public', 'uploads', 'anuncios');
 const uploader = require('../../lib/anuncios/uploader')(fotoFolder);
 
 // Arrays of validators for GET, POST and PUT requests 
