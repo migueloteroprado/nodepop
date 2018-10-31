@@ -53,5 +53,8 @@
 	"Ad successfully updated": "Anuncio actualizado correctamente",
 	"Image and Thumbnail succesfully deleted": "Imagen y Thumbnail eliminados correctamente",
 	"Ad successfully deleted": "Anuncio eliminado correctamente",
-	"Logged out successfully": "Desconectado con éxito"
+	"Logged out successfully": "Desconectado con éxito",
+	"Cannot set headers after they are sent to the client": "Cannot set headers after they are sent to the client",
+	"Thumbnail succesfully generated": "Thumbnail succesfully generated",
+	"Error generating thumbnail": "Error generating thumbnail"
 }

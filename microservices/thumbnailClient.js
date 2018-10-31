@@ -11,11 +11,8 @@ const generateThumbnail = function (req, cb) {
 		file: req.fileName,
 		width: req.width,
 		height: req.height
-	}, (err, res) => {
-		if (err) {
-			return cb(err);
-		}
-		return cb(null, res);
+	}, (error, result) => {
+		cb(error, result);
 	});
 };
 
@@ -24,11 +21,8 @@ const deleteImage = function (req, cb) {
 	return requester.send({
 		type: 'delete image',
 		file: req.fileName
-	}, (err, res) => {
-		if (err) {
-			return cb(err);
-		}
-		return cb(null, res);
+	}, (error, result) => {
+		cb(error, result);
 	});
 };
 

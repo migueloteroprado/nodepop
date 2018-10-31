@@ -128,16 +128,18 @@ router.post('/', sessionAuth(), uploader.single('foto'), bodyValidationsPost, as
 		const savedAnuncio = await newAnuncio.save();
 
 		// send message to thumbnail generation microservice, passing file name, width and height
+
 		generateThumbnail({
 			fileName: req.body.foto, 
 			width: 100, 
 			height: 100 
-		}, (err, result) => {
-			if (err) {
-				console.log(`${res.__('Error generating thumbnail')}: ${err}`);
+		}, (error, result) => {
+			if (error) {
+				console.log(`${res.__('Error generating thumbnail')}: ${error.message}`);
 				return;
 			}
 			console.log(res.__('Thumbnail succesfully generated'));
+			//successThumb = true;
 			return;
 		});
 
@@ -146,10 +148,9 @@ router.post('/', sessionAuth(), uploader.single('foto'), bodyValidationsPost, as
 		res.redirect('/anuncios/new');
 
 	} catch (err) {
-		req.flash('error', `Error: ${res.__(err.message)}`);		
+		req.flash('error', `Error: ${err.message}`);		
 		next(err);
 	}	
-
 });
 
 /** GET /:id/edit
