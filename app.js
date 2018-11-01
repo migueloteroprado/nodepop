@@ -40,7 +40,6 @@ app.use(flash());
 /**
  * Configuración Multiidioma
  */
-
 const i18n = require('./lib/i18nConfigure')();
 app.use(i18n.init);
 

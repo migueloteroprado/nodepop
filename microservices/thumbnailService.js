@@ -16,29 +16,20 @@ responder.on('generate thumbnail', async (req, done) => {
 	
 	// Generate thumbnail
 
-	let attempts = 0;
-	let successThumb = false;
-	let error = null;
-	while (!successThumb && attempts <= 3) {
-		try {
-			// read file
-			const image = await jimp.read(path.join(__dirname, '..', 'public', 'images', 'anuncios', req.file));
-			// generate thumbnail
-			const resizedImage = await image
-				.cover(Math.min(image.getWidth(), image.getHeight()), Math.min(image.getWidth(), image.getHeight()))
-				.resize(req.width, req.height, jimp.AUTO)
-				.writeAsync(path.join(__dirname, '..', 'public', 'images', 'anuncios', 'thumbs', `${req.width}x${req.height}-${req.file}`));
-			// invoke done callback
-			done(null, resizedImage);
-			return;
-		} catch (err) {
-			error = new Error(err.message);
-		}
-		await new Promise(resolve => setTimeout(resolve, 5000));
-		attempts++;
+	try {
+		// read file
+		const image = await jimp.read(path.join(__dirname, '..', 'public', 'images', 'anuncios', req.file));
+		// generate thumbnail
+		const resizedImage = await image
+			.cover(Math.min(image.getWidth(), image.getHeight()), Math.min(image.getWidth(), image.getHeight()))
+			.resize(req.width, req.height, jimp.AUTO)
+			.writeAsync(path.join(__dirname, '..', 'public', 'images', 'anuncios', 'thumbs', `${req.width}x${req.height}-${req.file}`));
+		// invoke done callback
+		done(null, resizedImage);
+	} catch (err) {
+		done(err, null);
 	}
-	// invoke callback with error
-	done(error, null);
+	
 });
 
 // delete file message
@@ -52,7 +43,7 @@ responder.on('delete image', async (req, done) => {
 		// delete file
 		fs.unlink(path.join(__dirname, '..', 'public', 'images', 'anuncios', req.file), (err) => {
 			if (err) {
-				done(err);
+				done(err, null);
 				return;
 			}
 
@@ -61,7 +52,7 @@ responder.on('delete image', async (req, done) => {
 			// read files in thumbs directory
 			fs.readdir(path.join(__dirname, '..', 'public', 'images', 'anuncios', 'thumbs'), (err, files) => {
 				if (err) {
-					done(err);
+					done(err, null);
 					return;
 				}
 				// delete thumbnails of deleted image
@@ -73,7 +64,7 @@ responder.on('delete image', async (req, done) => {
 						fs.unlink(path.join(__dirname, '..', 'public', 'images', 'anuncios', 'thumbs', files[i]), (err) => {
 							if (err) {
 								console.log('ERR_DELETE_THUMB', err);
-								done(err);
+								done(err, null);
 								return;
 							}
 						});
@@ -85,6 +76,6 @@ responder.on('delete image', async (req, done) => {
 	
 	} catch (err) {
 		// invoke callback with error
-		done(err);
+		done(err, null);
 	}
 });

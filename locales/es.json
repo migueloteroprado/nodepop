@@ -55,5 +55,7 @@
 	"Ad successfully deleted": "Anuncio eliminado correctamente",
 	"Logged out successfully": "Desconectado con éxito",
 	"Thumbnail succesfully generated": "Thumbnail generado con éxito",
-	"Error generating thumbnail": "Error generando thumbnail"
+	"Error generating thumbnail": "Error generando thumbnail",
+	"Not valid": "Not valid",
+	"Only image files are allowed (jpeg, jpeg, png, gif)": "Sólo se permiten archivos de imagen (jpeg, jpeg, png, gif)"
 }

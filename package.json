@@ -7,6 +7,7 @@
     "dev": "cross-env DEBUG=nodepop:* NODE_ENV=development nodemon",
     "install_db": "node ./install_db.js",
     "service": "node ./microservices/thumbnailService.js",
+    "test": "mocha **/*.test.js",
     "eslint": "node_modules/.bin/eslint ."
   },
   "dependencies": {
@@ -32,6 +33,8 @@
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
-    "eslint": "^5.2.0"
+    "eslint": "^5.2.0",
+    "mocha": "^5.2.0",
+    "supertest": "^3.3.0"
   }
 }

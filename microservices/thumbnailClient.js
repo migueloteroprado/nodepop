@@ -12,7 +12,11 @@ const generateThumbnail = function (req, cb) {
 		width: req.width,
 		height: req.height
 	}, (error, result) => {
-		cb(error, result);
+		if (error) {
+			cb(error, null);
+			return;
+		}
+		cb(null, result);
 	});
 };
 
@@ -22,7 +26,11 @@ const deleteImage = function (req, cb) {
 		type: 'delete image',
 		file: req.fileName
 	}, (error, result) => {
-		cb(error, result);
+		if (error) {
+			cb(error, null);
+			return;
+		}
+		cb(null, result);
 	});
 };
 

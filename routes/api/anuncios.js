@@ -44,7 +44,6 @@ const { generateThumbnail, deleteImage } = require('../../microservices/thumbnai
 router.get('/', queryValidations, async (req, res, next) => {
 
 	try {
-
 		// validate params from querystring
 		validationResult(req).throw();
 
@@ -127,6 +126,8 @@ router.post('/', uploader.single('foto'), bodyValidationsPost, async (req, res, 
 
 	try {
 
+console.log('BODY-POST', req.body);
+
 		// validate data from body and throw possible validation errors
 		validationResult(req).throw();
 
@@ -147,8 +148,8 @@ router.post('/', uploader.single('foto'), bodyValidationsPost, async (req, res, 
 			fileName: req.body.foto, 
 			width: 100, 
 			height: 100 
-		}, (err, result) => {
-			if (err) {
+		}, (error, result) => {
+			if (error) {
 				console.log(res.__('Error generating thumbnail'));
 				return;
 			}
