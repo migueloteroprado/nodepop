@@ -126,8 +126,6 @@ router.post('/', uploader.single('foto'), bodyValidationsPost, async (req, res, 
 
 	try {
 
-console.log('BODY-POST', req.body);
-
 		// validate data from body and throw possible validation errors
 		validationResult(req).throw();
 
