@@ -362,7 +362,6 @@ section.list header {
 	border: 1px solid grey;
 	border-radius: 5px;
 	background-color: #f9f9f9;
-	/* max-width: 900px; */
 }
 
 .anuncio .wrapper-anuncio {
@@ -379,7 +378,7 @@ section.list header {
   border-radius: 5px;
   display: flex;
   border: 1px solid grey;
-  max-width: 100px;
+  width: 125px;
   height: auto;
 }
 

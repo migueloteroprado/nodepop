@@ -4,7 +4,6 @@
 require('dotenv').config();
 const app = require('../app');
 const request = require('supertest');
-const path = require('path');
 
 // Hide stacktrace on errors
 Error.stackTraceLimit = 0;

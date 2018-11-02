@@ -247,7 +247,7 @@ router.delete('/:id', sessionAuth(), [
 		});
 		
 		// delete anuncio from database
-		const deleted = await Anuncio.remove({
+		await Anuncio.remove({
 			_id: _id
 		}).exec();
 

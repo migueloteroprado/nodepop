@@ -12,7 +12,6 @@ class loginController {
 		res.locals.email = process.env.NODE_ENV === 'development' 
 			? 'user@example.com'
 			: '';
-//		res.locals.error = '';
 		res.locals.page = 'login';
 		res.render('login/login');
 	}

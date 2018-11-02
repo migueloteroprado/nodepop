@@ -28,7 +28,7 @@
 	"Sort": "Orden",
 	"Start": "Inicio",
 	"Limit": "Límite",
-	"Fields": "Fields",
+	"Fields": "Campos",
 	"Reset": "Reset",
 	"Page": "Página",
 	"First": "Primera",
@@ -58,5 +58,6 @@
 	"Error generating thumbnail": "Error generando thumbnail",
 	"Not valid": "No válido",
 	"Only image files are allowed (jpeg, jpeg, png, gif)": "Sólo se permiten archivos de imagen (jpeg, jpeg, png, gif)",
-	"Email already in use": "El Correo electrónico ya está en uso"
+	"Email already in use": "El Correo electrónico ya está en uso",
+	"You need to be logged to do that": "You need to be logged to do that"
 }
