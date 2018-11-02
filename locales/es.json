@@ -59,5 +59,6 @@
 	"Not valid": "No válido",
 	"Only image files are allowed (jpeg, jpeg, png, gif)": "Sólo se permiten archivos de imagen (jpeg, jpeg, png, gif)",
 	"Email already in use": "El Correo electrónico ya está en uso",
-	"You need to be logged to do that": "You need to be logged to do that"
+	"You need to be logged to do that": "Debe iniciar sesión para hacer eso",
+	"Error deleting image and thumbnail": "Error eliminado imagen y thumbnail"
 }

@@ -38,6 +38,9 @@ const { generateThumbnail, deleteImage } = require('../microservices/thumbnailCl
 // translations
 const i18n = require('../lib/i18nConfigure')();
 
+// named routes
+const namedRoutes = require('../lib/namedRoutes');
+
 /**
  * GET /
  * Renders a list of documents sorted, filtered and paginated
@@ -140,7 +143,7 @@ router.post('/', sessionAuth(), uploader.single('foto'), bodyValidationsPost, as
 
 		// OK, set message an redirect to /anuncios
 		req.flash('success', res.__('Ad successfully created'));		
-		res.redirect('/anuncios/new');
+		res.redirect(namedRoutes.ads);
 
 	} catch (err) {
 		req.flash('error', `Error: ${err.message}`);		
@@ -160,7 +163,7 @@ router.get('/:id/edit', sessionAuth(), [param('id').isMongoId().withMessage(i18n
 		const foundAnuncio = await Anuncio.findById(req.params.id);
 		if (!foundAnuncio) {
 			req.flash('error', res.__('Ad not found in database'));
-			res.redirect('/anuncios');
+			res.redirect(namedRoutes.ads);
 		}
 		res.locals.title = `${res.__('Edit Ad')}`;
 		res.locals.page = 'edit_add';
@@ -168,7 +171,7 @@ router.get('/:id/edit', sessionAuth(), [param('id').isMongoId().withMessage(i18n
 
 	} catch(err) {
 		req.flash('error', `Error: ${err.message}`);
-		res.redirect('/anuncios');
+		res.redirect(namedRoutes.ads);
 	}
 });
 
@@ -197,9 +200,18 @@ router.put('/:id', sessionAuth(), uploader.single('foto'), [
 			const anuncio = req.body;
 			await Anuncio.findByIdAndUpdate(_id, anuncio, { new: true }).exec();
 
-			// If a new photo was uploaded, update thumbnail
+			// If a new photo was uploaded, delete previous image and thumbnail and generate anew one
 			// Send message to thumbnail generator microservice, passing file name, width and height
 			if (req.body.foto) {
+
+				deleteImage({fileName: originalAnuncio.foto}, (err, result) => {
+					if (err) {
+						console.log(res.__('Error deleting image and thumbnail'));
+						return;
+					}
+					console.log(res.__('Image and Thumbnail succesfully deleted'));
+				});
+		
 				generateThumbnail({
 					fileName: req.body.foto, 
 					width: 100, 
@@ -215,7 +227,7 @@ router.put('/:id', sessionAuth(), uploader.single('foto'), [
 
 			// OK, set flash message and redirect to /anuncios
 			req.flash('success', res.__('Ad successfully updated'));		
-			res.redirect('/anuncios');
+			res.redirect(namedRoutes.ads);
 		}
 	} catch (err) {
 		next(err);
@@ -253,7 +265,7 @@ router.delete('/:id', sessionAuth(), [
 
 		// OK, set flash message and redirect to /anuncios
 		req.flash('success', res.__('Ad successfully deleted'));		
-		res.redirect('/anuncios');
+		res.redirect(namedRoutes.ads);
 
 	} catch (err) {
 		// pass error to next middleware

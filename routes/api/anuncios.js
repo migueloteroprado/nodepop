@@ -189,9 +189,17 @@ router.put('/:id', uploader.single('foto'), [
 			const anuncio = req.body;
 			const updatedAnuncio = await Anuncio.findByIdAndUpdate(_id, anuncio, { new: true }).exec();
 
-			// If a new photo was uploaded, update thumbnail
-			// Send message to thumbnail generator microservice, passing file name, width and height
+			// If a new photo was uploaded, delete previous image and thumbnail and generate a new one
 			if (req.body.foto) {
+
+				deleteImage({fileName: originalAnuncio.foto}, (err, result) => {
+					if (err) {
+						console.log(res.__('Error deleting image and thumbnail'));
+						return;
+					}
+					console.log(res.__('Image and Thumbnail succesfully deleted'));
+				});
+
 				generateThumbnail({
 					fileName: req.body.foto, 
 					width: 100, 

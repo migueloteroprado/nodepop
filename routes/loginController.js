@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/users/User');
 
+const namedRoutes = require('../lib/namedRoutes');
+
 class loginController {
 	
 	// GET "/"
@@ -44,7 +46,7 @@ class loginController {
 
 			req.flash('success', res.__('Logged in successfully'));
 
-			res.redirect('/anuncios');
+			res.redirect(namedRoutes.ads);
 
 		} catch (err) {
 			next(err);
@@ -62,7 +64,7 @@ class loginController {
 			}
 			// set flash message and redirect to home page
 			req.flash('success', res.__('Logged out successfully'));
-			res.redirect('/');
+			res.redirect(namedRoutes.home);
 		});
 	}
 
