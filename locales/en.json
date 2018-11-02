@@ -57,5 +57,6 @@
 	"Thumbnail succesfully generated": "Thumbnail succesfully generated",
 	"Error generating thumbnail": "Error generating thumbnail",
 	"Not valid": "Not valid",
-	"Only image files are allowed (jpeg, jpeg, png, gif)": "Only image files are allowed (jpeg, jpeg, png, gif)"
+	"Only image files are allowed (jpeg, jpeg, png, gif)": "Only image files are allowed (jpeg, jpeg, png, gif)",
+	"Email already in use": "Email already in use"
 }

@@ -63,7 +63,6 @@ responder.on('delete image', async (req, done) => {
 
 						fs.unlink(path.join(__dirname, '..', 'public', 'images', 'anuncios', 'thumbs', files[i]), (err) => {
 							if (err) {
-								console.log('ERR_DELETE_THUMB', err);
 								done(err, null);
 								return;
 							}

@@ -9,19 +9,13 @@ const path = require('path');
 // Hide stacktrace on errors
 Error.stackTraceLimit = 0;
 
-const checkAdFields = function(ad) {
-	if (!ad.hasOwnProperty('nombre')) 
-		return new Error('Returned Ad should have a \'nombre\' property');
-	if (!ad.hasOwnProperty('venta')) 
-		return new Error('Returned Ad should have a \'venta\' property');
-	if (!ad.hasOwnProperty('precio')) 
-		return new Error('Returned Ad should have a \'precio\' property');
-	if (!ad.hasOwnProperty('tags')) 
-		return new Error('Returned Ad should have a \'tags\' property');
-	if (!ad.hasOwnProperty('foto')) 
-		return new Error('Returned Ad should have a \'foto\' property');
-	if (!ad.hasOwnProperty('user')) 
-		return new Error('Returned Ad should have a \'user\' property');
+const checkUserFields = function(user) {
+	if (!user.hasOwnProperty('name')) 
+		return new Error('Returned User should have a \'name\' property');
+	if (!user.hasOwnProperty('email')) 
+		return new Error('Returned User should have a \'email\' property');
+	if (!user.hasOwnProperty('role')) 
+		return new Error('Returned User should have a \'role\' property');
 	return null;
 };
 
@@ -48,15 +42,15 @@ describe('POST /api/authenticate', function() {
 });
 
 /**
- * Ads
+ * Users
 **/
 
-describe('GET /api/anuncios', function() {
+describe('GET /api/users', function() {
 
 	// check requests with no token returns 401 error { success: false, error: 'no token provided' }
 	it('Returns 401 (no token provided) for requests without token', function(done) {
 		request(app)
-			.get('/api/anuncios')
+			.get('/api/users')
 			.set('Accept', 'application/json')
 			.expect('Content-Type', /json/)
 			.expect(401, {
@@ -68,7 +62,7 @@ describe('GET /api/anuncios', function() {
 	// check requests with malformed tokens returns: 500 { success: false, error: 'jwt malformed' }
 	it('Returns 500 (jwt malformed) for requests with malformed token', function(done) {
 		request(app)
-			.get('/api/anuncios')
+			.get('/api/users')
 			.set('Accept', 'application/json')
 			.send({ token: 'this is a malformed token' })
 			.expect('Content-Type', /json/)
@@ -81,7 +75,7 @@ describe('GET /api/anuncios', function() {
 	// check requests with invalid tokens returns: 401 { success: false, error: 'invalid token' }
 	it('Returns 401 error for requests with invalid token', function(done) {
 		request(app)
-			.get('/api/anuncios')
+			.get('/api/users')
 			.set('Accept', 'application/json')
 			.send({ token: 'header.payload.signature' })
 			.expect('Content-Type', /json/)
@@ -94,7 +88,7 @@ describe('GET /api/anuncios', function() {
 	// check requests with expired tokens returns: 401 { success: false, error: 'jwt expired' }
 	it('Returns 401 error for requests with expired token', function(done) {
 		request(app)
-			.get('/api/anuncios')
+			.get('/api/users')
 			.set('Accept', 'application/json')
 			.send({ token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmQ4NjVjZGFlMTM4MDI0YjI4ZjFmYTUiLCJyb2xlIjoidXNlciIsImlhdCI6MTU0MDkwOTE3NywiZXhwIjoxNTQwOTEyNzc3fQ.07Z2DzB0dIpy-dcC5zY_Gh38XP8Am-fbZxCGFwKAKRM' })
 			.expect('Content-Type', /json/)
@@ -104,10 +98,10 @@ describe('GET /api/anuncios', function() {
 			},done);	
 	});
 
-	// check GET /api/anuncios requests with valid token returns a list of Ads
-	it('Returns a list of ads for requests with valid token', function(done) {
+	// check GET /api/users requests with valid token returns a list of Users
+	it('Returns a list of users for requests with valid token', function(done) {
 		request(app)
-			.get('/api/anuncios')
+			.get('/api/users')
 			.set('Accept', 'application/json')
 			.set('x-access-token', token)
 			.expect('Content-Type', /json/)
@@ -119,8 +113,8 @@ describe('GET /api/anuncios', function() {
 					throw new Error('result should be an array');
 				}
 				if (res.body.result.length > 0) {
-					const ad = res.body.result[0];
-					const err = checkAdFields(ad);
+					const user = res.body.result[0];
+					const err = checkUserFields(user);
 					if (err)
 						throw err;
 				}
@@ -129,72 +123,61 @@ describe('GET /api/anuncios', function() {
 	});
 }); 
 
-// save created Ad for next tests
-let ad = null;
+// save created User for next tests
+let user = null;
 
-describe('POST /api/anuncios', function() {
+describe('POST /api/users', function() {
 
-	// check POST /api/anuncios, whithout JWT token returns a 401 error
+	// check POST /api/users, whithout JWT token returns a 401 error
 	it('Returns 401 error if no jwt token is passed', function(done) {
 		request(app)
-			.post('/api/anuncios')
+			.post('/api/users')
 			.set('Accept', 'application/json')
 			.set('Content-Type', 'multipart/form-data')
 			.expect('Content-Type', /json/)
 			.expect(401, done);
 	});
 
-	// check POST /api/anuncios, passing a valid token without required fields returns 422 code, with all validation errors
+	// check POST /api/users, passing a valid token without required fields returns 422 code, with all validation errors
 	it('Returns validation errors when not all field values are passed', function(done) {
 		request(app)
-			.post('/api/anuncios')
+			.post('/api/users')
 			.set('Accept', 'application/json')
-			.set('Content-Type', 'multipart/form-data')
 			.set('x-access-token', token)
-			.field('venta', false)
+			.send({ email: 'testuser@example.com' })
 			.expect('Content-Type', /json/)
 			.expect(422, {
 				'success': false,
 				'error': {
 					'message': 'Not valid',
 					'errors': {
-						'nombre': {
+						'name': {
 							'location': 'body',
-							'param': 'nombre',
+							'param': 'name',
 							'msg': 'is required'
 						},
-						'tags': {
+						'password': {
 							'location': 'body',
-							'param': 'tags',
+							'param': 'password',
 							'msg': 'Invalid value'
-						},
-						'precio': {
-							'location': 'body',
-							'param': 'precio',
-							'msg': 'must be a positive number'
-						},
-						'foto': {
-							'location': 'body',
-							'param': 'foto',
-							'msg': 'foto is required'
 						}
 					}
 				}
 			}, done);
 	});
 
-	// check POST /api/anuncios, passing a valid token and all required fields without validation errors
-	it('Inserts new Ad', function(done) {
+	// check POST /api/users, passing a valid token and all required fields without validation errors
+	it('Inserts new User', function(done) {
 		request(app)
-			.post('/api/anuncios')
+			.post('/api/users')
 			.set('Accept', 'application/json')
-			.set('Content-Type', 'multipart/form-data')
 			.set('x-access-token', token)
-			.field('nombre', 'Test Ad')
-			.field('venta', false)
-			.field('precio', 123.45)
-			.field('tags', ['lifestyle', 'mobile'])
-			.attach('foto', path.join(__dirname, '..', 'public', 'images', 'portada.jpg'))
+			.send({
+				name: 'Test User',
+				email: 'testuser@example.com',
+				password: 'testuser',
+				role: 'user' 
+			})
 			.expect('Content-Type', /json/)
 			.expect(function(res) {
 				if (!res.body.success) {
@@ -203,8 +186,8 @@ describe('POST /api/anuncios', function() {
 				if (!res.body.result) {
 					throw new Error('response should have a result value');
 				}
-				ad = res.body.result;
-				const err = checkAdFields(ad);
+				user = res.body.result;
+				const err = checkUserFields(user);
 				if (err) {
 					throw err;
 				}
@@ -213,16 +196,15 @@ describe('POST /api/anuncios', function() {
 	});
 });
 
-// check PUT /api/anuncios, passing a valid token and updated field values, returns code 200, with { success: true, result: { (updated Ad) }}
-describe('PUT /api/anuncios/:id', function() {
-	it('Updates Ad', function(done) {
+// check PUT /api/users, passing a valid token and updated field values, returns code 200, with { success: true, result: { (updated User) }}
+describe('PUT /api/users/:id', function() {
+	it('Updates User', function(done) {
 		request(app)
-			.put(`/api/anuncios/${ad._id}`)
+			.put(`/api/users/${user._id}`)
 			.set('Accept', 'application/json')
 			.set('Content-Type', 'multipart/form-data')
 			.set('x-access-token', token)
-			.field('nombre', 'Test Ad Updated')
-			.field('venta', true)
+			.field('name', 'Test User Updated')
 			.expect('Content-Type', /json/)
 			.expect(function(res) {
 				if (!res.body.success) {
@@ -231,8 +213,8 @@ describe('PUT /api/anuncios/:id', function() {
 				if (!res.body.result) {
 					throw new Error('response should have a result value');
 				}
-				ad = res.body.result;
-				const err = checkAdFields(ad);
+				user = res.body.result;
+				const err = checkUserFields(user);
 				if (err) {
 					throw err;
 				}
@@ -241,12 +223,11 @@ describe('PUT /api/anuncios/:id', function() {
 	});
 });
 
-
-// check DELETE /api/anuncios/:id, passing a valid token and updated field values, returns code 200 with { success: true, result: { deleted: 1 } }
-describe('DELETE /api/anuncios/:id', function() {
-	it('Deletes Ad', function(done) {
+// check DELETE /api/users/:id, passing a valid token and updated field values, returns code 200 with { success: true, result: { deleted: 1 } }
+describe('DELETE /api/users/:id', function() {
+	it('Deletes User', function(done) {
 		request(app)
-			.delete(`/api/anuncios/${ad._id}`)
+			.delete(`/api/users/${user._id}`)
 			.set('Accept', 'application/json')
 			.set('x-access-token', token)
 			.expect('Content-Type', /json/)
@@ -258,3 +239,4 @@ describe('DELETE /api/anuncios/:id', function() {
 			}, done);
 	});
 });
+

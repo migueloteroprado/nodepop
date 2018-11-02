@@ -165,7 +165,6 @@ router.post('/', uploader.single('foto'), bodyValidationsPost, async (req, res, 
 	}
 });
 
-
 /** PUT /:id
  * Updates one document
  */

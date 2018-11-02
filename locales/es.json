@@ -56,6 +56,7 @@
 	"Logged out successfully": "Desconectado con éxito",
 	"Thumbnail succesfully generated": "Thumbnail generado con éxito",
 	"Error generating thumbnail": "Error generando thumbnail",
-	"Not valid": "Not valid",
-	"Only image files are allowed (jpeg, jpeg, png, gif)": "Sólo se permiten archivos de imagen (jpeg, jpeg, png, gif)"
+	"Not valid": "No válido",
+	"Only image files are allowed (jpeg, jpeg, png, gif)": "Sólo se permiten archivos de imagen (jpeg, jpeg, png, gif)",
+	"Email already in use": "El Correo electrónico ya está en uso"
 }

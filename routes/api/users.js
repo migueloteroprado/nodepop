@@ -105,6 +105,9 @@ router.post('/', bodyValidationsPost, async (req, res, next) => {
 		// get data from request body
 		const user = req.body;
 
+		// encrypt password
+		user.password = await User.hashPassword(user.password);		
+
 		// check that user doesn't already exists
 		const userExists = await User.find({ email: user.email }).exec();
 		if (userExists.length > 0) {
@@ -147,14 +150,21 @@ router.put('/:id', [
 		if (user.email) {
 			// find other users with the new email 
 			const userExists = await User.find({ 
-				email: user.email, 
+				email: user.email,
 				_id: { $ne: _id }
 			}).exec();
 			if (userExists.length > 0) {
 				throw new Error(res.__('Email already in use'));
 			}
 		}
+
+		// if password changes, encrypt it
+		if (user.password) {
+			user.password = await User.hashPassword(user.password);		
+		}
+		
 		const updatedUser = await User.findByIdAndUpdate(_id, user, { new: true }).exec();
+
 		res.json({ 
 			success: true, 
 			result: updatedUser
