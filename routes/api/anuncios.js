@@ -35,7 +35,7 @@ router.use(jwtAuth());
 const i18n = require('../../lib/i18nConfigure')();
 
 // Thumbnail generation Microservice
-const { generateThumbnail, deleteImage } = require('../../microservices/thumbnailClient');
+const { generateThumbnail, deleteImage } = require('../../lib/anuncios/thumbnailClient');
 
 /**
  * GET /
@@ -148,10 +148,10 @@ router.post('/', uploader.single('foto'), bodyValidationsPost, async (req, res, 
 			height: 100 
 		}, (error, result) => {
 			if (error) {
-				console.log(res.__('Error generating thumbnail'));
+				console.error(`${Date.now()}: ${res.__('Error generating thumbnail')}`);
 				return;
 			}
-			console.log(res.__('Thumbnail succesfully generated'));
+			console.log(`${Date.now()}: ${res.__('Thumbnail succesfully generated')}`);		
 		});
 
 		// return result
@@ -194,10 +194,10 @@ router.put('/:id', uploader.single('foto'), [
 
 				deleteImage({fileName: originalAnuncio.foto}, (err, result) => {
 					if (err) {
-						console.log(res.__('Error deleting image and thumbnail'));
+						console.error(`${Date.now()}: ${res.__('Error deleting image and thumbnail')}`);
 						return;
 					}
-					console.log(res.__('Image and Thumbnail succesfully deleted'));
+					console.log(`${Date.now()}: ${res.__('Image and Thumbnail succesfully deleted')}`);
 				});
 
 				generateThumbnail({
@@ -206,10 +206,10 @@ router.put('/:id', uploader.single('foto'), [
 					height: 100 
 				}, (err, result) => {
 					if (err) {
-						console.log(res.__('Error generating thumbnail'));
+						console.error(`${Date.now()}: ${res.__('Error generating thumbnail')}`);
 						return;
 					}
-					console.log(res.__('Thumbnail succesfully generated'));
+					console.log(`${Date.now()}: ${res.__('Thumbnail succesfully generated')}`);
 				});
 			}
 
@@ -241,10 +241,10 @@ router.delete('/:id', [
 		const anuncio = await Anuncio.findById(_id).exec();
 		deleteImage({fileName: anuncio.foto}, (err, result) => {
 			if (err) {
-				console.log(res.__('Error deleting image and thumbnail'));
+				console.error(`${Date.now()}: ${res.__('Error deleting image and thumbnail')}`);
 				return;
 			}
-			console.log(res.__('Image and Thumbnail succesfully deleted'));
+			console.log(`${Date.now()}: ${res.__('Image and Thumbnail succesfully deleted')}`);
 		});
 		
 		// delete anuncio from database

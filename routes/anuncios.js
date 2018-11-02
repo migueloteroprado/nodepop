@@ -33,7 +33,7 @@ const uploader = require('../lib/anuncios/uploader')(fotoFolder);
 const { bodyValidationsPost, bodyValidationsPut } = require('../lib/anuncios/validators');
 
 // Thumbnail generation Microservice
-const { generateThumbnail, deleteImage } = require('../microservices/thumbnailClient');
+const { generateThumbnail, deleteImage } = require('../lib/anuncios/thumbnailClient');
 
 // translations
 const i18n = require('../lib/i18nConfigure')();
@@ -135,10 +135,10 @@ router.post('/', sessionAuth(), uploader.single('foto'), bodyValidationsPost, as
 			height: 100 
 		}, (error, result) => {
 			if (error) {
-				console.log(res.__('Error generating thumbnail'));
+				console.error(`${Date.now()}: ${res.__('Error generating thumbnail')}`);
 				return;
 			}
-			console.log(res.__('Thumbnail succesfully generated'));
+			console.log(`${Date.now()}: ${res.__('Thumbnail succesfully generated')}`);
 		});
 
 		// OK, set message an redirect to /anuncios
@@ -206,10 +206,10 @@ router.put('/:id', sessionAuth(), uploader.single('foto'), [
 
 				deleteImage({fileName: originalAnuncio.foto}, (err, result) => {
 					if (err) {
-						console.log(res.__('Error deleting image and thumbnail'));
+						console.error(`${Date.now()}: ${res.__('Error deleting image and thumbnail')}`);
 						return;
 					}
-					console.log(res.__('Image and Thumbnail succesfully deleted'));
+					console.log(`${Date.now()}: ${res.__('Image and Thumbnail succesfully deleted')}`);
 				});
 		
 				generateThumbnail({
@@ -218,10 +218,10 @@ router.put('/:id', sessionAuth(), uploader.single('foto'), [
 					height: 100 
 				}, (err, result) => {
 					if (err) {
-						console.log(res.__('Error generating thumbnail'));
+						console.error(`${Date.now()}: ${res.__('Error generating thumbnail')}`);
 						return;
 					}
-					console.log(res.__('Thumbnail succesfully generated'));
+					console.log(`${Date.now()}: ${res.__('Thumbnail succesfully generated')}`);
 				});
 			}
 
@@ -252,10 +252,10 @@ router.delete('/:id', sessionAuth(), [
 		const anuncio = await Anuncio.findById(_id).exec();
 		deleteImage({fileName: anuncio.foto}, (err, result) => {
 			if (err) {
-				console.log(res.__('Error deleting image and thumbnail'));
+				console.error(`${Date.now()}: ${res.__('Error deleting image and thumbnail')}`);
 				return;
 			}
-			console.log(res.__('Image and Thumbnail succesfully deleted'));
+			console.log(`${Date.now()}: ${res.__('Image and Thumbnail succesfully deleted')}`);
 		});
 		
 		// delete anuncio from database

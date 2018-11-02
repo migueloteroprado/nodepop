@@ -576,6 +576,7 @@ ul.pagination li.disabled:hover {
   border-radius: 50%;
   box-shadow: 3px 3px 10px grey;
 }
+
 @media (hover: hover) {
   #btn-top:hover {
     color: #555;
@@ -597,10 +598,11 @@ ul.pagination li.disabled:hover {
     min-width: calc(50% - 15px);
   }
 
+  #btn-top {
+    font-size: 1.3rem;
+  }
+
   @media (hover: hover) {
-    #btn-top {
-      font-size: 1.3rem;
-    }
     #btn-top:hover {
       color: #555;
     }

@@ -12,7 +12,7 @@ const responder = new cote.Responder({ name: 'thumbnail generator service' }, { 
 // generate thumbnail message
 responder.on('generate thumbnail', async (req, done) => {
 	
-	console.log(`thumbnail generation -> ${req.width}x${req.height}-${req.file}`);
+	console.log(`${Date.now()} - Thumbnail generation -> ${req.width}x${req.height}-${req.file}`);
 	
 	// Generate thumbnail
 	try {
@@ -26,6 +26,7 @@ responder.on('generate thumbnail', async (req, done) => {
 		// OK, invoke done callback
 		done(null, resizedImage);
 	} catch (err) {
+		console.error(`${Date.now()}: ${err.message}`);
 		done(err, null);
 	}
 	
@@ -34,7 +35,7 @@ responder.on('generate thumbnail', async (req, done) => {
 // delete file message
 responder.on('delete image', async (req, done) => {
 	
-	console.log(`delete image -> ${req.file}`);
+	console.log(`${Date.now()}: Delete image -> ${req.file}`);
 	
 	try {
 
@@ -49,15 +50,17 @@ responder.on('delete image', async (req, done) => {
 			// read files in thumbs directory
 			fs.readdir(path.join(__dirname, '..', 'public', 'images', 'anuncios', 'thumbs'), (err, files) => {
 				if (err) {
+					console.error(`${Date.now()}: ${err.message}`);
 					done(err, null);
 					return;
 				}
 				// delete all possible thumbnails of deleted image
 				for (let i=0; i<files.length; i++) {
 					if (files[i].indexOf(req.file) >= 0) {
-						console.log(`delete thumb -> ${files[i]}`);
+						console.log(`${Date.now()}: Delete thumb -> ${files[i]}`);
 						fs.unlink(path.join(__dirname, '..', 'public', 'images', 'anuncios', 'thumbs', files[i]), (err) => {
 							if (err) {
+								console.error(`${Date.now()}: ${err.message}`);
 								done(err, null);
 								return;
 							}
@@ -71,6 +74,7 @@ responder.on('delete image', async (req, done) => {
 
 	} catch (err) {
 		// invoke callback with error
+		console.error(`${Date.now()}: ${err.message}`);
 		done(err, null);
 	}
 });
