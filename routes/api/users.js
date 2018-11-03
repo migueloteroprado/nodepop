@@ -5,7 +5,7 @@ const router = express.Router();
 const createError = require('http-errors');
 
 // constants
-const { MAX_LIMIT }  = require('../../lib/constants');
+const { MAX_LIMIT }  = require('../../lib/config');
 
 // express-validator
 const { param, validationResult } = require('express-validator/check');

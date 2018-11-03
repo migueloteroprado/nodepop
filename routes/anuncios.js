@@ -18,8 +18,8 @@ const getFilters = require('../lib/anuncios/filter');
 // Arrays of validators for GET, POST and PUT requests 
 const { queryValidations } = require('../lib/anuncios/validators');
 
-// constants
-const { MAX_LIMIT }  = require('../lib/constants');
+// config
+const { MAX_LIMIT, ANUNCIOS_IMAGE_BASE_PATH }  = require('../lib/config');
 
 // middleware to verify if user is logged
 const sessionAuth = require('../lib/auth/sessionAuth');
@@ -27,7 +27,7 @@ const sessionAuth = require('../lib/auth/sessionAuth');
 // multer uploader for foto field image file
 const path = require('path');
 const fotoFolder = path.join(__dirname, '..', 'public', 'images', 'anuncios');
-const uploader = require('../lib/anuncios/uploader')(fotoFolder);
+const uploader = require('../lib/uploader')(fotoFolder);
 
 // Arrays of validators for GET, POST and PUT requests 
 const { bodyValidationsPost, bodyValidationsPut } = require('../lib/anuncios/validators');
@@ -62,6 +62,12 @@ router.get('/', queryValidations, async (req, res, next) => {
 
 		// get the collections from database
 		const anuncios = await Anuncio.list(filters, limit, start, fields, sort);
+
+		// add base path to image file names
+		anuncios.forEach(anuncio => { 
+			anuncio.foto = path.join(ANUNCIOS_IMAGE_BASE_PATH, anuncio.foto);
+		});
+
 		const count = await Anuncio.count(filters);
 		
 		// calculate current page and total pages from limit and start, will be passed to the rendered view for pagination

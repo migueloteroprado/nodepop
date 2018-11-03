@@ -73,7 +73,7 @@ app.use(session({
 	saveUninitialized: true,
 	cookie: { 
 		httpOnly: true, // cookie can't be read from javascript, only from http
-		maxAge: 2 * 60 * 60 * 1000, // session expires in 2 hours
+		maxAge: 2 * 24 * 60 * 60 * 1000, // session expires in 2 days
 		secure: false
 	},
 	store: new MongoStore({

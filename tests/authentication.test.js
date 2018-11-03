@@ -4,6 +4,7 @@
 require('dotenv').config();
 const app = require('../app');
 const request = require('supertest');
+const { expect } = require('chai');
 
 // Hide stacktrace on errors
 Error.stackTraceLimit = 0;
@@ -40,16 +41,11 @@ describe('POST /api/authenticate', function() {
 			.post('/api/authenticate')
 			.send(user)
 			.expect('Content-Type', /json/)
-			.expect(200)
 			.expect(function(res) {
-				if (res.body.token) {
-					res.body.token = 'token';
-				}
+				expect(res.body.success).to.equal(true);
+				expect(res.body.token).to.be.a('string');
 			})
-			.expect(200, {
-				success: true,
-				token: 'token'
-			}, done);
+			.expect(200, done);
 	});
 	
 }); 

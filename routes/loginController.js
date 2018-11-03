@@ -86,7 +86,7 @@ class loginController {
 
 			// usuario found and password is correct
 			jwt.sign({ _id: user._id, role: user.role }, process.env.AUTH_JWT_SECRET, {
-				expiresIn: '2h'
+				expiresIn: '2d'
 			}, (err, token) => {
 				if (err) {
 					next(err);

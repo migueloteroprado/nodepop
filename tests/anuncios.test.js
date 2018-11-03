@@ -4,33 +4,30 @@
 require('dotenv').config();
 const app = require('../app');
 const request = require('supertest');
+const { expect } = require('chai');
 const path = require('path');
 
 // Hide stacktrace on errors
 Error.stackTraceLimit = 0;
 
 const checkAdFields = function(ad) {
-	if (!ad.hasOwnProperty('nombre')) 
-		return new Error('Returned Ad should have a \'nombre\' property');
-	if (!ad.hasOwnProperty('venta')) 
-		return new Error('Returned Ad should have a \'venta\' property');
-	if (!ad.hasOwnProperty('precio')) 
-		return new Error('Returned Ad should have a \'precio\' property');
-	if (!ad.hasOwnProperty('tags')) 
-		return new Error('Returned Ad should have a \'tags\' property');
-	if (!ad.hasOwnProperty('foto')) 
-		return new Error('Returned Ad should have a \'foto\' property');
-	if (!ad.hasOwnProperty('user')) 
-		return new Error('Returned Ad should have a \'user\' property');
-	return null;
+	expect(ad).has.ownProperty('nombre');
+	expect(ad).has.ownProperty('venta');
+	expect(ad).has.ownProperty('precio');
+	expect(ad).has.ownProperty('tags');
+	expect(ad).has.ownProperty('foto');
+	expect(ad).has.ownProperty('user');
 };
 
 // Save auth token for next tests
 let token = null;
 
+// save created Ad for next tests
+let ad = null;
+
 // Authenticate to get a JWT token
 describe('POST /api/authenticate', function() {
-	it('Returns 401 (no token provided) for requests without token', function(done) {
+	it('Returns auth token, for valid credentials', function(done) {
 		const user = {
 			email: 'user@example.com',
 			password: '1234'
@@ -39,9 +36,10 @@ describe('POST /api/authenticate', function() {
 			.post('/api/authenticate')
 			.send(user)
 			.expect(function(res) {
-				if (res.body.success && res.body.token) {
-					token = res.body.token;
-				}
+				expect(res.body.success).to.equal(true);
+				expect(res.body.token).to.be.a('string');
+				// save token for next tests
+				token = res.body.token;
 			})
 			.expect(200, done);
 	});
@@ -91,19 +89,6 @@ describe('GET /api/anuncios', function() {
 			},done);	
 	});
 
-	// check requests with expired tokens returns: 401 { success: false, error: 'jwt expired' }
-	it('Returns 401 error for requests with expired token', function(done) {
-		request(app)
-			.get('/api/anuncios')
-			.set('Accept', 'application/json')
-			.send({ token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmQ4NjVjZGFlMTM4MDI0YjI4ZjFmYTUiLCJyb2xlIjoidXNlciIsImlhdCI6MTU0MDkwOTE3NywiZXhwIjoxNTQwOTEyNzc3fQ.07Z2DzB0dIpy-dcC5zY_Gh38XP8Am-fbZxCGFwKAKRM' })
-			.expect('Content-Type', /json/)
-			.expect(401, {
-				success: false,
-				error: 'jwt expired'
-			},done);	
-	});
-
 	// check GET /api/anuncios requests with valid token returns a list of Ads
 	it('Returns a list of ads for requests with valid token', function(done) {
 		request(app)
@@ -112,25 +97,15 @@ describe('GET /api/anuncios', function() {
 			.set('x-access-token', token)
 			.expect('Content-Type', /json/)
 			.expect(function(res) {
-				if (!res.body.success) {
-					throw new Error('success should be true');
-				}
-				if (!Array.isArray(res.body.result)) {
-					throw new Error('result should be an array');
-				}
+				expect(res.body.success).to.equal(true);
+				expect(res.body.result).to.be.an('array');
 				if (res.body.result.length > 0) {
-					const ad = res.body.result[0];
-					const err = checkAdFields(ad);
-					if (err)
-						throw err;
+					checkAdFields(res.body.result[0]);
 				}
 			})
 			.expect(200, done);
 	});
 }); 
-
-// save created Ad for next tests
-let ad = null;
 
 describe('POST /api/anuncios', function() {
 
@@ -197,17 +172,10 @@ describe('POST /api/anuncios', function() {
 			.attach('foto', path.join(__dirname, '..', 'public', 'images', 'portada.jpg'))
 			.expect('Content-Type', /json/)
 			.expect(function(res) {
-				if (!res.body.success) {
-					throw new Error('success should be true');
-				}
-				if (!res.body.result) {
-					throw new Error('response should have a result value');
-				}
+				expect(res.body.success).to.equal(true);
 				ad = res.body.result;
-				const err = checkAdFields(ad);
-				if (err) {
-					throw err;
-				}
+				expect(ad).to.be.an('object');
+				checkAdFields(ad);
 			})
 			.expect(200, done);
 	});
@@ -225,22 +193,14 @@ describe('PUT /api/anuncios/:id', function() {
 			.field('venta', true)
 			.expect('Content-Type', /json/)
 			.expect(function(res) {
-				if (!res.body.success) {
-					throw new Error('success should be true');
-				}
-				if (!res.body.result) {
-					throw new Error('response should have a result value');
-				}
+				expect(res.body.success).to.equal(true);
 				ad = res.body.result;
-				const err = checkAdFields(ad);
-				if (err) {
-					throw err;
-				}
+				expect(ad).to.be.an('object');
+				checkAdFields(ad);
 			})
 			.expect(200, done);
 	});
 });
-
 
 // check DELETE /api/anuncios/:id, passing a valid token and updated field values, returns code 200 with { success: true, result: { deleted: 1 } }
 describe('DELETE /api/anuncios/:id', function() {

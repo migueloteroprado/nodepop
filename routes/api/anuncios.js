@@ -13,8 +13,8 @@ const {	param, validationResult } = require('express-validator/check');
 // Anuncio model
 const Anuncio = require('../../models/anuncios/Anuncio');
 
-// constants
-const { MAX_LIMIT }  = require('../../lib/constants');
+// config
+const { MAX_LIMIT, ANUNCIOS_IMAGE_BASE_PATH }  = require('../../lib/config');
 
 // function that returns a filters object created form querystring parameters, to pass to the model 'list' static method
 const getFilters = require('../../lib/anuncios/filter');
@@ -22,7 +22,7 @@ const getFilters = require('../../lib/anuncios/filter');
 // multer uploader for foto field image file
 const path = require('path');
 const fotoFolder = path.join(__dirname, '..', '..', 'public', 'images', 'anuncios');
-const uploader = require('../../lib/anuncios/uploader')(fotoFolder);
+const uploader = require('../../lib/uploader')(fotoFolder);
 
 // Arrays of validators for GET, POST and PUT requests 
 const { queryValidations,	bodyValidationsPost, bodyValidationsPut } = require('../../lib/anuncios/validators');
@@ -58,6 +58,11 @@ router.get('/', queryValidations, async (req, res, next) => {
 
 		// query database
 		const anuncios = await Anuncio.list(filters, limit, start, fields, sort);
+
+		// add base path to image file names
+		anuncios.forEach(anuncio => { 
+			anuncio.foto = path.join(ANUNCIOS_IMAGE_BASE_PATH, anuncio.foto);
+		});
 
 		// return result
 		res.json({

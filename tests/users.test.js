@@ -4,40 +4,39 @@
 require('dotenv').config();
 const app = require('../app');
 const request = require('supertest');
+const { expect } = require('chai');
 
 // Hide stacktrace on errors
 Error.stackTraceLimit = 0;
 
-const checkUserFields = function(user) {
-	if (!user.hasOwnProperty('name')) 
-		return new Error('Returned User should have a \'name\' property');
-	if (!user.hasOwnProperty('email')) 
-		return new Error('Returned User should have a \'email\' property');
-	if (!user.hasOwnProperty('role')) 
-		return new Error('Returned User should have a \'role\' property');
-	return null;
+const checkUserFields = function(ad) {
+	expect(ad).has.ownProperty('name');
+	expect(ad).has.ownProperty('email');
+	expect(ad).has.ownProperty('role');
 };
 
 // Save auth token for next tests
 let token = null;
 
-// Authenticate to get a JWT token
-describe('POST /api/authenticate', function() {
-	it('Returns 401 (no token provided) for requests without token', function(done) {
-		const user = {
-			email: 'user@example.com',
-			password: '1234'
-		};
-		request(app)
-			.post('/api/authenticate')
-			.send(user)
-			.expect(function(res) {
-				if (res.body.success && res.body.token) {
-					token = res.body.token;
-				}
-			})
-			.expect(200, done);
-	});
+// save created User for next tests
+let user = null;
+
+// Authenticate with valid credentials returns: 200 - { success: true, token: '(valid token)' }
+it('Returns auth token, for valid credentials', function(done) {
+	const user = {
+		email: 'user@example.com',
+		password: '1234'
+	};
+	request(app)
+		.post('/api/authenticate')
+		.send(user)
+		.expect('Content-Type', /json/)
+		.expect(function(res) {
+			expect(res.body.success).to.equal(true);
+			expect(res.body.token).to.be.a('string');
+			token = res.body.token;
+		})
+		.expect(200, done);
 });
 
 /**
@@ -84,19 +83,6 @@ describe('GET /api/users', function() {
 			},done);	
 	});
 
-	// check requests with expired tokens returns: 401 { success: false, error: 'jwt expired' }
-	it('Returns 401 error for requests with expired token', function(done) {
-		request(app)
-			.get('/api/users')
-			.set('Accept', 'application/json')
-			.send({ token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmQ4NjVjZGFlMTM4MDI0YjI4ZjFmYTUiLCJyb2xlIjoidXNlciIsImlhdCI6MTU0MDkwOTE3NywiZXhwIjoxNTQwOTEyNzc3fQ.07Z2DzB0dIpy-dcC5zY_Gh38XP8Am-fbZxCGFwKAKRM' })
-			.expect('Content-Type', /json/)
-			.expect(401, {
-				success: false,
-				error: 'jwt expired'
-			},done);	
-	});
-
 	// check GET /api/users requests with valid token returns a list of Users
 	it('Returns a list of users for requests with valid token', function(done) {
 		request(app)
@@ -105,25 +91,15 @@ describe('GET /api/users', function() {
 			.set('x-access-token', token)
 			.expect('Content-Type', /json/)
 			.expect(function(res) {
-				if (!res.body.success) {
-					throw new Error('success should be true');
-				}
-				if (!Array.isArray(res.body.result)) {
-					throw new Error('result should be an array');
-				}
+				expect(res.body.success).to.equal(true);
+				expect(res.body.result).to.be.an('array');
 				if (res.body.result.length > 0) {
-					const user = res.body.result[0];
-					const err = checkUserFields(user);
-					if (err)
-						throw err;
+					checkUserFields(res.body.result[0]);
 				}
 			})
 			.expect(200, done);
 	});
 }); 
-
-// save created User for next tests
-let user = null;
 
 describe('POST /api/users', function() {
 
@@ -159,6 +135,11 @@ describe('POST /api/users', function() {
 							'location': 'body',
 							'param': 'password',
 							'msg': 'Invalid value'
+						},
+						'role': {
+							'location': 'body',
+							'param': 'role',
+							'msg': 'is required'
 						}
 					}
 				}
@@ -179,17 +160,10 @@ describe('POST /api/users', function() {
 			})
 			.expect('Content-Type', /json/)
 			.expect(function(res) {
-				if (!res.body.success) {
-					throw new Error('success should be true');
-				}
-				if (!res.body.result) {
-					throw new Error('response should have a result value');
-				}
+				expect(res.body.success).to.equal(true);
 				user = res.body.result;
-				const err = checkUserFields(user);
-				if (err) {
-					throw err;
-				}
+				expect(user).to.be.an('object');
+				checkUserFields(user);
 			})
 			.expect(200, done);
 	});
@@ -206,17 +180,10 @@ describe('PUT /api/users/:id', function() {
 			.field('name', 'Test User Updated')
 			.expect('Content-Type', /json/)
 			.expect(function(res) {
-				if (!res.body.success) {
-					throw new Error('success should be true');
-				}
-				if (!res.body.result) {
-					throw new Error('response should have a result value');
-				}
+				expect(res.body.success).to.equal(true);
 				user = res.body.result;
-				const err = checkUserFields(user);
-				if (err) {
-					throw err;
-				}
+				expect(user).to.be.an('object');
+				checkUserFields(user);
 			})
 			.expect(200, done);
 	});

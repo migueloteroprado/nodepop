@@ -145,8 +145,8 @@
                     </div>                   
                   </div>
                   <div class="picture <%= anuncio.foto ? '' : 'hidden' %>">
-                    <a class="gallery" href="<%=`/images/anuncios/${anuncio.foto}` %>">
-                      <img class="shadow-box-light" src="<%=`/images/anuncios/${anuncio.foto}` %>" alt="<%= anuncio.nombre %>" onerror="this.src='<%= '/images/placeholder.png' %>';">
+                    <a class="gallery" href="<%= anuncio.foto %>">
+                      <img class="shadow-box-light" src="<%= anuncio.foto %>" alt="<%= anuncio.nombre %>" onerror="this.src='<%= '/images/placeholder.png' %>';">
                     </a>
                   </div>                  
                 </div>
