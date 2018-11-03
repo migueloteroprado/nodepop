@@ -33,7 +33,7 @@ const uploader = require('../lib/uploader')(fotoFolder);
 const { bodyValidationsPost, bodyValidationsPut } = require('../lib/anuncios/validators');
 
 // Thumbnail generation Microservice
-const { generateThumbnail, deleteImage } = require('../lib/anuncios/thumbnailClient');
+const { generateThumbnail, deleteImage } = require('../lib/anuncios/thumbnailRequester');
 
 // translations
 const i18n = require('../lib/i18nConfigure')();
@@ -91,7 +91,7 @@ router.get('/', queryValidations, async (req, res, next) => {
 
 		// render page
 		res.locals.page = 'ads';
-		res.render('anuncios/anuncios', {anuncios: anuncios, currentPage: currentPage, totalPages: totalPages, limit: limit, filtersInQuery: filtersInQuery});
+		res.render('anuncios/anuncios', { anuncios: anuncios, currentPage: currentPage, totalPages: totalPages, limit: limit, filtersInQuery: filtersInQuery });
 	}
 	catch (err) {
 		next(err);
@@ -136,10 +136,8 @@ router.post('/', sessionAuth(), uploader.single('foto'), bodyValidationsPost, as
 		// send message to thumbnail generation microservice, passing file name, width and height
 
 		generateThumbnail({
-			fileName: req.body.foto, 
-			width: 100, 
-			height: 100 
-		}, (error, result) => {
+			fileName: req.body.foto
+		}, (error) => {
 			if (error) {
 				console.error(`${Date.now()}: ${res.__('Error generating thumbnail')}`);
 				return;
@@ -210,8 +208,10 @@ router.put('/:id', sessionAuth(), uploader.single('foto'), [
 			// Send message to thumbnail generator microservice, passing file name, width and height
 			if (req.body.foto) {
 
-				deleteImage({fileName: originalAnuncio.foto}, (err, result) => {
-					if (err) {
+				deleteImage({
+					fileName: originalAnuncio.foto
+				}, (error) => {
+					if (error) {
 						console.error(`${Date.now()}: ${res.__('Error deleting image and thumbnail')}`);
 						return;
 					}
@@ -219,11 +219,9 @@ router.put('/:id', sessionAuth(), uploader.single('foto'), [
 				});
 		
 				generateThumbnail({
-					fileName: req.body.foto, 
-					width: 100, 
-					height: 100 
-				}, (err, result) => {
-					if (err) {
+					fileName: req.body.foto
+				}, (error) => {
+					if (error) {
 						console.error(`${Date.now()}: ${res.__('Error generating thumbnail')}`);
 						return;
 					}

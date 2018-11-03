@@ -11,7 +11,7 @@ const User = require('./models/users/User');
 const anuncios = require('./data/anuncios.json').anuncios;
 const users = require('./data/users.json').users;
 
-const { generateThumbnail } = require('./microservices/thumbnailClient');
+const { generateThumbnail } = require('./lib/anuncios/thumbnailRequester');
 
 conn.once('open', async() => {
 	try {
@@ -105,13 +105,12 @@ async function initAnuncios(anuncios) {
 			fileName: anuncios[i].foto, 
 			width: 100,
 			height: 100
-		}, (err, res) => {
-			if (err) {
-				console.log('Error generating thumbnail: ', err);
+		}, (error) => {
+			if (error) {
+				console.log('Error generating thumbnail: ', error);
 				return;
 			}
 			console.log('Thumbnail succesfully generated');
-			return;
 		});
 	}	
 }

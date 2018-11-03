@@ -35,7 +35,7 @@ router.use(jwtAuth());
 const i18n = require('../../lib/i18nConfigure')();
 
 // Thumbnail generation Microservice
-const { generateThumbnail, deleteImage } = require('../../lib/anuncios/thumbnailClient');
+const { generateThumbnail, deleteImage } = require('../../lib/anuncios/thumbnailRequester');
 
 /**
  * GET /
@@ -148,10 +148,8 @@ router.post('/', uploader.single('foto'), bodyValidationsPost, async (req, res, 
 
 		// send message to thumbnail generation microservice, passing file name, width and height
 		generateThumbnail({
-			fileName: req.body.foto, 
-			width: 100, 
-			height: 100 
-		}, (error, result) => {
+			fileName: req.body.foto
+		}, (error) => {
 			if (error) {
 				console.error(`${Date.now()}: ${res.__('Error generating thumbnail')}`);
 				return;
@@ -197,8 +195,8 @@ router.put('/:id', uploader.single('foto'), [
 			// If a new photo was uploaded, delete previous image and thumbnail and generate a new one
 			if (req.body.foto) {
 
-				deleteImage({fileName: originalAnuncio.foto}, (err, result) => {
-					if (err) {
+				deleteImage({fileName: originalAnuncio.foto}, (error) => {
+					if (error) {
 						console.error(`${Date.now()}: ${res.__('Error deleting image and thumbnail')}`);
 						return;
 					}
@@ -206,11 +204,9 @@ router.put('/:id', uploader.single('foto'), [
 				});
 
 				generateThumbnail({
-					fileName: req.body.foto, 
-					width: 100, 
-					height: 100 
-				}, (err, result) => {
-					if (err) {
+					fileName: req.body.foto
+				}, (error) => {
+					if (error) {
 						console.error(`${Date.now()}: ${res.__('Error generating thumbnail')}`);
 						return;
 					}
@@ -244,8 +240,10 @@ router.delete('/:id', [
 		// Send message to microservice to delete image and thumbnail(s)
 		// Get document from database
 		const anuncio = await Anuncio.findById(_id).exec();
-		deleteImage({fileName: anuncio.foto}, (err, result) => {
-			if (err) {
+		deleteImage({
+			fileName: anuncio.foto
+		}, (error) => {
+			if (error) {
 				console.error(`${Date.now()}: ${res.__('Error deleting image and thumbnail')}`);
 				return;
 			}

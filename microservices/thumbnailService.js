@@ -17,12 +17,12 @@ responder.on('generate thumbnail', async (req, done) => {
 	// Generate thumbnail
 	try {
 		// read file
-		const image = await jimp.read(path.join(__dirname, '..', 'public', 'images', 'anuncios', req.file));
+		const image = await jimp.read(path.join(req.path, req.file));
 		// generate thumbnail
 		const resizedImage = await image
 			.cover(Math.min(image.getWidth(), image.getHeight()), Math.min(image.getWidth(), image.getHeight()))
 			.resize(req.width, req.height, jimp.AUTO)
-			.writeAsync(path.join(__dirname, '..', 'public', 'images', 'anuncios', 'thumbs', `${req.width}x${req.height}-${req.file}`));
+			.writeAsync(path.join(req.path, 'thumbs', `${req.width}x${req.height}-${req.file}`));
 		// OK, invoke done callback
 		done(null, resizedImage);
 	} catch (err) {
@@ -40,15 +40,14 @@ responder.on('delete image', async (req, done) => {
 	try {
 
 		// Delete image file:
-		fs.unlink(path.join(__dirname, '..', 'public', 'images', 'anuncios', req.file), (err) => {
+		fs.unlink(path.join(req.path, req.file), (err) => {
 			if (err) {
 				done(err, null);
 				return;
 			}
-
 			// Delete thumbnails:
 			// read files in thumbs directory
-			fs.readdir(path.join(__dirname, '..', 'public', 'images', 'anuncios', 'thumbs'), (err, files) => {
+			fs.readdir(path.join(req.path, 'thumbs'), (err, files) => {
 				if (err) {
 					console.error(`${Date.now()}: ${err.message}`);
 					done(err, null);
@@ -58,7 +57,7 @@ responder.on('delete image', async (req, done) => {
 				for (let i=0; i<files.length; i++) {
 					if (files[i].indexOf(req.file) >= 0) {
 						console.log(`${Date.now()}: Delete thumb -> ${files[i]}`);
-						fs.unlink(path.join(__dirname, '..', 'public', 'images', 'anuncios', 'thumbs', files[i]), (err) => {
+						fs.unlink(path.join(req.path, 'thumbs', files[i]), (err) => {
 							if (err) {
 								console.error(`${Date.now()}: ${err.message}`);
 								done(err, null);
