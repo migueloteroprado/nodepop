@@ -13,13 +13,14 @@ npm install
 
 All modules required will be downloaded and installed.
 
-### Configure Port and Database URL
+### Configure Port, Database URL, and secret keys for Session and JWT Auth
 
 1. Copy file "*.env.example*" to "*.env*"
 2. In "*.env*" file, configure Port, in environment variable "NODEPOP_PORT"
 Default value is 3000.
 3. In "*.env*" file, configure MongoDB Database URL, in environment variable "NODEPOP_MONGOOSE_CONNECTION_STRING"
 Default value is "mongodb://localhost:27017/nodepop"
+4. In "*.env*" file, configure your secret keys for AUTH_SESSION_SECRET and AUTH_JWT_SECRET=you 
 
 ### Initialize database
 
@@ -36,6 +37,17 @@ You'll be prompted to confirm operation, enter 'yes' to confirm.
 
 # Run
 
+### 1. From command line
+
+#### Thumbnail Microservice
+
+To start the thumbnail generation microservice, run in a shell:
+
+``` shell
+npm run service
+```
+
+#### Application
 To start the application in **production** use:
 
 ``` shell
@@ -47,6 +59,30 @@ To run the application in **development** use:
 ``` shell
 npm run dev
 ```
+
+### 2. Using PM2
+
+##### 1 - Install PM2 process manager, globally:
+
+``` shell
+npm install -g pm2
+```
+
+(In Mac or Linux, you may need execute command with root privileges, using "sudo".
+In windows systems, you'll need execute the command from a console with administrator privileges)
+
+##### 2 - Run all processess 
+
+``` shell
+pm2 start ecosystem.config.js
+```
+
+To monitorize processes running:
+
+``` shell
+pm2 monit
+```
+
 
 ---
 
