@@ -74,6 +74,16 @@ class loginController {
 		const email = req.body.email;
 		const password = req.body.password;
 
+		if (!email || email.length === 0) {
+			next(new Error('You must specify a valid email'));
+			return;
+		}
+
+		if (!password || password.length === 0) {
+			next(new Error('You must specify the password'));
+			return;
+		}
+
 		try {
 
 			// find user

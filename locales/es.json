@@ -61,5 +61,8 @@
 	"Email already in use": "El Correo electrónico ya está en uso",
 	"You need to be logged to do that": "Debe iniciar sesión para hacer eso",
 	"Error deleting image and thumbnail": "Error eliminando imagen y thumbnail",
-	"No ads found for selected filters": "No se encontraron anuncios para los filtros introducidos"
+	"No ads found for selected filters": "No se encontraron anuncios para los filtros introducidos",
+	"wrong value": "valor incorrecto",
+	"Must be work, lifestyle, motor or mobile": "Debe ser trabajo, lifestyle, motor or mobile",
+	"wrong format": "formato incorrecto"
 }

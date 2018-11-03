@@ -61,5 +61,8 @@
 	"Email already in use": "Email already in use",
 	"You need to be logged to do that": "You need to be logged to do that",
 	"Error deleting image and thumbnail": "Error deleting image and thumbnail",
-	"No ads found for selected filters": "No ads found for selected filters"
+	"No ads found for selected filters": "No ads found for selected filters",
+	"wrong value": "wrong value",
+	"Must be work, lifestyle, motor or mobile": "Must be work, lifestyle, motor or mobile",
+	"wrong format": "wrong format"
 }

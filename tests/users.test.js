@@ -154,8 +154,8 @@ describe('POST /api/users', function() {
 			.set('x-access-token', token)
 			.send({
 				name: 'Test User',
-				email: 'testuser@example.com',
-				password: 'testuser',
+				email: 't3stus3r@example.com',
+				password: 't3stus3r',
 				role: 'user' 
 			})
 			.expect('Content-Type', /json/)

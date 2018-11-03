@@ -218,3 +218,20 @@ describe('DELETE /api/anuncios/:id', function() {
 			}, done);
 	});
 });
+
+describe('GET /api/anuncios/tags', function() {
+
+	// check GET /api/anuncios/tags requests with valid token returns a list of available tags
+	it('Returns a list of available tags for requests with valid token', function(done) {
+		request(app)
+			.get('/api/anuncios/tags')
+			.set('Accept', 'application/json')
+			.set('x-access-token', token)
+			.expect('Content-Type', /json/)
+			.expect(function(res) {
+				expect(res.body.success).to.equal(true);
+				expect(res.body.result).to.be.an('array');
+			})
+			.expect(200, done);
+	});
+}); 

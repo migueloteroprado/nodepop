@@ -20,7 +20,7 @@ All modules required will be downloaded and installed.
 Default value is 3000.
 3. In "*.env*" file, configure MongoDB Database URL, in environment variable "NODEPOP_MONGOOSE_CONNECTION_STRING"
 Default value is "mongodb://localhost:27017/nodepop"
-4. In "*.env*" file, configure your secret keys for AUTH_SESSION_SECRET and AUTH_JWT_SECRET=you 
+4. In "*.env*" file, configure your secret keys for AUTH_SESSION_SECRET and AUTH_JWT_SECRET
 
 ### Initialize database
 
@@ -32,6 +32,9 @@ npm run install_db
 
 **WARNING**: all previous database content will be deleted !!
 You'll be prompted to confirm operation, enter 'yes' to confirm.
+
+**NOTE**: For generating thumbnails of the ads photos added to database, the thumbnail generation microservice
+should be running, see next section...
 
 ---
 
@@ -73,25 +76,32 @@ In windows systems, you'll need execute the command from a console with administ
 
 ##### 2 - Run all processess 
 
-To execute all proccesses configured: 
+* To execute all proccesses configured: 
 
 ``` shell
 pm2 start ecosystem.config.js
 ```
+Process configuration can be modified on file 'ecosystem.config.js'
 
-To monitorize running processes execute:
+* To list running processes:
+
+``` shell
+pm2 list
+```
+
+* To monitorize running processes execute:
 
 ``` shell
 pm2 monit
 ```
 
-To start/stop/restart all processes:
+* To start/stop/restart all processes:
 
 ``` shell
 pm2 [start/stop/restart] all
 ```
 
-To start/stop/restart one specific process:
+* To start/stop/restart one specific process:
 
 ``` shell
 pm2 [start/stop/restart] [id/app_name]
@@ -101,7 +111,7 @@ pm2 [start/stop/restart] [id/app_name]
 
 # Tests
 
-To run tests, execute:
+To run application tests, execute:
 
 ``` shell
 npm run test
@@ -120,16 +130,61 @@ npm run eslint
 # Usage
 
 The app provides:
-* A REST API to make operations with anuncios and users
-* A web site with a landing page and a listing of anuncios, filtered, sorted and paginated.
+* A REST API to make operations with Ads and Users
+* A web site with:
+	- Landing page
+	- Login page
+	- List of Ads, filtered, sorted and paginated.
+	The user authenticated will de able to edit or remove the ads created by he, or any ad if the user has the admin role
+	- New Ad, if logged in
+	- Edit Ad, if logged in
 
 ## API Operations:
 
-## Anuncios
+## Authenticate
 
-### GET /apiv1/anuncios
+### POST /api/authenticate
 
-Get a listing of anuncios.
+Uses to get a JWT token for use in later requests to the API
+
+The request body must include a valid user email and password.
+
+In case of invalid credentials, a JSON object will be returned, containing the error 'Invalid credentials'
+
+```json
+{
+  "success": false,
+  "error": "Invalid credentials"
+}
+```
+
+In case of valid credentials, a token will be returned, for use in future requests
+
+```json
+{
+  "success": true,
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmRkYmVhMGVjN2Q4YjJkOWU2MzQ4MzciLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1NDEyNjEyNzksImV4cCI6MTU0MTQzNDA3OX0.vnlGW_t7yqM0YCtY3I40Gt8mASIkyEBGIoWzbit7zRs"
+}
+```
+
+For all other requests to API, 'token' must be passed in query string, body, or request header (as 'x-access-token'), otherwise an authentication error wil be returned:
+
+```json
+{
+  "success": false,
+  "error": "no token provided" / "invalid token" / "jwt malformed"
+}
+```
+
+---
+
+## Ads
+
+### GET /api/anuncios
+
+Get a listing of Ads.
+
+A valid JWT auth token must be passed, as described previously.
 
 Optional Parameters in query string:
 
@@ -183,12 +238,12 @@ Possible fields are: _id, nombre, venta, precio, tags and foto.
 Returns a JSON object with the following fields:
 - success: Boolean value indicating if operation was succesfully executed, 
 - result: 
-	- If success: An array of all anuncios matching the filters specified.
+	- If success: An array of all ads matching the filters specified.
 	- If error: an object describing the error(s)
 
 ##### Examples
 
-URL: http://localhost:3000/apiv1/anuncios?nombre=bici&venta=true&tag=motor&tag=lifestyle&precio=150-&start=0&limit=3
+URL: http://localhost:3000/api/anuncios?nombre=bici&venta=true&tag=motor&tag=lifestyle&precio=150-&start=0&limit=3&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmRkYmVhMGVjN2Q4YjJkOWU2MzQ4MzciLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1NDEyNjE1ODAsImV4cCI6MTU0MTQzNDM4MH0.zJ4QbhtgmcItJ2ebWDcxzxqkNyN7RKYmbxH5XryNFJY
 
 ``` json
 {
@@ -200,10 +255,11 @@ URL: http://localhost:3000/apiv1/anuncios?nombre=bici&venta=true&tag=motor&tag=l
 				"lifestyle",
 				"motor"
 			],
-			"_id": "5b64394592661e4117f1da4f",
+			"_id": "5bddbea0ec7d8b2d9e63483a",
 			"nombre": "Bicicleta",
 			"precio": 230.15,
-			"foto": "bici.jpg",
+			"foto": "/images/anuncios/bici.jpg",
+			"user": "5bddbea0ec7d8b2d9e634837",
 			"__v": 0
 		},
 		{
@@ -212,20 +268,21 @@ URL: http://localhost:3000/apiv1/anuncios?nombre=bici&venta=true&tag=motor&tag=l
 				"lifestyle",
 				"motor"
 			],
-			"_id": "5b64394592661e4117f1da51",
+			"_id": "5bddbea0ec7d8b2d9e63483c",
 			"nombre": "Bicicleta de montaña",
 			"precio": 625,
-			"foto": "bici-montaña.jpg",
+			"foto": "/images/anuncios/bici-montaña.jpg",
+			"user": "5bddbea0ec7d8b2d9e634837",
 			"__v": 0
 		}
 	]
 }
 ```
-URL: http://localhost:3000/apiv1/anuncios?&venta=idontknow&tag=any&tag=lifestyle&precio=abc
+URL: http://localhost:3000/api/anuncios?&venta=idontknow&tag=any&tag=lifestyle&precio=abc&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmRkYmVhMGVjN2Q4YjJkOWU2MzQ4MzciLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1NDEyNjE1ODAsImV4cCI6MTU0MTQzNDM4MH0.zJ4QbhtgmcItJ2ebWDcxzxqkNyN7RKYmbxH5XryNFJY
 
 ``` json
 {
-	"success": false,
+"success": false,
 	"error": {
 		"message": "Not valid",
 		"errors": {
@@ -255,16 +312,18 @@ URL: http://localhost:3000/apiv1/anuncios?&venta=idontknow&tag=any&tag=lifestyle
 }
 ```
 
-### GET /apiv1/anuncios/tags
+### GET /api/anuncios/tags
 
-Obtain a list with the distinct tag values found in all the anuncios in database
+Obtain a list with the distinct tag values found in all the ads in database.
+
+A valid JWT auth token must be passed, as described previously.
 
 ##### Returns
 
 An object with:
 - success: Boolean value indicating if operation was succesfully executed, 
 - result: 
-	- If sucess: An array containing all the tags existing in all anuncios.
+	- If sucess: An array containing all the tags existing in all ads.
 	- If error: An object describing the error(s)
 
 ``` json
@@ -279,9 +338,11 @@ An object with:
 }
 ```
 
-### POST /apiv1/anuncios
+### POST /api/anuncios
 
-Inserts a new Anuncio document in database
+Inserts a new Ad document in database
+
+A valid JWT auth token must be passed, as described previously.
 
 ##### Parameters
 
@@ -301,8 +362,11 @@ To pass more than one tag, insert multiple tag parameters with every value, to c
 - **foto**:
 An image file.
 Must be a .jpg, .jpeg, .png or .gif file
-The file will be uploaded to the server in the folder /images/anuncios. The name of the field ('foto' and a timestamp will be added as a prefix of the original file name.
+The file will be uploaded to the server in the folder '/images/anuncios'. The name of the field ('foto' and a timestamp will be added as a prefix of the original file name.
 The name of the uploaded file will be saved in the database.
+A thumbnail with size size 100x100 pixels will be generated in folder '/images/anuncios/thumbs' (if thumbnail generation microservice is running).
+
+The user passed in the auth JWT token will be added as Ad author.
 
 ##### Returns
 
@@ -326,14 +390,17 @@ An object with:
         "nombre": "Google Pixel 2",
         "precio": 755.5,
         "foto": "foto-1533341231478-google-pixel2.png",
+        "user": "5bddbea0ec7d8b2d9e634837",
         "__v": 0
     }
 }
 ```
 
-### PUT /apiv1/anuncios/:id
+### PUT /api/anuncios/:id
 
-Updates the Anuncio with the given ID in the URL parameter 'id'. It must be a MongoDB ID
+Updates the Ad with the given ID in the URL parameter 'id'. It must be a MongoDB ID.
+
+A valid JWT auth token must be passed, as described previously.
 
 The request body will receive an object with the fields to update:
 
@@ -350,8 +417,9 @@ If passed, must be one or more of the following: 'work', 'lifestyle', 'motor', '
 - **foto**:
 An image file.
 Must be a .jpg, .jpeg, .png or .gif file
-The file entered will be uploaded to the server in the folder /images/anuncios.
+The file entered will be uploaded to the server in the folder '/images/anuncios'.
 The name of the file will be saved in the database.
+If a new image is passed, the old image and thumbnails will de deleted, and a new one will be generated by thumbnail generation microservice (if running).
 
 ##### Returns
 
@@ -361,27 +429,28 @@ An object with:
 
 ##### Example
 
-URL: http://localhost:3000/apiv1/anuncios/5b64394592661e4117f1da51
+URL: http://localhost:3000/api/anuncios/5b64394592661e4117f1da51?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmQ5ZjlhNTZiZmViODEzMzU0YTI2ZDQiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1NDExMDI5NTUsImV4cCI6MTU0MTExMDE1NX0.9HK8IwxmtC2En5Lbb1J9izr5WeV3DMoB4zA9S7ypgxo
 
 ``` json
 {
     "success": true,
     "result": {
-        "venta": false,
+        "venta": true,
         "tags": [
             "lifestyle",
             "motor"
         ],
-        "_id": "5b64394592661e4117f1da51",
-        "nombre": "Bicicleta de montaña modificada",
-        "precio": 575,
-        "foto": "bici-montaña.jpg",
+        "_id": "5bddcd0c985cda5126ab1b56",
+        "nombre": "Modificado",
+        "precio": 123.45,
+        "foto": "foto-1533341231478-bici-montaña.jpg",
+        "user": "5bddbea0ec7d8b2d9e634837",
         "__v": 0
     }
 }
 ```
 
-URL: http://localhost:3000/apiv1/anuncios/123456789
+URL: http://localhost:3000/api/anuncios/123456789?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmQ5ZjlhNTZiZmViODEzMzU0YTI2ZDQiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1NDExMDI5NTUsImV4cCI6MTU0MTExMDE1NX0.9HK8IwxmtC2En5Lbb1J9izr5WeV3DMoB4zA9S7ypgxo
 
 ```json
 {
@@ -400,10 +469,12 @@ URL: http://localhost:3000/apiv1/anuncios/123456789
 }
 ```
 
-### DELETE /apiv1/anuncios/:id
+### DELETE /api/anuncios/:id
 
-Deletes the Anuncio with the received ID in the URL parameter.
-It must be a MongoDB ID
+Deletes the Ad with the received ID in the URL parameter.
+It must be a MongoDB ID.
+
+A valid JWT auth token must be passed, as described previously.
 
 ##### Returns
 
@@ -413,7 +484,7 @@ An object with:
 
 ##### Example
 
-URL: http://localhost:3000/apiv1/anuncios/5b643d43ffe63a4172e7c486
+URL: http://localhost:3000/api/anuncios/5b643d43ffe63a4172e7c486A?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmQ5ZjlhNTZiZmViODEzMzU0YTI2ZDQiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1NDExMDI5NTUsImV4cCI6MTU0MTExMDE1NX0.9HK8IwxmtC2En5Lbb1J9izr5WeV3DMoB4zA9S7ypgxo
 
 ``` json
 {
@@ -424,11 +495,15 @@ URL: http://localhost:3000/apiv1/anuncios/5b643d43ffe63a4172e7c486
 }
 ```
 
+---
+
 ## Users
 
-### GET /users
+### GET /api/users
 
 Get a listing of users.
+
+A valid JWT auth token must be passed, as described previously.
 
 Optional Parameters in query string:
 
@@ -438,6 +513,8 @@ Filters:
 Filter documents whose name contains the text passed in parameter value, case insensitive.
 - **email**:
 Filter documents whose email contains the text passed in parameter value, case insensitive.
+- **role**:
+Filter documents whose role contains the text passed in parameter value, case insensitive.
 
 Pagination:
 
@@ -464,29 +541,35 @@ Returns a JSON object with the following fields:
 
 ##### Example
 
-URL: http://localhost:3000/apiv1/users?name=ser
+URL: http://localhost:3000/api/users?name=ser&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmQ5ZjlhNTZiZmViODEzMzU0YTI2ZDQiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1NDExMDI5NTUsImV4cCI6MTU0MTExMDE1NX0.9HK8IwxmtC2En5Lbb1J9izr5WeV3DMoB4zA9S7ypgxo
 
 ``` json
 {
-	"success": true,
-	"result": [
-		{
-			"_id": "5b64394592661e4117f1da60",
-			"name": "User1",
-			"email": "user1@nodepop.com",
-			"__v": 0
-		},
-		{
-			"_id": "5b64394592661e4117f1da61",
-			"name": "User2",
-			"email": "user2@nodepop.com",
-			"__v": 0
-		}
-	]
+    "success": true,
+    "result": [
+        {
+            "role": "admin",
+            "_id": "5bddbea0ec7d8b2d9e634837",
+            "name": "User1",
+            "email": "user@example.com"
+        },
+        {
+            "role": "user",
+            "_id": "5bddbea0ec7d8b2d9e634838",
+            "name": "User2",
+            "email": "user2@example.com"
+        },
+        {
+            "role": "user",
+            "_id": "5bddbea0ec7d8b2d9e634839",
+            "name": "User3",
+            "email": "user3@example.com"
+        }
+    ]
 }
 ```
 
-### POST /apiv1/users
+### POST /api/users
 
 Inserts a new user in database
 
@@ -503,6 +586,8 @@ Cannot be empty and must be unique, there can't be two users with the same email
 - **password**:
 User's password. 
 Cannot be empty, and must be at least 6 characters long.
+- **role**:
+User role: 'admin' or 'user'
 
 ##### Returns
 
@@ -517,10 +602,11 @@ An object with:
 {
     "success": true,
     "result": {
-        "_id": "5b646a026ce8d7349efb61da",
-        "name": "Juan",
-        "email": "juan@nodepop.com",
-        "password": "25565456445",
+        "role": "user",
+        "_id": "5bddd332c2b3196a0fda0bae",
+        "email": "testuser@example.com",
+        "name": "Test User",
+        "password": "$2b$10$z0gjEgRcod4zcQg/XYFrJO1felN3fqLfRt7GumOi4eS0Jznsb4dKm",
         "__v": 0
     }
 }
@@ -550,7 +636,7 @@ An object with:
 }
 ```
 
-### PUT /apiv1/user/:id
+### PUT /api/users/:id
 
 Updates the user with the given ID in the URL parameter 'id'. It must be a MongoDB ID
 
@@ -565,6 +651,9 @@ If passed, cannot be empty and must be unique, there can't be two users with the
 - **password**:
 User's password. 
 If passed, cannot be empty, and must be at least 6 characters long.
+- **role**:
+User's password. 
+If passed, cannot be empty.
 
 ##### Returns
 
@@ -574,22 +663,23 @@ An object with:
 
 ##### Example
 
-URL: http://localhost:3000/apiv1/users/5b646a026ce8d7349efb61da
+URL: http://localhost:3000/api/users/5b646a026ce8d7349efb61da&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmQ5ZjlhNTZiZmViODEzMzU0YTI2ZDQiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1NDExMDI5NTUsImV4cCI6MTU0MTExMDE1NX0.9HK8IwxmtC2En5Lbb1J9izr5WeV3DMoB4zA9S7ypgxo
 
 ``` json
 {
     "success": true,
     "result": {
-        "_id": "5b646a026ce8d7349efb61da",
-        "name": "Miguel Otero",
-        "email": "anotheruser@nodepop.com",
-        "password": "123456",
+        "role": "user",
+        "_id": "5bddd332c2b3196a0fda0bae",
+        "email": "updateduser@example.com",
+        "name": "Updated User",
+        "password": "$2b$10$z0gjEgRcod4zcQg/XYFrJO1felN3fqLfRt7GumOi4eS0Jznsb4dKm",
         "__v": 0
     }
 }
 ```
 
-### DELETE /apiv1/anuncios/:id
+### DELETE /api/users/:id
 
 Deletes the user with the received ID in the URL parameter.
 It must be a MongoDB ID
@@ -602,7 +692,7 @@ An object with:
 
 ##### Example
 
-URL: http://localhost:3000/apiv1/anuncios/5b646a026ce8d7349efb61da
+URL: http://localhost:3000/api/anuncios/5b646a026ce8d7349efb61da&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmQ5ZjlhNTZiZmViODEzMzU0YTI2ZDQiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1NDExMDI5NTUsImV4cCI6MTU0MTExMDE1NX0.9HK8IwxmtC2En5Lbb1J9izr5WeV3DMoB4zA9S7ypgxo
 
 ``` json
 {
@@ -613,7 +703,7 @@ URL: http://localhost:3000/apiv1/anuncios/5b646a026ce8d7349efb61da
 }
 ```
 
-URL: http://localhost:3000/apiv1/users/bad-id
+URL: http://localhost:3000/api/users/bad-id&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YmQ5ZjlhNTZiZmViODEzMzU0YTI2ZDQiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE1NDExMDI5NTUsImV4cCI6MTU0MTExMDE1NX0.9HK8IwxmtC2En5Lbb1J9izr5WeV3DMoB4zA9S7ypgxo
 
 ```json
 {
@@ -635,21 +725,42 @@ URL: http://localhost:3000/apiv1/users/bad-id
 
 ## Web Site
 
+All pages have a Language selector in the right side of the header.
+Available languages are Engilsh (EN) and Spanish (ES).
+A language cookie will be set in the browser, with a validity of two weeks.
+
+### Routes
+
 ### /
 
 Site Home Page
+
+![Home Page](doc/home.png)
+
+### /login
+
+Displays a login form, with email and password fields
+
+![Login Page](doc/login.png)
 
 ### /anuncios
 
 Displays a page with:
 * A form to enter search filters and parameters
-* A List of anuncios, paginated 
+* A List of Ads, paginated 
 
 An example screen capture is showed:
 
-![Nodepop Logo](doc/anuncios.png)
+![List of Ads](doc/anuncios.png)
 
-We can pass to this page the same optional parameters as in "GET /" route of the API (/apiv1/anuncios):
+Clicking on an Ad photo will show a popup window with the image in full size.
+
+Every Ad will have a "Edit" and "Delete" buttons, if:
+- The logged in user is the Ad author.
+- The logged in user has an 'admin' role.
+
+
+We can pass to this page the same optional parameters as in "GET /" route of the API (/api/anuncios):
 
 Filters:
 
@@ -695,3 +806,19 @@ List of fields to include or exclude, separated by space.
 To exclude one field, it must have a '-' character before the field name.
 Mixing inclussions and exclussions is not possible.
 Possible fields are: _id, nombre, venta, precio, tags and foto.
+
+### /anuncios/new
+
+This page will be only available to authenticated users.
+
+Shows a form to add a new Ad.
+
+![New Ad](doc/new-ad.png)
+
+### /anuncios/:id/edit
+
+This page will be only available to authenticated users.
+
+Shows a form to edit an existing Ad.
+
+![Edit Ad](doc/edit-add.png)
