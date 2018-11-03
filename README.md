@@ -73,18 +73,39 @@ In windows systems, you'll need execute the command from a console with administ
 
 ##### 2 - Run all processess 
 
+To execute all proccesses configured: 
+
 ``` shell
 pm2 start ecosystem.config.js
 ```
 
-To monitorize processes running:
+To monitorize running processes execute:
 
 ``` shell
 pm2 monit
 ```
 
+To start/stop/restart all processes:
+
+``` shell
+pm2 [start/stop/restart] all
+```
+
+To start/stop/restart one specific process:
+
+``` shell
+pm2 [start/stop/restart] [id/app_name]
+```
 
 ---
+
+# Tests
+
+To run tests, execute:
+
+``` shell
+npm run test
+```
 
 # Lint
 
