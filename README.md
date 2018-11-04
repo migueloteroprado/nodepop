@@ -822,3 +822,11 @@ This page will be only available to authenticated users.
 Shows a form to edit an existing Ad.
 
 ![Edit Ad](doc/edit-add.png)
+
+# BONUS TRACK
+
+Create and publish a npm module:
+
+https://www.npmjs.com/package/loan-calculus
+
+It's a little function for calculating fee and amortization table for a loan, given an amount, interest, and number of months
