@@ -255,7 +255,7 @@ URL: http://localhost:3000/api/anuncios?nombre=bici&venta=true&tag=motor&tag=lif
 				"lifestyle",
 				"motor"
 			],
-			"_id": "5bddbea0ec7d8b2d9e63483a",
+			"_id": "5bddbea0ec7d8b2d9e63483b",
 			"nombre": "Bicicleta",
 			"precio": 230.15,
 			"foto": "/images/anuncios/bici.jpg",

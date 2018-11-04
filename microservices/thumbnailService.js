@@ -35,7 +35,7 @@ responder.on('generate thumbnail', async (req, done) => {
 // delete file message
 responder.on('delete image', async (req, done) => {
 	
-	console.log(`${Date.now()}: Delete image -> ${req.file}`);
+	console.log(`${Date.now()} - Delete image -> ${req.file}`);
 	
 	try {
 
@@ -56,7 +56,7 @@ responder.on('delete image', async (req, done) => {
 				// delete all possible thumbnails of deleted image
 				for (let i=0; i<files.length; i++) {
 					if (files[i].indexOf(req.file) >= 0) {
-						console.log(`${Date.now()}: Delete thumb -> ${files[i]}`);
+						console.log(`${Date.now()} - Delete thumb -> ${files[i]}`);
 						fs.unlink(path.join(req.path, 'thumbs', files[i]), (err) => {
 							if (err) {
 								console.error(`${Date.now()}: ${err.message}`);
