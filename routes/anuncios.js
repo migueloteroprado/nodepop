@@ -65,7 +65,8 @@ router.get('/', queryValidations, async (req, res, next) => {
 
 		// add base path to image file names
 		anuncios.forEach(anuncio => { 
-			anuncio.foto = path.join(ANUNCIOS_IMAGE_BASE_PATH, anuncio.foto);
+			if (anuncio.foto)
+				anuncio.foto = path.join(ANUNCIOS_IMAGE_BASE_PATH, anuncio.foto);
 		});
 
 		const count = await Anuncio.count(filters);
