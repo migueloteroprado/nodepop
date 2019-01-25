@@ -31,7 +31,7 @@ The Application is deployed in an AWS EC2 instance:
 
 **[Nginx](https://www.nginx.com/)** is configured as web server and reverse proxy for Nodepop app. 
 
-SSL certificates from Let's Encrypt are installed for all subdomains, and all HTTP requests will be redirected to HTTPS.
+SSL certificates from [Let's Encrypt](https://letsencrypt.org/) are installed for all subdomains, and all HTTP requests will be redirected to HTTPS, using http 2.0.
 
 The following servers are configured on Nginx:
 - Default server: will load a static bootstrap template page.
