@@ -92,7 +92,7 @@
             <% if (currentPage == totalPages) { %>
                 <li class="disabled"><a><%= __('Last') %></a></li>
             <% } else { %>
-                <li><a href="/anuncios?start=<%= (totalPages * limit) - limit %>&limit=<%= limit %>&<%= filtersInQuery %>">Última</a></li>
+                <li><a href="/anuncios?start=<%= (totalPages * limit) - limit %>&limit=<%= limit %>&<%= filtersInQuery %>"><%= __('Last') %></a></li>
             <% } %>
         </ul>
       </section>
