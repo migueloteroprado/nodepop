@@ -2,8 +2,51 @@
 
 ---
 
-# Install
+# Index
 
+<pre>
+0. DevOps
+1. Install
+2. Run
+3. Tests
+4. Lint
+5. Usage
+    5.1. API Operations
+        5.1.1. Authenticate Endpoint
+        5.1.2. Ads Endpoints
+        5.1.3. Users Endpoints
+    5.2. Web Site
+</pre>
+
+---
+
+# 0. DevOps
+
+The Application is deployed in an AWS EC2 instance:
+
+* IP Address: **[63.34.128.111](http://63.34.128.111)**
+* Nodepop Domain URL: **https://nodepop.miguelotero.net**
+
+#### Nginx
+
+**[Nginx](https://www.nginx.com/)** is configured as web server and reverse proxy for Nodepop app. 
+
+SSL certificates from Let's Encrypt are installed for all subdomains, and all HTTP requests will be redirected to HTTPS.
+
+The following servers are configured on Nginx:
+- Default server: will load a static bootstrap template page.
+- nodepop.miguelotero.net: Nodepop app will be shown.
+- miguelotero.net, www.miguelotero.net, curriculum.miguelotero.net: will show my curriculum vitae page.
+
+#### PM2
+**[PM2](https://pm2.io)** is installed to ensure that Node apps are always running, and is configured to start apps on server startup.
+
+![pm2 status](doc/pm2-status.png)
+![pm2 monit](doc/pm2-monit.png)
+
+---
+
+# 1. Install
 
 Open a shell, got to app root folder and execute command:
 
@@ -38,7 +81,7 @@ should be running, see next section...
 
 ---
 
-# Run
+# 2. Run
 
 ### 1. From command line
 
@@ -109,7 +152,7 @@ pm2 [start/stop/restart] [id/app_name]
 
 ---
 
-# Tests
+# 3. Tests
 
 To run application tests, execute:
 
@@ -117,7 +160,7 @@ To run application tests, execute:
 npm run test
 ```
 
-# Lint
+# 4. Lint
 
 To run eslint code validations, execute the command:
 
@@ -127,7 +170,7 @@ npm run eslint
 
 ---
 
-# Usage
+# 5. Usage
 
 The app provides:
 * A REST API to make operations with Ads and Users
@@ -139,9 +182,9 @@ The app provides:
 	- New Ad, if logged in
 	- Edit Ad, if logged in
 
-## API Operations:
+## 5.1. API Operations:
 
-## Authenticate
+## 5.1.1. Authenticate Endpoint
 
 ### POST /api/authenticate
 
@@ -178,7 +221,7 @@ For all other requests to API, 'token' must be passed in query string, body, or 
 
 ---
 
-## Ads
+## 5.1.2. Ads Endpoints
 
 ### GET /api/anuncios
 
@@ -497,7 +540,7 @@ URL: http://localhost:3000/api/anuncios/5b643d43ffe63a4172e7c486A?token=eyJhbGci
 
 ---
 
-## Users
+## 5.1.3. Users Endpoints
 
 ### GET /api/users
 
@@ -723,7 +766,7 @@ URL: http://localhost:3000/api/users/bad-id&token=eyJhbGciOiJIUzI1NiIsInR5cCI6Ik
 ```
 ---
 
-## Web Site
+## 5.2. Web Site
 
 All pages have a Language selector in the right side of the header.
 Available languages are Engilsh (EN) and Spanish (ES).
@@ -829,4 +872,4 @@ Create and publish a npm module:
 
 https://www.npmjs.com/package/loan-calculus
 
-It's a little function for calculating fee and amortization table for a loan, given an amount, interest, and number of months
+It's a little function for calculating fee and amortization table for a loan, given an amount, interest, and number of months.
